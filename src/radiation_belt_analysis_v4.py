@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+#---- TO DO : move imports and functions to a library file 
+
 ##from utils import *
 import os
 import csv
@@ -194,81 +196,34 @@ def get_bav_bsub(bfile,date):
 
 
 '''
-get field in MFA coordinates and subtract background field 
+get field in MFA coordinates and subtract background field
 '''
 #confirmed, works
+#---- TO DO : 1) break get_bav_bsub into smaller functions 
+#             2) do not create a file in get_bav_bsub, just return array for 
+#                b_hp_filt_nT_mfa
+#             3) maybe accept a command line entry for the file? possible accept mulitple files? 
 date = '20230227'
 bfile = '/Users/aspen.davis/Desktop/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc'
 b_hp_filt_nT_mfa = get_bav_bsub(bfile,date)
 
 
-# In[60]:
-
-
-#get tau using ignore nans in signal filtering works
-#note, expecting the new Osmane Dll to be about 2 orders of magnitude different from Sandhu
-#interesting : current output, Osmane 2 output is comparable to the tau output from Sandhu.. 
-chunk_1 = [0,108000]
-highps_z1_01,f_hp_z1_01, t_hp_z1_01,sgdb_hp_z1_01,psd_avg1_01,Dll1_01,tau_m1_01 = getTau(chunk_1,b_hp_filt_nT_mfa) 
-
-
-# In[43]:
-
-
-b,a = butter_filter(10 ,0.001,1, 'high')
-print(b,a)
-highps_z = apply_butter(b_hp_filt_nT_mfa,b,a)
-plt.plot(highps_z)
-print(len(highps_z))
-
-
-# In[ ]:
-
-
-b,a = butter_filter(10 ,0.001,1, 'high')
-print(b,a)
-highps_z = apply_butter(b_hp_filt_nT_mfa1,b,a)
-plt.plot(highps_z)
-print(len(highps_z))
-
-
-# In[ ]:
-
-
-psd_store1 = '/Users/aspen.davis/Desktop/mfa_bav_g16_20230227.pickle'
-file1 = open(psd_store1,'rb')
-psd_analysis1 = pickle.load(file1)
-b_hp_filt_nT_mfa1 = psd_analysis1['b_hp_filt_nT_mfa'] 
-
-plt.plot(b_hp_filt_nT_mfa1-b_hp_filt_nT_mfa)
-
-
-# In[ ]:
-
-
-'''
-TEST
-'''
-
-a1 = np.array([[10,11,12,13,16,27,-9999,56,4,-9999,34],[10,11,12,13,16,27,-9999,56,4,-9999,34],[10,11,12,13,16,27,-9999,56,4,-9999,34]])
-a = np.where((a1!=-9.999e+03),a1,np.nan)
-#ab = [np.nan, np.where(a==-9999)]
-print(a)
-
-signal.filtfilt(B, A, ~np.isnan(values))
-
-
-# In[ ]:
-
-
+#---- TO DO : move this to library with all functions
 def find_nearest(array, value):
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
     return idx
 
 
-# In[ ]:
+'''
+call getTau for each 3 hour "chunk" portion of b_hp_filt_nt_mfa
+'''
 
+#---- TO DO : 1) user input for time length (chunk) to calculate Tau for 
+#             2) remove the steps to open and load the pickle (or keep if we decide thats best)
+#             3) create easier return type rather than a bunch or arrays (dict? named tuple?)
+#             4) break getTau into smaller functions 
+#             5) create a loop or a calling function to call getTau rather than repeated line calls
 
 date = '20230227'
 #psd_store1 = '/Users/aspen.davis/Documents/radiation_belt/20220809/mfa_bav_g17_20220808.pickle'
@@ -289,7 +244,6 @@ highps_z7_01,f_hp_z7_01, t_hp_z7_01,sgdb_hp_z7_01,psd_avg7_01,Dll7_01,tau_m7_01 
 highps_z8_01,f_hp_z8_01, t_hp_z8_01,sgdb_hp_z8_01,psd_avg8_01,Dll8_01,tau_m8_01 = getTau(chunk_8,b_hp_filt_nT_mfa1)
 
 
-# In[ ]:
 
 
 date = '20230228'
@@ -311,8 +265,6 @@ highps_z8_02,f_hp_z8_02, t_hp_z8_02,sgdb_hp_z8_02,psd_avg8_02,Dll8_02,tau_m8_02 
                                                                                         
 
 
-# In[ ]:
-
 
 date = '20230228'
 #psd_store3 = '/Users/aspen.davis/Documents/radiation_belt/20220809/mfa_bav_g17_20220810.pickle'
@@ -333,29 +285,11 @@ highps_z7_03,f_hp_z7_03, t_hp_z7_03,sgdb_hp_z7_03,psd_avg7_03,Dll7_03,tau_m7_03 
 highps_z8_03,f_hp_z8_03, t_hp_z8_03,sgdb_hp_z8_03,psd_avg8_03,Dll8_03,tau_m8_03 = getTau(chunk_8,b_hp_filt_nT_mfa3)
 
 
-# In[ ]:
+'''
+concatenate all of the individual tau / highpass filtered data, etc. 
 
-
-date = '20230301'
-#psd_store4 = '/Users/aspen.davis/Documents/GOES/G18/G18_data/L1b_daily/20230226_event/mfa_bav_g18_20230301.pickle'
-psd_store4 = '/Users/aspen.davis/Documents/GOES/G16/G16l1b/20230226_event/mfa_bav_g16_20230301.pickle'
-file4 = open(psd_store4,'rb')
-psd_analysis4 = pickle.load(file4)
-b_hp_filt_nT_mfa4 = psd_analysis4['b_hp_filt_nT_mfa'] 
-
-highps_z1_04,f_hp_z1_04, t_hp_z1_04,sgdb_hp_z1_04,psd_avg1_04,Dll1_04,tau_m1_04 = getTau(chunk_1,b_hp_filt_nT_mfa4) 
-highps_z2_04,f_hp_z2_04, t_hp_z2_04,sgdb_hp_z2_04,psd_avg2_04,Dll2_04,tau_m2_04 = getTau(chunk_2,b_hp_filt_nT_mfa4) 
-highps_z3_04,f_hp_z3_04, t_hp_z3_04,sgdb_hp_z3_04,psd_avg3_04,Dll3_04,tau_m3_04 = getTau(chunk_3,b_hp_filt_nT_mfa4) 
-highps_z4_04,f_hp_z4_04, t_hp_z4_04,sgdb_hp_z4_04,psd_avg4_04,Dll4_04,tau_m4_04 = getTau(chunk_4,b_hp_filt_nT_mfa4)
-
-highps_z5_04,f_hp_z5_04, t_hp_z5_04,sgdb_hp_z5_04,psd_avg5_04,Dll5_04,tau_m5_04 = getTau(chunk_5,b_hp_filt_nT_mfa4)
-highps_z6_04,f_hp_z6_04, t_hp_z6_04,sgdb_hp_z6_04,psd_avg6_04,Dll6_04,tau_m6_04 = getTau(chunk_6,b_hp_filt_nT_mfa4)
-highps_z7_04,f_hp_z7_04, t_hp_z7_04,sgdb_hp_z7_04,psd_avg7_04,Dll7_04,tau_m7_04 = getTau(chunk_7,b_hp_filt_nT_mfa4)
-highps_z8_04,f_hp_z8_04, t_hp_z8_04,sgdb_hp_z8_04,psd_avg8_04,Dll8_04,tau_m8_04 = getTau(chunk_8,b_hp_filt_nT_mfa4)
-
-
-# In[ ]:
-
+'''
+#---- TO DO : do this better lol. allow for unlimited dimensions based on days / "chunl" lengths
 
 highps_z_01 = np.concatenate((highps_z1_01, highps_z2_01,highps_z3_01,highps_z4_01,highps_z5_01,highps_z6_01,highps_z7_01,highps_z8_01), axis=None)
 highps_z_02 = np.concatenate((highps_z1_02, highps_z2_02,highps_z3_02,highps_z4_02,highps_z5_02,highps_z6_02,highps_z7_02,highps_z8_02), axis=None)
@@ -365,17 +299,6 @@ highps_z_03 = np.concatenate((highps_z1_03, highps_z2_03,highps_z3_03,highps_z4_
 highps_z_all = np.concatenate((highps_z_01,highps_z_02,highps_z_03),axis=None)
 
 
-# In[ ]:
-
-
-fig,ax = plt.subplots(figsize=(8,5))
-plt.plot(g17_dt,highps_z_01)
-
-
-# In[ ]:
-
-
-tau_m_01 = np.concatenate((tau_m1_01,tau_m2_01,tau_m3_01,tau_m4_01,tau_m5_01,tau_m6_01,tau_m7_01,tau_m8_01),axis=None)
 tau_m_02 = np.concatenate((tau_m1_02,tau_m2_02,tau_m3_02,tau_m4_02,tau_m5_02,tau_m6_02,tau_m7_02,tau_m8_02),axis=None)
 tau_m_03 = np.concatenate((tau_m1_03,tau_m2_03,tau_m3_03,tau_m4_03,tau_m5_03,tau_m6_03,tau_m7_03,tau_m8_03),axis=None)
 #tau_m_04 = np.concatenate((tau_m1_04,tau_m2_04,tau_m3_04,tau_m4_04,tau_m5_04,tau_m6_04,tau_m7_04,tau_m8_04),axis=None)
@@ -394,22 +317,13 @@ dll_03 = np.concatenate((Dll1_03,Dll2_03,Dll3_03,Dll4_03,Dll5_03,Dll6_03,Dll7_03
 Dll_all = np.concatenate((dll_01,dll_02,dll_03),axis=None)
 
 
-# In[ ]:
+'''
+Grab time from L2 files
+'''
 
-
-print(len(psd_avg_all))
-
-
-# In[ ]:
-
-
-fig,ax = plt.subplots(figsize=(8,5))
-plt.plot(tau_m_01[1:6])
-fig,ax = plt.subplots(figsize=(8,5))
-plt.plot(psd_avg_01[1:6])
-
-
-# In[ ]:
+#---- TO DO : 1) make this part of an earlier step when we read in the l2 file the first time
+#             2) make concatenate able to take in unlimited dimension
+#note: this is only here because I was only reading in the pickle file and needed to re-read the L2 to get time
 
 
 #t1 = nc.Dataset('/Users/aspen.davis/Documents/radiation_belt/20220809/dn_magn-l2-hires_g17_d20220808_v1-0-1.nc')
@@ -440,8 +354,9 @@ time_ob_3 = np.asarray(time_ob_native3).flatten()
 time_g16 = np.concatenate((time_ob_1,time_ob_2,time_ob_3),axis=None)
 
 
-# In[ ]:
-
+'''
+convert the time from seconds since J2000 epoch to a julian date time
+'''
 
 dt_g16 = []
 
@@ -449,8 +364,11 @@ for i, time_new in enumerate(time_g16.data):
     dt_g16.append(time_convert(time_new))
 
 
-# In[ ]:
+'''
+create time "chunks" or time lengths to calculate tau for 
+'''
 
+#---- TO DO : make this better : accept length of time from user, not hard coded
 
 chunk_9 = [864000,972000]
 chunk_10=[972000,1080000]
@@ -477,15 +395,7 @@ chunk_24 = [2484000,2592000]
 # chunk_31 = [3240000,3348000]
 # chunk_32 = [3348000,3456000]
 
-
-# In[ ]:
-
-
-print(len(dt_g16))
-print(len(long_tau))
-
-
-# In[ ]:
+#this re-fills the tau, again, need to make better and more flexible 
 
 
 long_tau = np.zeros(len(dt_g16))
@@ -526,7 +436,7 @@ long_tau[chunk_24[0]:chunk_24[1]] = tau_m_all[23]
 # long_tau[chunk_21[0]:chunk_21[1]] = tau_m_all[32]
 
 
-# In[ ]:
+# same for power spectral density
 
 
 long_psd = np.zeros(len(dt_g16))
@@ -566,14 +476,12 @@ long_psd[chunk_24[0]:chunk_24[1]] = psd_avg_all[23]
 # long_psd[chunk_32[0]:chunk_32[1]] = psd_avg_all[31]
 
 
-# In[ ]:
 
 
 print(len(long_psd))
 print(len(psd_avg_all))
 
 
-# In[ ]:
 
 
 NFFT = 4500#6000
@@ -581,7 +489,13 @@ f_hp_zT, t_hp_zT, Sxx_hp_zT = signal.spectrogram(highps_z_all,fs=10, nperseg=int
 sgdb_hp_zT = 10 * np.log10(Sxx_hp_zT)
 
 
-# In[ ]:
+'''
+plotting
+'''
+
+#---- TO DO : 1) make these into functions 
+#             2) accept user input for what kind of plots to generate? 
+#             3) auto save figures 
 
 
 from matplotlib.offsetbox import AnchoredText
@@ -622,12 +536,19 @@ ax3.set_xlabel('Time [UT]',fontsize=24)
 ax3.tick_params(axis='both', labelsize=22)
 
 
-# In[ ]:
 
 
 '''
+*** THIS SECTION STARTS SOME OPTIONAL THINGS THAT WE SHOULD HAVE THE ABILITY TO DO, BUT 
+WILL ONLY NEED TO DO ONCE 
+
+
 Minimum resonant energies
 '''
+
+#---- TO DO : 1) make this into functions : calculate resoancnce output value
+#             2) maybe make it an optional part of the program to run? 
+
 import math
 #note on 11/16 : pretty sure I have this correct now. Getting what seems to be same values 
 #as Paul gets on his paper for his values
@@ -653,7 +574,7 @@ w_res = p_four/q
 w_res_MeV = w_res * 10E-6
 
 
-# In[ ]:
+#---- TO DO : move this function to function library 
 
 
 def j2000_sec_to_datetime( unix_ms ):
@@ -665,8 +586,17 @@ def j2000_sec_to_datetime( unix_ms ):
 
 
 '''
-seiss plot
+seiss plot : electron integral flux levels 
+this plots the electron flux levels from the GOES SEISS instrument 
+currenlty, this loops through a folder containing seiss files, concatenates an array with all the 
+days to run for and then plots 
 '''
+
+#--- TO DO : 1) make this into small functions 
+#            2) think about if reading all files from a folder is the best way to plot mulitple days? 
+#            3) make this an optional thing to run? 
+#            4) include seiss integral fulx in the final output file? 
+
 import glob
 dir='/Users/aspen.davis/Documents/radiation_belt/20230226_ext/G18_seiss/'
 ##dir = '/Users/aspen.davis/Documents/radiation_belt/G17/seiss/'
@@ -709,8 +639,6 @@ atimes=j2000_sec_to_datetime(times)
 #use channel 4, which is index 3
 
 
-# In[ ]:
-
 
 import glob
 dir='/Users/aspen.davis/Documents/radiation_belt/20230226_ext/G16_seiss/'
@@ -751,7 +679,7 @@ times16=np.reshape(times16,(288*16))
 atimes16=j2000_sec_to_datetime(times16)
 
 
-# In[ ]:
+#---- TO DO : make plotting into functions
 
 
 # %matplotlib notebook
@@ -788,7 +716,7 @@ ax1.set_ylabel('Particle Flux \n [particles $\cdot cm^{-2} \cdot s^{-1} \cdot sr
 ax0.set_ylabel('Particle Flux \n [particles $\cdot cm^{-2} \cdot s^{-1} \cdot sr^{-1}$]',fontsize=14)
 
 
-# In[ ]:
+#---- TO DO : the plot below is probably the type of comprehensive figure we would want to output
 
 
 # %matplotlib notebook
@@ -829,8 +757,14 @@ ax1.set_ylabel('Particle Flux \n [particles $\cdot cm^{-2} \cdot s^{-1} \cdot sr
 ax0.set_ylabel('Particle Flux \n [particles $\cdot cm^{-2} \cdot s^{-1} \cdot sr^{-1}$]',fontsize=20)
 
 
-# In[ ]:
+'''
+Save outputs to a file
+'''
 
+#---- TO DO : 1) decide if a pickle file is if we want to output, or an h5 / netCDF / etc. 
+#             2) save following parameters to a file : highpass_z_all, b_mfa_nT_*, psd_avg_all, time,tau, psd, 
+#                dt_*, t_hp, f_hp, sgdb, Dll, seis values, resontant energies
+#             3) make this into a function 
 
 name = '/Users/aspen.davis/Documents/radiation_belt/20230226_ext/g16_0227_0301_3hr_highpass.pickle'
 
@@ -853,56 +787,5 @@ analysis_out['Dll'] = Dll_all
 f = open(name,'wb') 
 pickle.dump(analysis_out,f)
 f.close()  
-
-
-# In[5]:
-
-
-'''validating with other studies
-'''
-
-L = 6.6 
-P_b = 50 #psd #psd_time #average power of field pertubations over all frequencies being used
-                    #using paralell componenet bc leads to E accelerating electrons in radial directions
-f = 0.01 #(0.0012 + 0.01) / 2 #central frequency, using middle of frequency band 1-10mHz
-B_e = 31200  #B field at equator : equitaorial magnetic field strength at surface of earth 
-            # = 0.312 G = 31200 nT
-Dll =( (L**8 * 4 * np.pi**2 ) / (9 * (8* B_e**2)) ) * (P_b * f**2)
-print('Sandhu', Dll)
-
-tau_s = 1/Dll
-tau_m = tau_s / 60
-tau_d = tau_m / 1440
-print('Sandhu tau : ',tau_d )
-
-
-# In[ ]:
-
-
-186414.05522966047/60
-
-
-# In[ ]:
-
-
-print(len(tau_m_02))
-
-
-# In[ ]:
-
-
-print(np.mean(tau_m_02[0:1]))
-print(tau_m_02[1])
-
-
-# In[ ]:
-
-
-1185.042577661517 / 60
-
-
-# In[ ]:
-
-
 
 
