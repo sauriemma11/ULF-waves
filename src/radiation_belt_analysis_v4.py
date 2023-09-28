@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-#---- TO DO : move imports and functions to a library file 
+#---- TODO : move imports and functions to a library file
 
 ##from utils import *
 import os
 import csv
+from scipy import signal
 import numpy as np
 from datetime import datetime, timedelta
 import datetime
@@ -35,6 +36,9 @@ def time_convert(seconds_2000):
     return date_original + timedelta(seconds=int(seconds_2000))
 
 def find_nearest(array, value):
+    """"
+    Finds closest frequency and outputs the closest frequency. Workaround for how python stores decimals, there isn't going to have an exact match
+    """
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
     return idx
@@ -191,15 +195,11 @@ def get_bav_bsub(bfile,date):
     return(b_hp_filt_nT_mfa_o)    
         
 
-
-# In[47]:
-
-
 '''
 get field in MFA coordinates and subtract background field
 '''
 #confirmed, works
-#---- TO DO : 1) break get_bav_bsub into smaller functions 
+#---- TODO : 1) break get_bav_bsub into smaller functions
 #             2) do not create a file in get_bav_bsub, just return array for 
 #                b_hp_filt_nT_mfa
 #             3) maybe accept a command line entry for the file? possible accept mulitple files? 
@@ -208,7 +208,7 @@ bfile = '/Users/aspen.davis/Desktop/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc'
 b_hp_filt_nT_mfa = get_bav_bsub(bfile,date)
 
 
-#---- TO DO : move this to library with all functions
+#---- TODO : move this to library with all functions
 def find_nearest(array, value):
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
@@ -219,7 +219,7 @@ def find_nearest(array, value):
 call getTau for each 3 hour "chunk" portion of b_hp_filt_nt_mfa
 '''
 
-#---- TO DO : 1) user input for time length (chunk) to calculate Tau for 
+#---- TODO : 1) user input for time length (chunk) to calculate Tau for
 #             2) remove the steps to open and load the pickle (or keep if we decide thats best)
 #             3) create easier return type rather than a bunch or arrays (dict? named tuple?)
 #             4) break getTau into smaller functions 
@@ -289,7 +289,7 @@ highps_z8_03,f_hp_z8_03, t_hp_z8_03,sgdb_hp_z8_03,psd_avg8_03,Dll8_03,tau_m8_03 
 concatenate all of the individual tau / highpass filtered data, etc. 
 
 '''
-#---- TO DO : do this better lol. allow for unlimited dimensions based on days / "chunl" lengths
+#---- TODO : do this better lol. allow for unlimited dimensions based on days / "chunl" lengths
 
 highps_z_01 = np.concatenate((highps_z1_01, highps_z2_01,highps_z3_01,highps_z4_01,highps_z5_01,highps_z6_01,highps_z7_01,highps_z8_01), axis=None)
 highps_z_02 = np.concatenate((highps_z1_02, highps_z2_02,highps_z3_02,highps_z4_02,highps_z5_02,highps_z6_02,highps_z7_02,highps_z8_02), axis=None)
@@ -321,7 +321,7 @@ Dll_all = np.concatenate((dll_01,dll_02,dll_03),axis=None)
 Grab time from L2 files
 '''
 
-#---- TO DO : 1) make this part of an earlier step when we read in the l2 file the first time
+#---- TODO : 1) make this part of an earlier step when we read in the l2 file the first time
 #             2) make concatenate able to take in unlimited dimension
 #note: this is only here because I was only reading in the pickle file and needed to re-read the L2 to get time
 
@@ -368,7 +368,7 @@ for i, time_new in enumerate(time_g16.data):
 create time "chunks" or time lengths to calculate tau for 
 '''
 
-#---- TO DO : make this better : accept length of time from user, not hard coded
+#---- TODO : make this better : accept length of time from user, not hard coded
 
 chunk_9 = [864000,972000]
 chunk_10=[972000,1080000]
@@ -493,7 +493,7 @@ sgdb_hp_zT = 10 * np.log10(Sxx_hp_zT)
 plotting
 '''
 
-#---- TO DO : 1) make these into functions 
+#---- TODO : 1) make these into functions
 #             2) accept user input for what kind of plots to generate? 
 #             3) auto save figures 
 
@@ -539,14 +539,14 @@ ax3.tick_params(axis='both', labelsize=22)
 
 
 '''
-*** THIS SECTION STARTS SOME OPTIONAL THINGS THAT WE SHOULD HAVE THE ABILITY TO DO, BUT 
-WILL ONLY NEED TO DO ONCE 
+*** THIS SECTION STARTS SOME OPTIONAL THINGS THAT WE SHOULD HAVE THE ABILITY TODO, BUT 
+WILL ONLY NEED TODO ONCE 
 
 
 Minimum resonant energies
 '''
 
-#---- TO DO : 1) make this into functions : calculate resoancnce output value
+#---- TODO : 1) make this into functions : calculate resoancnce output value
 #             2) maybe make it an optional part of the program to run? 
 
 import math
@@ -574,7 +574,7 @@ w_res = p_four/q
 w_res_MeV = w_res * 10E-6
 
 
-#---- TO DO : move this function to function library 
+#---- TODO : move this function to function library
 
 
 def j2000_sec_to_datetime( unix_ms ):
@@ -592,7 +592,7 @@ currenlty, this loops through a folder containing seiss files, concatenates an a
 days to run for and then plots 
 '''
 
-#--- TO DO : 1) make this into small functions 
+#--- TODO : 1) make this into small functions
 #            2) think about if reading all files from a folder is the best way to plot mulitple days? 
 #            3) make this an optional thing to run? 
 #            4) include seiss integral fulx in the final output file? 
@@ -679,7 +679,7 @@ times16=np.reshape(times16,(288*16))
 atimes16=j2000_sec_to_datetime(times16)
 
 
-#---- TO DO : make plotting into functions
+#---- TODO : make plotting into functions
 
 
 # %matplotlib notebook
@@ -716,7 +716,7 @@ ax1.set_ylabel('Particle Flux \n [particles $\cdot cm^{-2} \cdot s^{-1} \cdot sr
 ax0.set_ylabel('Particle Flux \n [particles $\cdot cm^{-2} \cdot s^{-1} \cdot sr^{-1}$]',fontsize=14)
 
 
-#---- TO DO : the plot below is probably the type of comprehensive figure we would want to output
+#---- TODO : the plot below is probably the type of comprehensive figure we would want to output
 
 
 # %matplotlib notebook
@@ -761,7 +761,7 @@ ax0.set_ylabel('Particle Flux \n [particles $\cdot cm^{-2} \cdot s^{-1} \cdot sr
 Save outputs to a file
 '''
 
-#---- TO DO : 1) decide if a pickle file is if we want to output, or an h5 / netCDF / etc. 
+#---- TODO : 1) decide if a pickle file is if we want to output, or an h5 / netCDF / etc.
 #             2) save following parameters to a file : highpass_z_all, b_mfa_nT_*, psd_avg_all, time,tau, psd, 
 #                dt_*, t_hp, f_hp, sgdb, Dll, seis values, resontant energies
 #             3) make this into a function 
