@@ -16,11 +16,12 @@ import netCDF4 as nc
 from datetime import datetime, timedelta
 import datetime
 import numpy as np
+import os
 
 def read_nc_file(file_path):
     dataset = nc.Dataset(file_path)
     variables = read_variables(dataset)
-    print(variables)
+    # print(variables)
     dataset.close()
     return variables
 
@@ -54,4 +55,6 @@ def time_convert(seconds_2000):
 # time_g16 = np.concatenate((time_ob_1,time_ob_2),axis=None)
 
 
-test_nc = read_nc_file('../data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc')
+# test_nc = read_nc_file('../data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc')
+
+# print(type(read_nc_file('../data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc')))
