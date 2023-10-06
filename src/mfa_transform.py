@@ -1,6 +1,36 @@
 # MFA transformation steps
 # to be called after data_prep
 # output will go into calc_tau
+import os
+import csv
+import numpy as np
+from datetime import datetime, timedelta
+import datetime
+from scipy.interpolate import interp1d
+from typing import Dict, Optional, List
+from glob import glob
+import matplotlib
+import matplotlib.pyplot as plt
+from matplotlib.dates import DateFormatter
+from matplotlib.ticker import LinearLocator, FormatStrFormatter
+import datetime as dt
+import pickle
+import scipy.signal as signal
+
+# TODO: put these in a utils
+def butter_filter(fs,fc,N,btype):
+    #fs = sampling frequency [Hz], fc = cut off frequency [Hz], N = filter order, btype = high / low
+    w = fc / (fs/2) #normalize the frequency
+    b,a = signal.butter(N,w,btype) #design filter
+    return b,a
+
+def apply_butter(siggy, b, a):
+    #b,a = output from butter_filter, signal = 1d array
+    filtered = signal.filtfilt(b, a, siggy[~np.isnan(siggy)]) #apply filter forwards and back, ignore nans
+    return filtered
+
+
+
 
 # step 1 : find average background field 
 def get_bav(b_in):

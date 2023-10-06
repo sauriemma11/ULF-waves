@@ -3,8 +3,6 @@
 # of time that we need to calculate tau for. i.e. this will do one tau cal
 
 
-#TO DO : break this into smaller chunks, write tests
-
 # step 1: filter chunk
 # step 2: create spectrogram 
 # step 3: define frequency band
@@ -13,9 +11,10 @@
 # step 6: tau (invert D_LL)
 
 # TO DO: GET RID OF GLOBAL VARIABLES HERE
+# THINGS TO ADD TO CONFIG: frequency/Pc band
+#   -highpass or bandpass for tau filtering
 
-
-def highps_b(b_mfa):
+def filter_b(b_mfa,ftype,comp):
     # TO DO: option for which componen to get waves for?
     # TO DO: optoin for frequency band? dpdds on application..
     # could make separate config files for difference pc bands?
@@ -31,25 +30,25 @@ def highps_b(b_mfa):
 
     """
 
-    b_hp_filt_short = b_mfa
     fs = 10 #sampling frequncy, Hz, usually 10 Hz for mag
-    fc = 0.001 #cut off frequency 10mHz = 0.01 Hz, 1mHz = 0.001 Hz
-    w1 = 0.001 / (fs/2) #normalize the frequency
-    w2 = 0.01 / (fs/2)
-    N = 1 #filter order
-    #btype = 'bandpass'# 'high' #high or low pass filterbb\\
-    btype = 'high'
+    N = 1
+    if ftype == 'high':
+        fc = 0.001 #cut off frequency 10mHz = 0.01 Hz, 1mHz = 0.001 Hz
+        b,a = butter_filter(fs ,fc,N, ftype)
+        filt_z = apply_butter(b_mfa[:][:,comp],b,a)
+    if ftype == 'bandpass'
+        w1 = 0.001 / (fs/2) #normalize the frequency
+        w2 = 0.01 / (fs/2)
+        b,a = butter_filter(fs ,np.asarray([w1,w2]),N, ftype) #bandpass filter
+        filt_z = apply_butter(b_mfa[:][:,comp],b,a)
 
-   # b,a = butter_filter(fs ,np.asarray([w1,w2]),N, btype) #bandpass filter
-    b,a = butter_filter(fs ,fc,N, btype)
-    highps_z = apply_butter(b_hp_filt_short[:][:,2],b,a)
-    return(highps_z)
+    return(filt_z)
 
-def spect(highps_z):
+def spect(filt_z):
 
     NFFT = 4500
 
-    f_hp_spectrum, t_hp_spectrum, Sxx_hp_spectrum = signal.spectrogram(highps_z,
+    f_hp_spectrum, t_hp_spectrum, Sxx_hp_spectrum = signal.spectrogram(filt_z,
             fs=10, nperseg=int(NFFT),noverlap = int(NFFT / 4),scaling='spectrum',
             return_onesided=True,mode='psd')
     return(f_hp_spectrum,t_hp_spectrum,Sxx_hp_spectrum)
