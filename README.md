@@ -1,7 +1,120 @@
-# ULF-waves
+# ULFW - Ultra Low Frequency Waves
 
-The purpose of this project is...
+[//]: # (Magnetospheric Plasma Wave-Particle Interactions)
 
-## How to use ULF-waves
+---
 
-## Installation
+
+<div align="center">
+
+![ulfwave_img.png](docs%2Fulfwave_img.png)
+
+The ULFW project focuses on the analysis of Ultra-Low-Frequency (ULF) waves in
+space
+using data from the Geostationary Operational Environmental Satellite (GOES)
+magnetic field sensors. It seeks to uncover insights into the relationship
+between observed plasma wave parameters and their impact on electron
+diffusion within Earth's Radiation belt.
+
+This repo was created by students in the Fall 2023 semester of Software
+Engineering for Scientists ([SWE4S](https://github.com/swe4s)) course at
+University of Colorado, Boulder with the intent of helping answer this question
+in future studies.
+
+</div>
+
+---
+
+<!-- TOC -->
+### TOC
+* [ULFW - Ultra Low Frequency Waves](#ulfw---ultra-low-frequency-waves)
+    * [Project Goals](#project-goals)
+    * [Key Features](#key-features)
+
+<!-- TOC -->
+
+
+---
+
+### Project Goals
+
+* Calculate observed wave properties and how long it would take an electron to
+  diffuse one Earth radius towards Earth due to wave-particle interactions (also
+  known as <i>diffusion time</i>)
+* Use these parameters to better inform radiation belt models that currently
+  rely on proxy indices
+
+### Key Features
+
+![codebase_ulf.png](docs%2Fcodebase_ulf.png)
+
+* Data Analysis : ULFW uses GOES L2 high-res magnetic field data to perform analysis of
+  Ultra-Low-Frequency (ULF) waves in space.
+* Diffusion Time Calculation : Calculate the time it takes for an electron to
+  diffuse one Earth radii towards Earth due to wave-particle interaction.
+* Data Visualization : Generate time series plots
+* User-Friendly : This project was designed to be user-friendly and with best 
+code practices. 
+
+
+---
+
+## Usage
+
+- Start from clone
+- Run from main project directory, execute with `$ ./run.sh`.
+
+### `module_name_here.py`
+
+#### Examples how to run:
+
+```shell
+python print_fires.py --country USSR --country_column 0 --fires_column 3 ../Agrofood_c02.csv
+python print_fires.py --country "United States of America" --country_column 0 --fires_column 3 --file_name ../Agrofood_co2_emission.csv
+```
+
+## Updates
+
+<details>
+<summary>Expand for version release updates</summary>
+
+
+### V 3.0
+
+- blah blah
+
+### V 2.0
+
+- blah blah
+- wow new feature 
+
+### V 1.0
+
+- blah blah 
+- initial release etc. 
+
+</details>
+
+## LICENSE
+
+MIT License
+
+Copyright (c) 2023 sauriemma11
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
