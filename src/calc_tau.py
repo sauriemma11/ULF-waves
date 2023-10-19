@@ -1,10 +1,36 @@
-# calculate the tau value. this assumes that the call_tau 
+'''
+Module to calculate the tau value
+-Inputs:
+    * dictionary (output from mfa_transform.py) with
+        nx3 array of background-subtracted B-field in MFA
+        nx1 array of time in dt sec
+-Outputs:
+    * dictionary with
+        mx1 tau
+        mx1 D_LL
+        mx1 time
+        mx1 frequencies
+-Used in:
+    * call_tau.py
+    * main.py
+-Functions:
+    * highps_b -- highpass filter that returns tx1 B-field in MFA
+    * spect -- spectrogram that returns tx1 frequencies, tx1 times, tx1 spectrum
+    * get_fband -- retrieves indexes for frequencies in band of interest and
+                   returns start (low freq.) index and stop (high freq. index)
+    * avg_psd -- returns average Power Spectral Density within freq. band
+    * calc_dll -- calculate and return D_LL
+    * calc_tau -- calculate and return tau
+    * make_dict -- take outputs from functions and return a dictionary with them
+'''
+
+# calculate the tau value. this assumes that the call_tau
 # module is set up to repeatedly call this module for every "chunk"
 # of time that we need to calculate tau for. i.e. this will do one tau cal
 
 
 # step 1: filter chunk
-# step 2: create spectrogram 
+# step 2: create spectrogram
 # step 3: define frequency band
 # step 4: avg psd
 # step 5: D_LL calculation
@@ -22,7 +48,7 @@ def filter_b(b_mfa,ftype,comp):
     """
     **NOTE : ASSUMES B_MFA IS ALREADY "TIME CHUNKED"
     setp 1: highpass filter to get frequencies of interest
-    input: b_mfa: magnetic field measurements in MFA coordinates, assumed to 
+    input: b_mfa: magnetic field measurements in MFA coordinates, assumed to
            be one time window, size nx3
     output: highps_z: highpass filtered componenent of b_mfa. size 1xn
     parameters: fs: sampling frequency, Hz
@@ -91,6 +117,10 @@ def calc_tau(D_ll):
     tau_m = tau_s / 60
     print('Sandhu tau : ',tau_m )
     return(tau_m)
+
+def make_dict(tau, D_ll, psd_avg, times, freqs):
+    tau_dict = 0 # Needs to be filled in!
+    return(tau_dict)
 
 
 # ------------------------------------------ original getTau
