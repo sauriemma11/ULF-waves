@@ -33,6 +33,8 @@ def apply_butter(siggy, b, a):
 
 
 # step 1 : find average background field 
+
+# TO DO: USE CONFIG FILE TO SET UP THE FILTER: i.e. set up fs/fc/N/btype
 def get_bav(b_in):
     """
     step 1: get average background field. This is done by taking a 30 min
@@ -117,8 +119,7 @@ def background_sub(b_in):
     b_mfa_bsub = np.column_stack((b_x,b_y,b_z))
     return(b_mfa_bsub)
 
-# TO DO: not sure how variables are passed between modules... this main may
-# need to go in the main module
+# TO DO: snake rule to link these variables to the other modules? 
 def main():
     b_avg = get_bav(b_epn)
 

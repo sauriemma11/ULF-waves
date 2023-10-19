@@ -1,5 +1,5 @@
 # This is where I will be writing documentation for the plotting functionality
-import matplotlib.pylplot as plt
+import matplotlib.pyplot as plt
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 from matplotlib.offsetbox import AnchoredText
 
