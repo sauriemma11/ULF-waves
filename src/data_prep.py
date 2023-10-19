@@ -1,4 +1,21 @@
 """
+Module to read in the data file and create outputs in the necessary format
+-Inputs:
+    * data file (format *.nc)
+-Outputs:
+    * dictionary with
+        nx3 array of background-subtracted B-field in EPN (with nan values)
+        nx1 array of time in dt sec
+-Used in:
+    * mfa_transform.py
+    * main.py
+-Functions:
+    * read_variables -- creates dictionary of varaiables from nc dataset
+    * read_nc_file -- creates dictionary from data file with EPN and time values
+    * deal_w_fills -- converts -9999 values from dictionary to nans
+
+#####
+
 This module will:
 
 - Read .nc files

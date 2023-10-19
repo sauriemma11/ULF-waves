@@ -1,3 +1,24 @@
+'''
+Module to create final result file and visuals
+-Inputs:
+    * dictionary (output from call_tau.py) with
+        mx1 tau
+        mx1 D_LL
+        mx1 PSD
+        mx1 time
+        mx1 frequencies
+    * user input
+-Outputs:
+    * saved plot files
+    * csv file with key result parameters
+-Used in:
+    * main.py
+-Functions:
+    * make_BLAH_plot --
+    * make_BLAHH_plot --
+    * generate_file -- transform dictionary into csv for convenient reference
+'''
+
 # This is where I will be writing documentation for the plotting functionality
 import matplotlib.pyplot as plt
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
