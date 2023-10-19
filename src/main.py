@@ -1,4 +1,11 @@
-
+'''
+Main module
+-Inputs:
+    * data file (format *.nc)
+-Outputs:
+    * plots
+    * data file
+'''
 
 
 # Import statements here

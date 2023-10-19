@@ -5,9 +5,10 @@ Module to calculate the tau value
         nx3 array of background-subtracted B-field in MFA
         nx1 array of time in dt sec
 -Outputs:
-    * dictionary with
+    * individual returns from functions, particularly
         mx1 tau
         mx1 D_LL
+        mx1 PSD
         mx1 time
         mx1 frequencies
 -Used in:
@@ -21,7 +22,6 @@ Module to calculate the tau value
     * avg_psd -- returns average Power Spectral Density within freq. band
     * calc_dll -- calculate and return D_LL
     * calc_tau -- calculate and return tau
-    * make_dict -- take outputs from functions and return a dictionary with them
 '''
 
 # calculate the tau value. this assumes that the call_tau
@@ -117,11 +117,6 @@ def calc_tau(D_ll):
     tau_m = tau_s / 60
     print('Sandhu tau : ',tau_m )
     return(tau_m)
-
-def make_dict(tau, D_ll, psd_avg, times, freqs):
-    tau_dict = 0 # Needs to be filled in!
-    return(tau_dict)
-
 
 # ------------------------------------------ original getTau
 
