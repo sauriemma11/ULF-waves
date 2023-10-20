@@ -44,7 +44,8 @@ def plot_data(t_hp_z, f_hp_z, sgdb_hp_z, dt_g16, highps_z_all):
     ax[0].xaxis.set_ticklabels([])
     ax[0].tick_params(axis='y')
 
-    at = AnchoredText("Highpass filtered, 1 mHz", frameon=True, loc='upper right')
+    at = AnchoredText("Highpass filtered, 1 mHz", frameon=True,
+                      loc='upper right')
     at.patch.set_boxstyle("round, pad=0., rounding_size=0.2")
     ax[0].add_artist(at)
 
@@ -53,7 +54,8 @@ def plot_data(t_hp_z, f_hp_z, sgdb_hp_z, dt_g16, highps_z_all):
     ax[1].set_ylabel('Frequency\n[Hz]')
     ax[1].tick_params(axis='y')
 
-    ax[2].plot(dt_g16, np.random.rand(len(dt_g16)) * 100, linewidth=1)  # Replace with your data for long_psd
+    ax[2].plot(dt_g16, np.random.rand(len(dt_g16)) * 100,
+               linewidth=1)  # Replace with your data for long_psd
     ax[2].set_ylabel('Average $P^{B}$\n[$nT^2$/Hz]')
     ax[2].xaxis.set_ticklabels([])
 
@@ -61,22 +63,23 @@ def plot_data(t_hp_z, f_hp_z, sgdb_hp_z, dt_g16, highps_z_all):
     at2.patch.set_boxstyle("round, pad=0., rounding_size=0.2")
     ax[2].add_artist(at2)
 
-    ax[3].semilogy(dt_g16, np.random.rand(len(dt_g16)) * 100, linewidth=1)  # Replace with your data for long_tau
+    ax[3].semilogy(dt_g16, np.random.rand(len(dt_g16)) * 100,
+                   linewidth=1)  # Replace with your data for long_tau
     ax[3].set_ylabel('Tau\n[hrs]')
     ax[3].set_xlabel('Time [UT]')
     ax[3].tick_params(axis='both')
 
-    plt.show()
+    # plt.show()
 
-
+# **** Moved this all to unit test
 # Make sample data for plotting:
-t_hp_z = np.linspace(0, 10, 100)
-f_hp_z = np.linspace(0, 0.05, 100)
-sgdb_hp_z = np.random.rand(100, 100) * 40 - 20 #2d array
-dt_g16 = np.linspace(0, 10, 100)
-highps_z_all = np.random.uniform(-10, 10, len(dt_g16))
+# t_hp_z = np.linspace(0, 10, 100)
+# f_hp_z = np.linspace(0, 0.05, 100)
+# sgdb_hp_z = np.random.rand(100, 100) * 40 - 20 #2d array
+# dt_g16 = np.linspace(0, 10, 100)
+# highps_z_all = np.random.uniform(-10, 10, len(dt_g16))
 
-plot_data(t_hp_z, f_hp_z, sgdb_hp_z, dt_g16, highps_z_all)
+# plot_data(t_hp_z, f_hp_z, sgdb_hp_z, dt_g16, highps_z_all)
 
 
 # TODO: have option to save plot?
