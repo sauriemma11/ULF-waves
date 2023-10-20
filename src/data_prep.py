@@ -4,7 +4,8 @@ Module to read in the data file and create outputs in the necessary format
     * goes l2 hires data file (format *.nc)
 - Outputs:
     * dictionary with
-        ['b_epn'] nx3 array of B-field in EPN (with nan values from fill value -9999)
+        ['b_epn'] nx3 array of B-field in EPN (with nan values from fill
+        value -9999)
         ['time'] nx1 array of time in datetime formatted sec
 - Used in:
     ****
@@ -14,6 +15,7 @@ import netCDF4 as nc
 from datetime import datetime, timedelta
 import datetime
 import numpy as np
+
 
 def read_nc_file(file_path):
     """
@@ -30,6 +32,7 @@ def read_nc_file(file_path):
     dataset.close()
     return variables
 
+
 def read_variables(dataset):
     """
     Read and store all variables from an nc dataset into a dictionary.
@@ -44,6 +47,7 @@ def read_variables(dataset):
     for variable_name in dataset.variables.keys():
         data_dict[variable_name] = dataset.variables[variable_name][:]
     return data_dict
+
 
 def deal_with_fills(data_dict):
     """
@@ -62,38 +66,47 @@ def deal_with_fills(data_dict):
     # print(type(b_epn))
     return new_epn
 
+
 def time_convert(seconds_2000):
     """
     Convert time values from seconds since 2000-01-01 to datetime objects.
 
     Args:
-        seconds_2000 (numpy.ndarray): Array of time values in seconds since 2000-01-01.
+        seconds_2000 (numpy.ndarray): Array of time values in seconds since
+        2000-01-01.
 
     Returns:
         numpy.ndarray: Array of datetime objects.
     """
     date_original = datetime.datetime(2000, 1, 1, 12, 0)
-    return np.array([date_original + timedelta(seconds=int(seconds)) for seconds in seconds_2000])
+    return np.array(
+        [date_original + timedelta(seconds=int(seconds)) for seconds in
+         seconds_2000])
+
 
 def output_data_prepped_dict(file_path):
     """
-    Process a data file, including reading, dealing with fill values, and converting time. Puts everything into a new dictionary
+    Process a data file, including reading, dealing with fill values,
+    and converting time. Puts everything into a new dictionary
 
     Args:
         file_path (str): Path to the data file.
 
     Returns:
-        dict: Processed data dictionary containing 'time' and 'b_epn' with fill values corrected.
+        dict: Processed data dictionary containing 'time' and 'b_epn' with
+        fill values corrected.
     """
 
     original_dict = read_nc_file(file_path)
     epn_with_fills_fixed = deal_with_fills(original_dict)
     converted_time = time_convert(original_dict['time'])
 
-    dict_prepped = {'time': converted_time, 'b_epn': epn_with_fills_fixed['b_epn']}
+    dict_prepped = {'time': converted_time,
+                    'b_epn': epn_with_fills_fixed['b_epn']}
 
     return dict_prepped
 
 # Example usage:
-# prepped_data = output_data_prepped_dict('../data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc')
+# prepped_data = output_data_prepped_dict(
+# '../data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc')
 # print(prepped_data)
