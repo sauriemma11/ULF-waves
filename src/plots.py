@@ -1,72 +1,83 @@
-'''
+"""
 Module to create final result file and visuals
 -Inputs:
     * dictionary (output from call_tau.py) with
         mx1 tau
         mx1 D_LL
         mx1 PSD
-        mx1 time
-        mx1 frequencies
+        mx1 time : dt_g16
+        mx1 frequencies : t_hp_z, f_hp_z, sg_hp_z
     * user input
 -Outputs:
     * saved plot files
     * csv file with key result parameters
 -Used in:
     * main.py
--Functions:
-    * make_BLAH_plot --
-    * make_BLAHH_plot --
-    * generate_file -- transform dictionary into csv for convenient reference
-'''
 
-# This is where I will be writing documentation for the plotting functionality
+"""
+
 import matplotlib.pyplot as plt
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
 from matplotlib.offsetbox import AnchoredText
+import numpy as np
 
-# For this code chunk to work, need t_hp_z, f_hp_z, and sgdb_hp_z
-# These come from signal.spectrogram -- which needs results from butter_filter and apply_butter (from get_tau)
-fig, ax = plt.subplots(figsize=(12,6))
-cmap = plt.get_cmap('rainbow')
-im = plt.pcolormesh(t_hp_z, f_hp_z, sgdb_hp_z,vmin=-20,vmax=20,cmap=cmap)
-formatter = matplotlib.ticker.FuncFormatter(timeTicks)
-plt.gca().xaxis.set_major_formatter(formatter)
-plt.ylim([0,0.05])
-fig.colorbar(im, ax=ax, label='Power Spectral Density (dB)')
 
-# For this code chunk to work, also need butter results AND dt_g16 (time data from data prep?)
-cmap = plt.get_cmap('rainbow')
-#12,9
-fig, (ax0,ax1,ax2,ax3) = plt.subplots(4,figsize=(18,14))
-fig.tight_layout(pad=-0.5)
-ax0.plot(dt_g16,highps_z_all)
-ax0.set_ylabel('B_par MFA \n [nT]',fontsize=24)
-ax0.xaxis.set_ticklabels([])
-ax0.tick_params(axis='y',labelsize=20)
-at = AnchoredText(
-    "Highpass filtered, 1 mHz", prop=dict(size=16), frameon=True, loc='upper right')
-# at = AnchoredText(
-#     "Bandpass filtered, 1-10 mHz", prop=dict(size=16), frameon=True, loc='upper right')
-at.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
-ax0.add_artist(at)
-im = ax1.pcolormesh(t_hp_zT, f_hp_zT, sgdb_hp_zT, vmin=-20, vmax=20, cmap=cmap)
-ax1.axes.get_xaxis().set_visible(False)
-ax1.set_ylabel('Frequency \n [Hz]',fontsize=24)
-ax1.tick_params(axis='y',labelsize=20)
-ax0.margins(x=0)
-ax1.set_ylim([0,0.05])
-#fig.colorbar(im, ax=ax1, label='Power Spectral Density (dB)')
-ax2.plot(dt_g16,long_psd,linewidth=2)
-ax2.margins(x=0)
-ax2.set_ylabel('Average $P^{B}$ \n [$nT^{2}$/Hz]',fontsize=24)
-ax2.xaxis.set_ticklabels([])
-ax2.tick_params(axis='y',labelsize=20)
-at2 = AnchoredText(
-    "3 hour windows", prop=dict(size=16), frameon=True, loc='upper right')
-at2.patch.set_boxstyle("round,pad=0.,rounding_size=0.2")
-ax2.add_artist(at2)
-ax3.semilogy(dt_g16,(long_tau/60),linewidth=2)
-ax3.set_ylabel('Tau \n [hrs]',fontsize=24)
-ax3.margins(x=0)
-ax3.set_xlabel('Time [UT]',fontsize=24)
-ax3.tick_params(axis='both', labelsize=22)
+def plot_data(t_hp_z, f_hp_z, sgdb_hp_z, dt_g16, highps_z_all):
+    """
+        Create a 4-panel subplot
+
+        Args:
+            t_hp_z (numpy.ndarray): Array of time values.
+            f_hp_z (numpy.ndarray): Array of frequency values.
+            sgdb_hp_z (numpy.ndarray): Spectrogram data.
+            dt_g16 (numpy.ndarray):
+            highps_z_all (numpy.ndarray):
+
+        Example:
+            plot_data(t_hp_z, f_hp_z, sgdb_hp_z, dt_g16, highps_z_all)
+    """
+    fig, ax = plt.subplots(nrows=4)
+
+    cmap = plt.get_cmap('rainbow')
+
+    ax[0].plot(dt_g16, highps_z_all, linewidth=1)
+    ax[0].set_ylabel('B_par MFA\n[nT]')
+    ax[0].xaxis.set_ticklabels([])
+    ax[0].tick_params(axis='y')
+
+    at = AnchoredText("Highpass filtered, 1 mHz", frameon=True, loc='upper right')
+    at.patch.set_boxstyle("round, pad=0., rounding_size=0.2")
+    ax[0].add_artist(at)
+
+    ax[1].pcolormesh(t_hp_z, f_hp_z, sgdb_hp_z, vmin=-20, vmax=20, cmap=cmap)
+    ax[1].axes.get_xaxis().set_visible(False)
+    ax[1].set_ylabel('Frequency\n[Hz]')
+    ax[1].tick_params(axis='y')
+
+    ax[2].plot(dt_g16, np.random.rand(len(dt_g16)) * 100, linewidth=1)  # Replace with your data for long_psd
+    ax[2].set_ylabel('Average $P^{B}$\n[$nT^2$/Hz]')
+    ax[2].xaxis.set_ticklabels([])
+
+    at2 = AnchoredText("3 hour windows", frameon=True, loc='upper right')
+    at2.patch.set_boxstyle("round, pad=0., rounding_size=0.2")
+    ax[2].add_artist(at2)
+
+    ax[3].semilogy(dt_g16, np.random.rand(len(dt_g16)) * 100, linewidth=1)  # Replace with your data for long_tau
+    ax[3].set_ylabel('Tau\n[hrs]')
+    ax[3].set_xlabel('Time [UT]')
+    ax[3].tick_params(axis='both')
+
+    plt.show()
+
+
+# Make sample data for plotting:
+t_hp_z = np.linspace(0, 10, 100)
+f_hp_z = np.linspace(0, 0.05, 100)
+sgdb_hp_z = np.random.rand(100, 100) * 40 - 20 #2d array
+dt_g16 = np.linspace(0, 10, 100)
+highps_z_all = np.random.uniform(-10, 10, len(dt_g16))
+
+plot_data(t_hp_z, f_hp_z, sgdb_hp_z, dt_g16, highps_z_all)
+
+
+# TODO: have option to save plot?
+# TODO: save csv file
