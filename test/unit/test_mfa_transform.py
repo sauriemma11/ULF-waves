@@ -1,3 +1,42 @@
+import sys
+import numpy as np
+import random
+import os
+import unittest
+from numpy.random import randint
+sys.path.insert(0, '../../src')  # noqa # must run from unit test directory
+import utils as u  # noqa
+import mfa_transform as mt
+
+class TestMathLib(unittest.TestCase):
+    def setUP(self):
+        #create an nx3 random dataset for testing
+        self.test_file_name = 'setup_test_file.txt'
+        f = open(self.test_file_name, 'w')
+
+        for i in range(100):
+            rand_int = random.randint(1, 100)
+            f.write(str(rand_int) + str(rand_int) + str(rand_int) + '\n')
+        f.close()
+    def test_get_bav(self):
+        test_dat = np.random.randint(low=1, high=10000,size=(100,3))
+        bav_out = mt.get_bav(test_dat)
+        self.assertIsNotNone()
+
+  #  def test_getcol_pos(self):
+  ##      query_col = randint(0, 2)  # test file has 3 columns
+   #     query_val = randint(0, 100)
+   #     result_col = randint(0, 2)
+
+  #      f = open('testing_data_file.txt', 'w')
+   #     for i in range(100):
+   #         rand_int = random.randint(1, 100)
+   #         f.write(str(rand_int) + ',' + str(rand_int) + ',' + str(rand_int)
+   #                 + '\n')
+   #     f.close()
+   #     val = u.get_column('testing_data_file.txt', query_col, query_val,
+                           result_col)
+   #     self.assertIsNotNone(val)
 
 
 

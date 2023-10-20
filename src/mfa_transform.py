@@ -17,6 +17,7 @@ Module to find the Magnetic Field Aligned (MFA) coordinates
     * compute_mfa -- perform EPN to MFA transformation
     * background_sub -- filter out (subtract) the background field from data
 '''
+import utils as u
 
 # MFA transformation steps
 # to be called after data_prep
@@ -36,20 +37,6 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import datetime as dt
 import pickle
 import scipy.signal as signal
-
-# TODO: put these in a utils
-def butter_filter(fs,fc,N,btype):
-    #fs = sampling frequency [Hz], fc = cut off frequency [Hz], N = filter order, btype = high / low
-    w = fc / (fs/2) #normalize the frequency
-    b,a = signal.butter(N,w,btype) #design filter
-    return b,a
-
-def apply_butter(siggy, b, a):
-    #b,a = output from butter_filter, signal = 1d array
-    filtered = signal.filtfilt(b, a, siggy[~np.isnan(siggy)]) #apply filter forwards and back, ignore nans
-    return filtered
-
-
 
 
 # step 1 : find average background field
@@ -79,10 +66,10 @@ def get_bav(b_in):
     fc = 1/(30*60)
     N = 2
     btype = 'lowpass'
-    b,a = butter_filter(fs ,fc,N, btype)
-    b_avx = apply_butter(b_in[:][:,0],b,a)
-    b_avy = apply_butter(b_in[:][:,1],b,a)
-    b_avz = apply_butter(b_in[:][:,2],b,a)
+    b,a = u.butter_filter(fs ,fc,N, btype)
+    b_avx = u.apply_butter(b_in[:][:,0],b,a)
+    b_avy = u.apply_butter(b_in[:][:,1],b,a)
+    b_avz = u.apply_butter(b_in[:][:,2],b,a)
 
     b_av = np.column_stack((b_avx,b_avy,b_avz))
     return(b_av)
@@ -139,7 +126,6 @@ def background_sub(b_in):
     b_mfa_bsub = np.column_stack((b_x,b_y,b_z))
     return(b_mfa_bsub)
 
-# TO DO: snake rule to link these variables to the other modules?
 def main():
     b_avg = get_bav(b_epn)
 
@@ -148,5 +134,11 @@ def main():
     b_mga_bsub = background_sub(b_mfa)
 
 
-if __name__ == '__main__':
-    main()
+#if __name__ == '__main__':
+#    main()
+
+test_dat = np.random.randint(low=1, high=10000, size=(100, 3))
+bav_out = get_bav(test_dat)
+
+print(bav_out)
+
