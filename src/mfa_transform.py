@@ -61,21 +61,21 @@ def get_bav(b_in):
 
     """
 
-
     fs = 10
-    fc = 1/(30*60)
+    fc = 1 / (30 * 60)
     N = 2
     btype = 'lowpass'
-    b,a = u.butter_filter(fs ,fc,N, btype)
-    b_avx = u.apply_butter(b_in[:][:,0],b,a)
-    b_avy = u.apply_butter(b_in[:][:,1],b,a)
-    b_avz = u.apply_butter(b_in[:][:,2],b,a)
+    b, a = u.butter_filter(fs, fc, N, btype)
+    b_avx = u.apply_butter(b_in[:][:, 0], b, a)
+    b_avy = u.apply_butter(b_in[:][:, 1], b, a)
+    b_avz = u.apply_butter(b_in[:][:, 2], b, a)
 
-    b_av = np.column_stack((b_avx,b_avy,b_avz))
-    return(b_av)
+    b_av = np.column_stack((b_avx, b_avy, b_avz))
+    return (b_av)
+
 
 # setp 2 : compute mfa
-def compute_mfa(b_av,b_epn):
+def compute_mfa(b_av, b_epn):
     """
     step 2: compute MFA coordinates. See wave_analysis_steps.pdf for all dtails
     input: b_av: average background field from get_bav
@@ -85,20 +85,20 @@ def compute_mfa(b_av,b_epn):
             nx3.
     """
 
-
-    b_mfa = np.zeros((len(b_epn),3))
+    b_mfa = np.zeros((len(b_epn), 3))
     for n in np.arange(len(b_epn)):
-        e_par2 = b_av[n]/np.linalg.norm(b_av[n])
-        e_phi2 = e_par2 * [-1,0,0]
+        e_par2 = b_av[n] / np.linalg.norm(b_av[n])
+        e_phi2 = e_par2 * [-1, 0, 0]
         e_phi3 = e_phi2 / np.linalg.norm(e_phi2)
-        e_r = e_phi2* e_par2
+        e_r = e_phi2 * e_par2
         e_r3 = e_r / np.linalg.norm(e_r)
 
-        mfa_trans = np.row_stack((e_r,e_phi2,e_par2))
-        b_mfa_temp = np.matmul(b_epn[n],mfa_trans.T)
+        mfa_trans = np.row_stack((e_r, e_phi2, e_par2))
+        b_mfa_temp = np.matmul(b_epn[n], mfa_trans.T)
         b_mfa[n] = b_mfa_temp
 
-    return(b_mfa)
+    return (b_mfa)
+
 
 # step 3 : background subtraction
 def background_sub(b_in):
@@ -115,30 +115,30 @@ def background_sub(b_in):
     """
 
     fs = 10
-    fc = 1/(30*60)
+    fc = 1 / (30 * 60)
     N = 2
     btype = 'high'
-    b,a = butter_filter(fs ,fc,N, btype)
-    b_x = apply_butter(b_in[:][:,0],b,a)
-    b_y = apply_butter(b_in[:][:,1],b,a)
-    b_z = apply_butter(b_in[:][:,2],b,a)
+    b, a = butter_filter(fs, fc, N, btype)
+    b_x = apply_butter(b_in[:][:, 0], b, a)
+    b_y = apply_butter(b_in[:][:, 1], b, a)
+    b_z = apply_butter(b_in[:][:, 2], b, a)
 
-    b_mfa_bsub = np.column_stack((b_x,b_y,b_z))
-    return(b_mfa_bsub)
+    b_mfa_bsub = np.column_stack((b_x, b_y, b_z))
+    return (b_mfa_bsub)
+
 
 def main():
     b_avg = get_bav(b_epn)
 
-    b_mfa = compute_mfa(b_avg,b_epn)
+    b_mfa = compute_mfa(b_avg, b_epn)
 
     b_mga_bsub = background_sub(b_mfa)
 
 
-#if __name__ == '__main__':
+# if __name__ == '__main__':
 #    main()
 
 test_dat = np.random.randint(low=1, high=10000, size=(100, 3))
 bav_out = get_bav(test_dat)
 
 print(bav_out)
-
