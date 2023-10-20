@@ -95,5 +95,5 @@ def output_data_prepped_dict(file_path):
     return dict_prepped
 
 # Example usage:
-# prepped_data = output_data_prepped_dict('../data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc')
-# print(prepped_data)
+prepped_data = output_data_prepped_dict('../data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc')
+print(prepped_data)
