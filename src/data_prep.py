@@ -1,77 +1,99 @@
 """
 Module to read in the data file and create outputs in the necessary format
--Inputs:
-    * data file (format *.nc)
--Outputs:
+- Inputs:
+    * goes l2 hires data file (format *.nc)
+- Outputs:
     * dictionary with
-        nx3 array of background-subtracted B-field in EPN (with nan values)
-        nx1 array of time in dt sec
--Used in:
-    * mfa_transform.py
-    * main.py
--Functions:
-    * read_variables -- creates dictionary of varaiables from nc dataset
-    * read_nc_file -- creates dictionary from data file with EPN and time values
-    * deal_w_fills -- converts -9999 values from dictionary to nans
-
-#####
-
-This module will:
-
-- Read .nc files
-- Deal with fill values
-- Convert times (convert_time(sec->dt))
-- Take user input?? (maybe should be in main)
-
-Outputs:
-- Array / dictonary of 'prepped' data (IE fill values corrected, in EPN)
- N x 3 array
-- Time N x 1 array
-- User input???
+        ['b_epn'] nx3 array of B-field in EPN (with nan values from fill value -9999)
+        ['time'] nx1 array of time in datetime formatted sec
+- Used in:
+    ****
 """
+
 import netCDF4 as nc
 from datetime import datetime, timedelta
 import datetime
 import numpy as np
-import os
 
 def read_nc_file(file_path):
+    """
+    Read an nc file and extract its variables.
+
+    Args:
+        file_path (str): Path to the nc file.
+
+    Returns:
+        dict: Dictionary containing variables extracted from the nc file.
+    """
     dataset = nc.Dataset(file_path)
     variables = read_variables(dataset)
-    # print(variables)
     dataset.close()
     return variables
 
 def read_variables(dataset):
+    """
+    Read and store all variables from an nc dataset into a dictionary.
+
+    Args:
+        dataset : NetCDF dataset.
+
+    Returns:
+        dict: Dictionary containing variables from the dataset.
+    """
     data_dict = {}
     for variable_name in dataset.variables.keys():
-        # print(variable_name)
         data_dict[variable_name] = dataset.variables[variable_name][:]
     return data_dict
 
-# TODO: Add function to deal with fills
+def deal_with_fills(data_dict):
+    """
+    Replaces variables that are -9999 with NaN values in the 'b_epn' variable.
+
+    Args:
+        data_dict (dict): Dictionary containing data that needs to be filtered.
+            It has variables 'time' (nx1) and 'b_epn' (nx3).
+
+    Returns:
+        dict: a new dictionary with -9999 values in 'b_epn' replaced by NaNs.
+    """
+    b_epn = data_dict['b_epn']
+    b_epn = np.where(b_epn == -9999, np.nan, b_epn)
+    new_epn = {'b_epn': b_epn}
+
+    return new_epn
 
 def time_convert(seconds_2000):
-    date_original = datetime(2000, 1, 1, 12, 0)
-    return date_original + timedelta(seconds=int(seconds_2000))
+    """
+    Convert time values from seconds since 2000-01-01 to datetime objects.
 
-#---- TODO : 1) make this part of an earlier step when we read in the l2 file the first time
-#             2) make concatenate able to take in unlimited dimension
-#note: this is only here because I was only reading in the pickle file and needed to re-read the L2 to get time
+    Args:
+        seconds_2000 (numpy.ndarray): Array of time values in seconds since 2000-01-01.
 
+    Returns:
+        numpy.ndarray: Array of datetime objects.
+    """
+    date_original = datetime.datetime(2000, 1, 1, 12, 0)
+    return np.array([date_original + timedelta(seconds=int(seconds)) for seconds in seconds_2000])
 
-# t1 = nc.Dataset('/Users/aspen.davis/Documents/GOES/G16/G16l1b/20230226_event/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc')
-# time_ob_native1 = t1['time']
-# time_ob_1 = np.asarray(time_ob_native1).flatten()
-#
-# t2 = nc.Dataset('/Users/aspen.davis/Documents/GOES/G16/G16l1b/20230226_event/dn_magn-l2-hires_g16_d20230228_v1-0-1.nc')
-# time_ob_native2 = t2['time']
-# time_ob_2 = np.asarray(time_ob_native2).flatten()
-#
-#
-# time_g16 = np.concatenate((time_ob_1,time_ob_2),axis=None)
+def output_data_prepped_dict(file_path):
+    """
+    Process a data file, including reading, dealing with fill values, and converting time. Puts everything into a new dictionary
 
+    Args:
+        file_path (str): Path to the data file.
 
-# test_nc = read_nc_file('../data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc')
+    Returns:
+        dict: Processed data dictionary containing 'time' and 'b_epn' with fill values corrected.
+    """
 
-# print(type(read_nc_file('../data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc')))
+    original_dict = read_nc_file(file_path)
+    epn_with_fills_fixed = deal_with_fills(original_dict)
+    converted_time = time_convert(original_dict['time'])
+
+    dict_prepped = {'time': converted_time, 'b_epn': epn_with_fills_fixed}
+
+    return dict_prepped
+
+# Example usage:
+# prepped_data = output_data_prepped_dict('../data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc')
+# print(prepped_data)
