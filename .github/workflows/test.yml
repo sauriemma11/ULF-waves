@@ -30,11 +30,13 @@ jobs:
           environment-file: env.yml
       - name: Run data_prep tests
         run: |
+          mamba activate env
           cd test/unit
           python -m unittest test_data_prep.py
 
       - name: Run plots tests
         run: |
+          mamba activate env
           cd test/unit
           python -m unittest test_plots.py
 
