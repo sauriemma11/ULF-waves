@@ -12,3 +12,8 @@ def apply_butter(siggy, b, a):
     #b,a = output from butter_filter, signal = 1d array
     filtered = signal.filtfilt(b, a, siggy[~np.isnan(siggy)]) #apply filter forwards and back, ignore nans
     return filtered
+
+def find_nearest(array, value):
+    array = np.asarray(array)
+    idx = (np.abs(array - value)).argmin()
+    return idx
