@@ -28,16 +28,14 @@ jobs:
         with:
           activate-environment: ULF_waves
           environment-file: env.yml
-      - name: Run data_prep tests
-        run: |
-          cd test/unit
-          python -m unittest test_data_prep.py
-
       - name: Run plots tests
         run: |
           cd test/unit
           python -m unittest test_plots.py
-
+      - name: Run data_prep tests
+        run: |
+          cd test/unit
+          python -m unittest test_data_prep.py
 #  run_func_tests: # FUNCTIONAL TESTS
 #    runs-on: ubuntu-latest
 #    steps:
