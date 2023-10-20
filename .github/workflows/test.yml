@@ -17,7 +17,7 @@ jobs:
       - uses: mamba-org/setup-micromamba@v1
         with:
           activate-environment: env
-          environment-file: ../../env.yml
+          environment-file: env.yml
       - run: pycodestyle $(git ls-files "*.py")
 
   run_unit_tests: # UNIT TESTS
@@ -27,7 +27,7 @@ jobs:
       - uses: mamba-org/setup-micromamba@v1
         with:
           activate-environment: env
-          environment-file: ../../env.yml
+          environment-file: env.yml
       - name: Run data_prep tests
         run: |
           cd test/unit
