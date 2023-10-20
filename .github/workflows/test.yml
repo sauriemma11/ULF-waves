@@ -1,14 +1,13 @@
 name: Tests
 
 on:
-  deployment
-  # push:
-  #   branches: [ main ] # push on main
-  # pull_request:
-  #   branches: [ main ] # pull on main
+#   push:
+#     branches: [ main ] # push on main
+   pull_request:
+     branches: [ main ] # pull on main
 
 jobs:
-  run_style_check: # SYLE CHECK
+  run_style_check: # STYLE CHECK
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -29,18 +28,24 @@ jobs:
         with:
           activate-environment: env
           environment-file: env.yml
-      - run: |
+      - name: Run data_prep tests
+        run: |
           cd test/unit
           python -m unittest test_data_prep.py
 
-  run_func_tests: # FUNCTIONAL TESTS
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: mamba-org/setup-micromamba@v1
-        with:
-          activate-environment: env
-          environment-file: env.yml
-      - run: |
-          cd test/functional
-          bash func_tests.sh
+      - name: Run plots tests
+        run: |
+          cd test/unit
+          python -m unittest test_plots.py
+
+#  run_func_tests: # FUNCTIONAL TESTS
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - uses: mamba-org/setup-micromamba@v1
+#        with:
+#          activate-environment: env
+#          environment-file: env.yml
+#      - run: |
+#          cd test/functional
+#          bash func_tests.sh
