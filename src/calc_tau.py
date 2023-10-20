@@ -82,7 +82,11 @@ def get_f_band(f_hp_spectrum,fband):
     # TO DO: band option in config?
     """
     Find the indicies for the low and high frequencies
-
+    inputs: f_hp_spectrum: frequencies in the spectrogram, mx1 [Hz]
+            fband: low and high frequencies of band, 1x2 list i.e. [low,high], [Hz]
+    output: band_st: index of the starting frequency, int
+            band_sp: index of the stop frequency, int
+            delta_f: difference between the high and low frequencies, int [Hz]
     """
 
     band = [fband[0],fband[1]] #band = frequency band limits,: 1-10mHz, use 0.011 so includes 10mHz
@@ -93,6 +97,15 @@ def get_f_band(f_hp_spectrum,fband):
     return(band_st,band_sp,delta_f)
 
 def avg_psd(Sxx_hp_spectrum,  band_st, band_sp, delta_f, t_xx):
+    """
+    Calculate the average power spectral density in the frequency band
+    inputs: Sxx_hp_spectrum: power specrum from spectrogram, txm [nT^2/Hz]
+            band_st: starting index of frequencies in frequency band, int
+            band_sp: stopping index of frequencies in frequency band, int
+            delta_f: difference between the high and low frequencies, in [Hz]
+            t_xx: times from spectrum [s]
+    outputs: psd_avg: average power spectral density, int, [nT^2/Hz]
+    """
 
     band_pwrs = []
     for t in np.arange(0,len(t_xx)):
@@ -103,22 +116,32 @@ def avg_psd(Sxx_hp_spectrum,  band_st, band_sp, delta_f, t_xx):
     return(psd_avg)
 
 def calc_Dll(psd_avg):
+    # TO DO: MAKE F A VARIABLE / JUST PASS IN FBAND FROM INPUTS
+    """
+    Calculate D_LL
+    inputs: psd_avg: average power spectral density for the frequency band of interest, int [nT^2/Hz]
+    params: L: Lshell (Earth Radius) [RE]
+            B_e: equitorial magnetic field strength at surface of earth [nT]
+    output: D_LL
+    """
     L = 6.6
-    P_b = psd_avg#psd #psd_time #average power of field pertubations over all frequencies being used
-                        #using paralell componenet bc leads to E accelerating electrons in radial directions
-    f = (0.001 + 0.01) / 2#(0.0012 + 0.01) / 2 #central frequency, using middle of frequency band 1-10mHz
-    B_e = 31200  #B field at equator : equitaorial magnetic field strength at surface of earth
-                # = 0.312 G = 31200 nT
+    P_b = psd_avg
+    f = (0.001 + 0.01) / 2 #noralizes
+    B_e = 31200
     Dll =( (L**8 * 4 * np.pi**2 ) / (9 * (8* B_e**2)) ) * (P_b * f**2)
     return(Dll)
 
 def calc_tau(D_ll):
-
+    """
+    calculate tau (the time it takes for an electron to diffuse one Lshell)
+    input: D_ll
+    output: tau, int [min]
+    """
     tau_s = 1/D_ll
     tau_m = tau_s / 60
     return(tau_m)
 
-def get_tau(b_mfa, fband,ftype,comp): #function to be called by main module
+def get_tau(b_mfa, fband=[0.001,0.01],ftype='highpass',comp=2): #function to be called by main module
     """
     calculate tau.
     input: b_mfa: magnetic field values in MFA with background field
@@ -126,7 +149,9 @@ def get_tau(b_mfa, fband,ftype,comp): #function to be called by main module
            time: datetime array, tx1 [s]
            fband: low and high frequency for the band of interest,
                   1x2, list of ints [Hz]
-    output: tau: timescale to diffuse one Lshell, int [min]
+            comp: componenet of the magnetic field to filter, int, 0=radia, 1=phi,2=paralell
+    output: a dictionary containing:
+            tau: timescale to diffuse one Lshell, int [min]
             Dll: D_LL, int
             t_hp_spectrum: times corresponding to frequency domain,  [s]
             f_hp_spectrum: frequencies corresponding to frequency domain [Hz]

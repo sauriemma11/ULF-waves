@@ -47,7 +47,7 @@ class TestMathLib(unittest.TestCase):
    #                 + '\n')
    #     f.close()
    #     val = u.get_column('testing_data_file.txt', query_col, query_val,
-                           result_col)
+                           #result_col)
    #     self.assertIsNotNone(val)
 
 
