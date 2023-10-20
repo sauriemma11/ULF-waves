@@ -117,7 +117,7 @@ def calc_tau(D_ll):
     print('Sandhu tau : ',tau_m )
     return(tau_m)
 
-def get_tau(b_mfa, time, fband,ftype,comp):
+def get_tau(b_mfa, time, fband,ftype,comp): #function to be called by main module
     """
     calculate tau.
     input: b_mfa: magnetic field values in MFA with background field
@@ -146,5 +146,4 @@ def get_tau(b_mfa, time, fband,ftype,comp):
     tau = calc_tau(D_LL)
 
     return(tau, f_spect, t_spect, Sxx_spect, psd_av, b_filt)
-
 
