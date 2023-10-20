@@ -59,7 +59,7 @@ def deal_with_fills(data_dict):
     b_epn = data_dict['b_epn']
     b_epn = np.where(b_epn == -9999, np.nan, b_epn)
     new_epn = {'b_epn': b_epn}
-
+    # print(type(b_epn))
     return new_epn
 
 def time_convert(seconds_2000):
@@ -90,10 +90,10 @@ def output_data_prepped_dict(file_path):
     epn_with_fills_fixed = deal_with_fills(original_dict)
     converted_time = time_convert(original_dict['time'])
 
-    dict_prepped = {'time': converted_time, 'b_epn': epn_with_fills_fixed}
+    dict_prepped = {'time': converted_time, 'b_epn': epn_with_fills_fixed['b_epn']}
 
     return dict_prepped
 
 # Example usage:
-prepped_data = output_data_prepped_dict('../data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc')
-print(prepped_data)
+# prepped_data = output_data_prepped_dict('../data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc')
+# print(prepped_data)
