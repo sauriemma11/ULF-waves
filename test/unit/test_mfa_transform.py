@@ -22,7 +22,19 @@ class TestMathLib(unittest.TestCase):
         test_dat = np.random.randint(low=1, high=10000,size=(100,3))
         bav_out = mt.get_bav(test_dat)
         self.assertIsNotNone()
-
+#####test_dat = np.random.randint(low=1, high=10000, size=(100, 3))
+# bav_out = get_bav(test_dat)
+# mfa_out = compute_mfa(bav_out,test_dat)
+# bsub = background_sub(mfa_out)
+#
+# plt.plot(test_dat)
+# plt.show()
+# plt.plot(bav_out)
+# plt.show()
+# plt.plot(mfa_out)
+# plt.show()
+# plt.plot(bsub)
+# plt.show()
   #  def test_getcol_pos(self):
   ##      query_col = randint(0, 2)  # test file has 3 columns
    #     query_val = randint(0, 100)

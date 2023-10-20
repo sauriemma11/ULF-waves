@@ -27,12 +27,14 @@ Module to calculate the tau value
 '''
 
 import utils as u
+import matplotlib.pyplot as plt
+from scipy import signal
 # TO DO: GET RID OF GLOBAL VARIABLES HERE
 # THINGS TO ADD TO CONFIG: frequency/Pc band
 #   -highpass or bandpass for tau filtering
 
 def filter_b(b_mfa,ftype='high',comp=2,fs=10,N=1, fc=0.001):
-    # TO DO: option for which componen to get waves for?
+    # TO DO: option for which components to get waves for?
     # TO DO: optoin for frequency band? dpdds on application..
     """
     Filter the mangetic field component of interest.
@@ -75,25 +77,25 @@ def spect(b_in, fs=10):
             return_onesided=True,mode='psd')
     return(f_sps,t_s,Sxx_s)
 
-def get_f_band(f_hp_spectrum,f_low,f_high):
+def get_f_band(f_hp_spectrum,fband):
     # TO DO: band option in config?
     """
     Find the indicies for the low and high frequencies
 
     """
 
-    band = [f_low,f_high] #band = frequency band limits,: 1-10mHz, use 0.011 so includes 10mHz
+    band = [fband[0],fband[1]] #band = frequency band limits,: 1-10mHz, use 0.011 so includes 10mHz
     delta_f = band[1]-band[0]
     #get start and stop index for frequency band
     band_st = find_nearest(f_hp_spectrum,band[0])
     band_sp = find_nearest(f_hp_spectrum,band[1])
     return(band_st,band_sp,delta_f)
 
-def avg_psd(Sxx_hp_spectrum, band_st, band_sp, delta_f):
+def avg_psd(Sxx_hp_spectrum,  band_st, delta_f):
 
     band_pwrs = []
     for t in np.arange(0,len(t_hp_z)):
-        band_sum = np.sum(Sxx_hp_spectrum[band_st:band_sp,t])
+        band_sum = np.sum(Sxx_hp_spectrum[band_st[0]:band_sp[1],t])
         band_pwr_tmp = band_sum / delta_f
         band_pwrs.append(band_pwr_tmp)
     psd_avg = np.mean(band_pwrs)
@@ -137,7 +139,7 @@ def get_tau(b_mfa, time, fband,ftype,comp): #function to be called by main modul
 
     f_spect,t_spect,Sxx_spect = spect(b_filt)
 
-    low_f, high_f = get_f_band(f_spect)
+    low_f, high_f = get_f_band(f_spect,fband)
 
     psd_av = avg_psd(Sxx_spect, low_f, high_f)
 
@@ -145,5 +147,15 @@ def get_tau(b_mfa, time, fband,ftype,comp): #function to be called by main modul
 
     tau = calc_tau(D_LL)
 
-    return(tau, f_spect, t_spect, Sxx_spect, psd_av, b_filt)
+    outs = {}
+
+    outs['tau'] = tau
+    outs['D_LL'] = D_LL
+    outs['frequencies'] = f_spect
+    outs['time'] = t_spect
+    outs['Sxx'] = Sxx_spect
+    outs['psd'] = psd_av
+    outs['b_filt'] = b_filt
+
+    return(outs)
 

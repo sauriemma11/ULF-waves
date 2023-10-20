@@ -118,10 +118,10 @@ def background_sub(b_in):
     fc = 1/(30*60)
     N = 2
     btype = 'high'
-    b,a = butter_filter(fs ,fc,N, btype)
-    b_x = apply_butter(b_in[:][:,0],b,a)
-    b_y = apply_butter(b_in[:][:,1],b,a)
-    b_z = apply_butter(b_in[:][:,2],b,a)
+    b,a = u.butter_filter(fs ,fc,N, btype)
+    b_x = u.apply_butter(b_in[:][:,0],b,a)
+    b_y = u.apply_butter(b_in[:][:,1],b,a)
+    b_z = u.apply_butter(b_in[:][:,2],b,a)
 
     b_mfa_bsub = np.column_stack((b_x,b_y,b_z))
     return(b_mfa_bsub)
@@ -134,11 +134,8 @@ def main():
     b_mga_bsub = background_sub(b_mfa)
 
 
+
 #if __name__ == '__main__':
 #    main()
 
-test_dat = np.random.randint(low=1, high=10000, size=(100, 3))
-bav_out = get_bav(test_dat)
-
-print(bav_out)
 
