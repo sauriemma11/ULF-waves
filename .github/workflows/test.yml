@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: mamba-org/setup-micromamba@v1
         with:
-          activate-environment: env
+          activate-environment: ULF_waves
           environment-file: env.yml
       - run: pycodestyle $(git ls-files "*.py")
 
@@ -26,17 +26,17 @@ jobs:
       - uses: actions/checkout@v2
       - uses: mamba-org/setup-micromamba@v1
         with:
-          activate-environment: env
+          activate-environment: ULF_waves
           environment-file: env.yml
       - name: Run data_prep tests
         run: |
-          mamba activate env
+          mamba activate ULF_waves
           cd test/unit
           python -m unittest test_data_prep.py
 
       - name: Run plots tests
         run: |
-          mamba activate env
+          mamba activate ULF_waves
           cd test/unit
           python -m unittest test_plots.py
 
