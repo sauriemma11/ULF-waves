@@ -1,0 +1,46 @@
+name: Tests
+
+on:
+  deployment
+  # push:
+  #   branches: [ main ] # push on main
+  # pull_request:
+  #   branches: [ main ] # pull on main
+
+jobs:
+  run_style_check: # SYLE CHECK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: mamba-org/setup-micromamba@v1
+        with:
+          activate-environment: env
+          environment-file: env.yml
+      - run: pycodestyle $(git ls-files "*.py")
+
+  run_unit_tests: # UNIT TESTS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: mamba-org/setup-micromamba@v1
+        with:
+          activate-environment: env
+          environment-file: env.yml
+      - run: |
+          cd test/unit
+          python -m unittest test_data_prep.py
+
+  run_func_tests: # FUNCTIONAL TESTS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: mamba-org/setup-micromamba@v1
+        with:
+          activate-environment: env
+          environment-file: env.yml
+      - run: |
+          cd test/functional
+          bash func_tests.sh
