@@ -157,11 +157,3 @@ def get_tau(b_mfa, fband,ftype,comp): #function to be called by main module
     outs['b_filt'] = b_filt
 
     return(outs)
-
-test_dat = np.random.randint(low=1, high=100000, size=(108000, 3))
-fband=[0.001,0.01]
-pls = get_tau(test_dat, fband, 'highpass',2)
-
-
-#get_tau(test_dat, [0.001,0.001],'highpass',2)
-print(pls['tau'])
