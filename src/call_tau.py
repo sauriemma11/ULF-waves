@@ -44,13 +44,21 @@ def define_window(time_list, timespan_hrs=1):
     return time_sublists
 
 
-def concat_tau(timespan_hrs=1):
+def concat_tau(b_mfa, fband, ftype, comp, timespan_hrs=1):
     """
     Concatenates individual window data into one dictionary
 
     Parameters
     ----------
-    timespan_hrs: int (default = 1)
+    b_mfa: tx1 list [nT]
+        Magnetic field values in MFA with background field subtracted
+    time: tx1 list [s]
+        Datetime array
+    fband: 1x2 list of ints [Hz]
+        Low and high frequency for the band of interest
+    comp:
+        Component of magnetic field
+    timespan_hrs: int (default = 1) [Hrs]
         Number of hours over which to find average Tau, PSD, and DLL
         Must be divisible by 24 (i.e. 1, 2, 3, 4, 6, 8, 12 hrs)
 
@@ -64,7 +72,7 @@ def concat_tau(timespan_hrs=1):
     all_windows_tau_dict = {"tau": [], "D_LL": [], "psd": [], "Sxx": [],
                             "time": [], "freqs": [], "b_filt": []}
     for i in range(num_windows):
-        tau_dict_for_window = calc_tau.get_tau()
+        tau_dict_for_window = calc_tau.get_tau(b_mfa, fband, ftype, comp)
         all_windows_tau_dict["tau"].append(tau_dict_for_window["tau"])
         all_windows_tau_dict["D_LL"].append(tau_dict_for_window["D_LL"])
         all_windows_tau_dict["psd"].append(tau_dict_for_window["psd"])
