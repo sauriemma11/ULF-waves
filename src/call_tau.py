@@ -20,12 +20,21 @@ Module to calculate and combine tau values for specified time interval
     * call_tau -- calculate tau for each time interval by looping over data set
 '''
 
-import get_tau
+#import calc_tau
+import utils
 
-def define_window(ttimespan):
-  window = 0
-  return window
+def define_window(timespan_hrs, time_list):
+  # Find number of data entries over defined input (timespan in hours)
+  num_timespan_data_entries = timespan_hrs * 3600 * 10
+  sublists = []
+  for i in range(0, utils.file_length, num_timespan_data_entries):
+    sublist = time_list[i:i+num_timespan_data_entries]
+    sublists.append(sublist)
+  return sublists
 
+print(define_window(1, range(0,utils.file_length)))
+
+"""
 def concat_tau(Bfields, t_arrays):
   tau_dict = 0
   return tau_dict
@@ -36,3 +45,4 @@ def call_tau():
     one_tau = get_tau.get_tau()
     concat_tau.append(one_tau)
   return concat_tau
+"""
