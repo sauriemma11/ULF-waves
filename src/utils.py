@@ -1,5 +1,3 @@
-file_length = 864000 # 10Hz cadence, 86400 seconds/day
-
 def butter_filter(fs,fc,N,btype):
     #fs = sampling frequency [Hz], fc = cut off frequency [Hz], N = filter order, btype = high / low
     w = fc / (fs/2) #normalize the frequency
