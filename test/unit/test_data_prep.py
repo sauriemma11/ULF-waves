@@ -30,15 +30,16 @@ class TestDataPrep(unittest.TestCase):
         with self.assertRaises(FileNotFoundError):
             read_nc_file(fake_file_path)
 
-    import numpy as np
-
-
     def test_time_convert(self):
         seconds_2000 = [0, 3600, 7200]  # 0 seconds, 1 hour, 2 hours
         converted_time = time_convert(seconds_2000)
         expected_time = ['2000-01-01 12:00:00', '2000-01-01 13:00:00',
                          '2000-01-01 14:00:00']
-        self.assertEqual(converted_time, expected_time)
+
+        # Convert datetime objects to strings for comparison
+        converted_time_str = [time.strftime('%Y-%m-%d %H:%M:%S') for time in
+                              converted_time]
+        self.assertEqual(converted_time_str, expected_time)
 
 
 if __name__ == '__main__':
