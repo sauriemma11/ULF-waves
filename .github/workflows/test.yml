@@ -1,10 +1,11 @@
 name: Tests
 
 on:
-  push:
-    branches: [ main ] # push on main
-  pull_request:
-    branches: [ main ] # pull on main
+  deployment
+  # push:
+  #   branches: [ main ] # push on main
+  # pull_request:
+  #   branches: [ main ] # pull on main
 
 jobs:
   run_style_check: # SYLE CHECK
