@@ -35,13 +35,18 @@ def define_window(time_list, timespan_hrs=1):
     time_sublists: list
         List of lists; each list is indices of data entries for each timespan
     """
-    # Find number of data entries over defined input (timespan in hours)
-    num_timespan_data_entries = timespan_hrs * 3600 * 10
-    time_sublists = []
-    for i in range(0, len(time_list), num_timespan_data_entries):
-        sublist = time_list[i:i+num_timespan_data_entries]
-        time_sublists.append(sublist)
-    return time_sublists
+    # Check that 24 is divisible by entered timespan before proceeding
+    if 24 % timespan_hrs != 0:
+        raise ValueError("24 is not divisible by timespan used.")
+        return None
+    else:
+        # Find number of data entries over defined input (timespan in hours)
+        num_timespan_data_entries = timespan_hrs * 3600 * 10
+        time_sublists = []
+        for i in range(0, len(time_list), num_timespan_data_entries):
+            sublist = time_list[i:i+num_timespan_data_entries]
+            time_sublists.append(sublist)
+        return time_sublists
 
 
 def concat_tau(b_mfa, fband, ftype, comp, timespan_hrs=1):
@@ -61,6 +66,7 @@ def concat_tau(b_mfa, fband, ftype, comp, timespan_hrs=1):
     timespan_hrs: int (default = 1) [Hrs]
         Number of hours over which to find average Tau, PSD, and DLL
         Must be divisible by 24 (i.e. 1, 2, 3, 4, 6, 8, 12 hrs)
+        Must be the same timespan used in define_windows function
 
     Returns
     -------
