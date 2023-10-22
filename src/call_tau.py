@@ -61,6 +61,7 @@ def concat_tau(b_mfa, fband, ftype, comp, timespan_hrs=1):
     timespan_hrs: int (default = 1) [Hrs]
         Number of hours over which to find average Tau, PSD, and DLL
         Must be divisible by 24 (i.e. 1, 2, 3, 4, 6, 8, 12 hrs)
+        Must be the same timespan used in define_windows function
 
     Returns
     -------
