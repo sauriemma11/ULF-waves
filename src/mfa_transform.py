@@ -18,29 +18,13 @@ Module to find the Magnetic Field Aligned (MFA) coordinates
     * background_sub -- filter out (subtract) the background field from data
 '''
 import utils as u
-
+import numpy as np
 # MFA transformation steps
 # to be called after data_prep
 # output will go into calc_tau
-import os
-import csv
-import numpy as np
-from datetime import datetime, timedelta
-import datetime
-from scipy.interpolate import interp1d
-from typing import Dict, Optional, List
-from glob import glob
-import matplotlib
-import matplotlib.pyplot as plt
-from matplotlib.dates import DateFormatter
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
-import datetime as dt
-import pickle
-import scipy.signal as signal
 
 
 # step 1 : find average background field
-
 # TO DO: USE CONFIG FILE TO SET UP THE FILTER: i.e. set up fs/fc/N/btype
 def get_bav(b_in):
     """
@@ -60,22 +44,21 @@ def get_bav(b_in):
                     btype: filter type, high/low/band pass (lowpass default)
 
     """
-
-
     fs = 10
     fc = 1/(30*60)
     N = 2
     btype = 'lowpass'
-    b,a = u.butter_filter(fs ,fc,N, btype)
-    b_avx = u.apply_butter(b_in[:][:,0],b,a)
-    b_avy = u.apply_butter(b_in[:][:,1],b,a)
-    b_avz = u.apply_butter(b_in[:][:,2],b,a)
+    b, a = u.butter_filter(fs, fc, N, btype)
+    b_avx = u.apply_butter(b_in[:][:, 0], b, a)
+    b_avy = u.apply_butter(b_in[:][:, 1], b, a)
+    b_avz = u.apply_butter(b_in[:][:, 2], b, a)
 
-    b_av = np.column_stack((b_avx,b_avy,b_avz))
-    return(b_av)
+    b_av = np.column_stack((b_avx, b_avy, b_avz))
+    return (b_av)
+
 
 # setp 2 : compute mfa
-def compute_mfa(b_av,b_epn):
+def compute_mfa(b_av, b_epn):
     """
     step 2: compute MFA coordinates. See wave_analysis_steps.pdf for all dtails
     input: b_av: average background field from get_bav
@@ -84,21 +67,20 @@ def compute_mfa(b_av,b_epn):
     output : magnetic field measurements in MFA coordinates, list of int size
             nx3.
     """
-
-
-    b_mfa = np.zeros((len(b_epn),3))
+    b_mfa = np.zeros((len(b_epn), 3))
     for n in np.arange(len(b_epn)):
         e_par2 = b_av[n]/np.linalg.norm(b_av[n])
-        e_phi2 = e_par2 * [-1,0,0]
+        e_phi2 = e_par2 * [-1, 0, 0]
         e_phi3 = e_phi2 / np.linalg.norm(e_phi2)
-        e_r = e_phi2* e_par2
+        e_r = e_phi2*e_par2
         e_r3 = e_r / np.linalg.norm(e_r)
 
-        mfa_trans = np.row_stack((e_r,e_phi2,e_par2))
-        b_mfa_temp = np.matmul(b_epn[n],mfa_trans.T)
+        mfa_trans = np.row_stack((e_r, e_phi2, e_par2))
+        b_mfa_temp = np.matmul(b_epn[n], mfa_trans.T)
         b_mfa[n] = b_mfa_temp
 
-    return(b_mfa)
+    return (b_mfa)
+
 
 # step 3 : background subtraction
 def background_sub(b_in):
@@ -118,24 +100,23 @@ def background_sub(b_in):
     fc = 1/(30*60)
     N = 2
     btype = 'high'
-    b,a = u.butter_filter(fs ,fc,N, btype)
-    b_x = u.apply_butter(b_in[:][:,0],b,a)
-    b_y = u.apply_butter(b_in[:][:,1],b,a)
-    b_z = u.apply_butter(b_in[:][:,2],b,a)
+    b, a = u.butter_filter(fs, fc, N, btype)
+    b_x = u.apply_butter(b_in[:][:, 0], b, a)
+    b_y = u.apply_butter(b_in[:][:, 1], b, a)
+    b_z = u.apply_butter(b_in[:][:, 2], b, a)
 
-    b_mfa_bsub = np.column_stack((b_x,b_y,b_z))
-    return(b_mfa_bsub)
+    b_mfa_bsub = np.column_stack((b_x, b_y, b_z))
+    return (b_mfa_bsub)
+
 
 def main():
     b_avg = get_bav(b_epn)
 
-    b_mfa = compute_mfa(b_avg,b_epn)
+    b_mfa = compute_mfa(b_avg, b_epn)
 
     b_mga_bsub = background_sub(b_mfa)
+    return (b_mga_bsub)
 
 
-
-#if __name__ == '__main__':
+# if __name__ == '__main__':
 #    main()
-
-
