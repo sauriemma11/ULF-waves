@@ -19,7 +19,7 @@ jobs:
           activate-environment: ULF_waves
           environment-file: env.yml
       - name: Install project dependencies
-        run: mamba install --file requirements.txt
+        run: micromamba install --file requirements.txt
       - run: pycodestyle $(git ls-files "*.py")
 
   run_unit_tests: # UNIT TESTS
@@ -31,7 +31,7 @@ jobs:
           activate-environment: ULF_waves
           environment-file: env.yml
       - name: Install proj dependencies
-        run: mamba install --file requirements.txt
+        run: micromamba install --file requirements.txt
       - name: Run plots tests
         run: |
           cd test/unit
