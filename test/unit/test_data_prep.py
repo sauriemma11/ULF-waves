@@ -1,12 +1,12 @@
 import unittest
 import sys
-
-import numpy as np
-
-# sys.path.insert(0, '../../src')  #noqa
-from src.data_prep import *
 import os
 import random
+import numpy as np
+
+sys.path.insert(0, '../../src')  #noqa
+from data_prep import *
+
 
 class TestDataPrep(unittest.TestCase):
 
