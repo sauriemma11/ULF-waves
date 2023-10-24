@@ -19,10 +19,10 @@ jobs:
         with:
           activate-environment: ULF_waves
           environment-file: env.yml
-      - name: Verify conda env
-        run: conda list -n ULF_waves
-      - name: Install project dependencies
-        run: micromamba install -n ULF_waves --file requirements.txt
+      # - name: Verify conda env
+      #   run: conda list -n ULF_waves
+      # - name: Install project dependencies
+      #   run: micromamba install -n ULF_waves --file requirements.txt
       - run: pycodestyle $(git ls-files "*.py")
 
   run_unit_tests: # UNIT TESTS
