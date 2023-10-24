@@ -1,6 +1,6 @@
 import unittest
-import numpy as np
 from src.plots import plot_data
+import numpy as np
 
 class TestPlots(unittest.TestCase):
 
