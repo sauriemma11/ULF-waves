@@ -4,14 +4,14 @@ import os
 import random
 import numpy as np
 
-sys.path.insert(0, '../../src')  #noqa
+sys.path.insert(0, '../../src')  # noqa
 from data_prep import *
 
 
 class TestDataPrep(unittest.TestCase):
 
     def test_read_nc_file_not_empty(self):
-        file_name = '../../data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc'
+        file_name = 'test_data/first_5_data.nc'
 
         variables = read_nc_file(file_name)
 
@@ -19,7 +19,7 @@ class TestDataPrep(unittest.TestCase):
         self.assertTrue(variables)
 
     def test_read_nc_file_is_dict(self):
-        file_name = '../../data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc'
+        file_name = 'test_data/first_5_data.nc'
         variables = read_nc_file(file_name)
 
         # pass if the returned variables are a type dict
@@ -40,6 +40,22 @@ class TestDataPrep(unittest.TestCase):
         converted_time_str = [time.strftime('%Y-%m-%d %H:%M:%S') for time in
                               converted_time]
         self.assertEqual(converted_time_str, expected_time)
+
+    def test_time_convert_fromnc(self):
+        file_name = 'test_data/first_5_data.nc'
+        variables = read_nc_file(file_name)
+        time_from_nc_raw = variables['time']
+        first_timestamp = time_from_nc_raw[0]
+
+        # Is the first timestamp the correct number?
+        self.assertEqual(first_timestamp, 730728000.0)
+
+        converted_time = time_convert(time_from_nc_raw)
+        converted_time_first = converted_time[0]
+        expected_converted_time = '2023-02-27 00:00:00'
+
+        # Is the first timestamp being converted correctly?
+        self.assertEqual(str(converted_time_first), expected_converted_time)
 
 
 if __name__ == '__main__':
