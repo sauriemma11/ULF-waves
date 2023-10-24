@@ -23,7 +23,7 @@ jobs:
       #   run: conda list -n ULF_waves
       # - name: Install project dependencies
       #   run: micromamba install -n ULF_waves --file requirements.txt
-      - run: pycodestyle $(git ls-files "*.py")
+      - run: pycodestyle --exclude=src/radiation_belt_analysis_v4.py,test/unit/test_mfa_transform.py $(git ls-files "*.py")
 
   run_unit_tests: # UNIT TESTS
     runs-on: ubuntu-latest

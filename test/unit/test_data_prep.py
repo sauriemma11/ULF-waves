@@ -4,7 +4,7 @@ import os
 import random
 import numpy as np
 
-sys.path.insert(0, '../../src')  #noqa
+sys.path.insert(0, '../../src')  # noqa
 from data_prep import *
 
 

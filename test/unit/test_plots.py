@@ -1,7 +1,8 @@
 import unittest
 import numpy as np
 import sys
-sys.path.insert(0, '../../src')  #noqa
+
+sys.path.insert(0, '../../src')  # noqa
 from plots import plot_data
 
 

@@ -21,8 +21,7 @@ def main(file_path, timespan, freq_band):
     file_path: str
         data file to work with
 
-    timespan: integer
-        hours to split up data by 
+    timespan: integer: hours to split up data by
 
     freq_band: list of 2 integers
         first element is lower frequency
@@ -34,13 +33,16 @@ def main(file_path, timespan, freq_band):
 
     """
     # prep data
-    variable_dict = data_prep.read_nc_file(file_path) # dictionary of all variables
+    variable_dict = data_prep.read_nc_file(
+        file_path)  # dictionary of all variables
 
     # mfa_transform
     mfa_dict = mfa_transform.main(variable_dict)
 
     # calc Tau
-    tau_dict = call_tau.call_tau(mfa_dict, timespan, freq_band) # calculates tau for each time window
+    tau_dict = call_tau.call_tau(mfa_dict, timespan,
+                                 freq_band)  # calculates tau for each time
+    # window
 
     # CREATE PLOTS???
 
@@ -49,4 +51,4 @@ def main(file_path, timespan, freq_band):
 
 if __name__ == '__main__':
     # Do the main stuff
-    # main()
+    main()
