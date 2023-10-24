@@ -53,7 +53,7 @@ def main(filename, timespan, freq_band):
     timespan: integer: hours to split up data by
 
     freq_band: list of 2 integers
-        first element is lower frequency, 
+        first element is lower frequency,
         and second element is upper frequency
 
     Returns
