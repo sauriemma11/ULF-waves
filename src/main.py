@@ -59,9 +59,8 @@ def main(filename, timespan, freq_band):
     Returns
     -------
     tau_dict: dict
-
     """
-    variable_dict = data_prep.read_nc_file(filename)  # dictionary of all variables
+    variable_dict = data_prep.read_nc_file(filename)
 
     mfa_dict = mfa_transform.main(variable_dict)
 
