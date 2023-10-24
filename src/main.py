@@ -15,7 +15,8 @@ import call_tau
 import argparse
 
 parser = argparse.ArgumentParser(
-    description='Pass in parameters for calculating Tau for a given dataset.'
+    description="""Pass in parameters for calculating
+      Tau for a given dataset."""
     )
 
 parser.add_argument('--filename',
@@ -26,13 +27,17 @@ parser.add_argument('--filename',
 parser.add_argument('--timespan',
                     type=int,
                     default=1,  # default is 1 hour
-                    help='Number of hours over which to find average Tau, PSD, and DLL values. Must be divisible by 24 (i.e. 1, 2, 3, 4, 6, 8, 12 hrs).',  #noqa
+                    help="""Number of hours over which to find average
+                      Tau, PSD, and DLL values. Must be divisible by 24
+                        (i.e. 1, 2, 3, 4, 6, 8, 12 hrs).""",
                     required=False)
 
 parser.add_argument('--freq_band',
                     type=list,
                     default=[0.001, 0.01],  # default is 0.001 - 0.01 Hz
-                    help='Values to define the frequency band of interest. First element is lower frequency, and second element is upper frequency [Hz].',  #noqa
+                    help="""Values to define the frequency band
+                      of interest.First element is lower frequency,
+                        and second element is upper frequency [Hz].""",
                     required=False)
 
 args = parser.parse_args()
@@ -48,23 +53,20 @@ def main(filename, timespan, freq_band):
     timespan: integer: hours to split up data by
 
     freq_band: list of 2 integers
-        first element is lower frequency, and second element is upper frequency
+        first element is lower frequency,
+        and second element is upper frequency
 
     Returns
     -------
     tau_dict: dict
-
     """
-    # prep data
-    variable_dict = data_prep.read_nc_file(filename) # dictionary of all variables
+    variable_dict = data_prep.read_nc_file(filename)
 
-    # mfa_transform
     mfa_dict = mfa_transform.main(variable_dict)
 
-    # calc Tau
-    tau_dict = call_tau.call_tau(mfa_dict, timespan,
-                                 freq_band)  # calculates tau for each time
-    # window
+    tau_dict = call_tau.call_tau(mfa_dict,
+                                 timespan,
+                                 freq_band)
 
     # CREATE PLOTS???
 
