@@ -1,0 +1,9 @@
+python=3.10
+mamba
+micromamba
+pip
+numpy
+netcdf4
+scipy
+matplotlib
+pycodestyle
