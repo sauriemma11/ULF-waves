@@ -4,9 +4,10 @@ import random
 import os
 import unittest
 from numpy.random import randint
-# sys.path.insert(0, '../../src')  # noqa # must run from unit test directory
+sys.path.insert(0, '../../src')  # noqa # must run from unit test directory
+import mfa_transform as mt
 import utils as u  # noqa
-import src.mfa_transform as mt
+# import src.mfa_transform as mt
 
 class TestMathLib(unittest.TestCase):
     def setUP(self):
