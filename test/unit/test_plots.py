@@ -1,6 +1,9 @@
 import unittest
-from src.plots import plot_data
 import numpy as np
+import sys
+sys.path.insert(0, '../../src')  #noqa
+from plots import plot_data
+
 
 class TestPlots(unittest.TestCase):
 
