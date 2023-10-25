@@ -5,13 +5,16 @@ import os
 import unittest
 from numpy.random import randint
 sys.path.insert(0, '../../src')  # noqa # must run from unit test directory
+import utils as u  # noqa
+import src.mfa_transform as mt
+sys.path.insert(0, './test_data')
 import mfa_transform as mt
 import utils as u  # noqa
 # import src.mfa_transform as mt
 
 class TestMathLib(unittest.TestCase):
     def setUP(self):
-        #create an nx3 random dataset for testing
+        # create an nx3 random dataset for testing
         self.test_file_name = 'setup_test_file.txt'
         f = open(self.test_file_name, 'w')
 
@@ -19,107 +22,71 @@ class TestMathLib(unittest.TestCase):
             rand_int = random.randint(1, 100)
             f.write(str(rand_int) + str(rand_int) + str(rand_int) + '\n')
         f.close()
+
     def test_get_bav(self):
-        test_dat = np.random.randint(low=1, high=10000,size=(100,3))
-        bav_out = mt.get_bav(test_dat)
-        self.assertIsNotNone()
-#####test_dat = np.random.randint(low=1, high=10000, size=(100, 3))
-# bav_out = get_bav(test_dat)
-# mfa_out = compute_mfa(bav_out,test_dat)
-# bsub = background_sub(mfa_out)
-#
-# plt.plot(test_dat)
-# plt.show()
-# plt.plot(bav_out)
-# plt.show()
-# plt.plot(mfa_out)
-# plt.show()
-# plt.plot(bsub)
-# plt.show()
-  #  def test_getcol_pos(self):
-  ##      query_col = randint(0, 2)  # test file has 3 columns
-   #     query_val = randint(0, 100)
-   #     result_col = randint(0, 2)
+        test_dat = np.random.randint(low=1, high=10000, size=(100, 3))
+        empty_dat = []
+        av = np.mean(test_dat, axis=0)
+        self.assertIsNotNone(mt.get_bav(test_dat))
+        self.assertEqual(np.shape(mt.get_bav(test_dat)), np.shape(test_dat))
+        self.assertEqual(np.all(mt.get_bav(test_dat)), np.all(av))
+        self.assertRaises(TypeError, mt.get_bav, empty_dat)
 
-  #      f = open('testing_data_file.txt', 'w')
-   #     for i in range(100):
-   #         rand_int = random.randint(1, 100)
-   #         f.write(str(rand_int) + ',' + str(rand_int) + ',' + str(rand_int)
-   #                 + '\n')
-   #     f.close()
-   #     val = u.get_column('testing_data_file.txt', query_col, query_val,
-                           #result_col)
-   #     self.assertIsNotNone(val)
+    # TO DO: figure out how to make these types of tests run faster
+    # def test_get_bav_sci(self):
+    # # test scientific rightness by comparison to a validated dataset
+    #     b_epn = u.read_txt('../../test/unit/test_data/epn_test_set.txt')
+    #     b_av_sci = u.read_txt('../../test/unit/test_data/b_av_test_set.txt')
+    #     self.assertAlmostEqual(np.all(mt.get_bav(b_epn)), np.all(b_av_sci))
 
+    def test_compute_mfa(self):
+        test_bav = np.random.randint(low=1, high=10000, size=(100, 3))
+        test_dat = np.random.randint(low=1, high=10000, size=(100, 3))
+        zero_bav = np.zeros((100, 3))
+        wrong_sz = 2
+        nan_dat = np.empty((100, 3))
+        nan_dat[:] = np.nan
 
+        self.assertIsNotNone(mt.compute_mfa(test_bav, test_dat))
+        self.assertEqual(np.shape(mt.compute_mfa(test_bav, test_dat)),
+                         np.shape(test_dat))
+        self.assertRaises(TypeError, mt.compute_mfa, wrong_sz, zero_bav)
+        self.assertIsNotNone(mt.compute_mfa(nan_dat, test_dat))
 
+    # def test_cmopute_mfa_sci(self):
+    # # test scientific rightness by comparison to a validated dataset
+    #     b_epn = u.read_txt('../../test/unit/test_data/epn_test_set.txt')
+    #     b_av_sci = u.read_txt('../../test/unit/test_data/b_av_test_set.txt')
+    #     b_mfa_sci = u.read_txt('../../test/unit/test_data/
+    #                            b_mfa_test_set.txt')
+    #     self.assertAlmostEqual(np.all(mt.compute_mfa(b_av_sci, b_epn)),
+    #                            np.all(b_mfa_sci))
+    def test_background_sub(self):
+        test_in = np.random.randint(low=1, high=10000, size=(100, 3))
+        wrong_sz = 2
+        nan_dat = np.empty((100, 3))
+        nan_dat[:] = np.nan
+        self.assertIsNotNone(mt.background_sub(test_in))
+        self.assertEqual(np.shape(mt.background_sub(test_in)),
+                         np.shape(test_in))
+        self.assertRaises(TypeError, mt.background_sub, wrong_sz)
+        self.assertIsNotNone(mt.compute_mfa(nan_dat, test_in))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import sys
-import numpy as np
-import random
-import os
-import unittest
-from numpy.random import randint
-sys.path.insert(0, '../../src')  # noqa # must run from unit test directory
-import mfa_transform as t  # noqa
-#  NOTE TO SELF : i think that this will go from the unit test directory back
-#  one to the home directory where the utility functions are
-
-
-class TestMathLib(unittest.TestCase):
-
-    def test_mfa_basic(self):
-        #TO DO: make this part of a set up maybe?
-        b_epn_test_set = np.zeros((1,3))
-        with open('../data/epn_test_set.txt', 'r') as f:
-            for line in f: #f:
-                line_data = line.split(',')
-                line_data[0],line_data[1],line_data[2] = float(line_data[0]),float(line_data[1]),float(line_data[2])
-                b_epn_test_set=np.vstack((b_epn_test_set,line_data))
-        b_epn_test_set = np.delete(b_epn_test_set, (0), axis=0)
-        
-        out = t.get_bav(b_epn_test_set)
-        self.assertIsNotNone(out)
-
-if __name__ == '__main__':
-    unittest.main()
-=======
-#use epn test dataset to test the mfa transformation
+    # def test_background_sub_sci(self):
+    # # test scientific rightness by comparison to a validated dataset
+    #     b_mfa_sci = u.read_txt('../../test/unit/
+    #                            test_data/b_mfa_test_set.txt')
+    #     b_mfa_bsub_sci = u.read_txt('../../test/unit/test_data/
+    #                                 b_mfa_bsub_test_set.txt')
+    #     self.assertAlmostEqual(np.all(mt.background_sub(b_mfa_sci)),
+    #                            np.all(b_mfa_bsub_sci))
+    def test_main(self):
+        test_in = np.random.randint(low=1, high=10000, size=(1000, 3))
+        wrong_sz = 2
+        nan_dat = np.empty((100, 3))
+        nan_dat[:] = np.nan
+        self.assertIsNotNone(mt.main(test_in))
+        self.assertEqual(np.shape(mt.main(test_in)),
+                         np.shape(test_in))
+        self.assertRaises(TypeError, mt.main, wrong_sz)
+        self.assertRaises(ValueError, mt.main, nan_dat)

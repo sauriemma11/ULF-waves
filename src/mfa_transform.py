@@ -109,7 +109,7 @@ def background_sub(b_in):
     return (b_mfa_bsub)
 
 
-def main():
+def main(b_epn):
     b_avg = get_bav(b_epn)
 
     b_mfa = compute_mfa(b_avg, b_epn)

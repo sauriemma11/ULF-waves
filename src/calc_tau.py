@@ -51,7 +51,7 @@ def filter_b(b_mfa, ftype='highpass', comp=2, fs=10, N=1, fc=0.001):
            fc: cutoff frequency IF highpass or lowpass filter, int
                if bandpass, 1x2 list of int with low and high frequencies
 
-    output: highps_z: highpass filtered componenent of b_mfa. size 1xn [nT]
+    output: highps_z: highpass filtered componenent of b_mfa. size n [nT]
     """
 
     if ftype == 'highpass' or 'lowpass':
@@ -70,7 +70,8 @@ def filter_b(b_mfa, ftype='highpass', comp=2, fs=10, N=1, fc=0.001):
 def spect(b_in, fs=10):
     """
     create spectrogram of magnetic field timeseries.
-    input: b_in: magnetic field in MFA coordinates, filtered [nT]
+    input: b_in: magnetic field in MFA coordinates, filtered, size n (i.e.
+    just one componenet of magnetic field) [nT]
            fs: sampling frequency, default is 10 Hz [Hz]
     output: f_sps: frequencies present in the spectrogram, [Hz]
             t_s: times in the spectrogram [s]
