@@ -12,7 +12,21 @@ def apply_butter(siggy, b, a):
     filtered = signal.filtfilt(b, a, siggy[~np.isnan(siggy)]) #apply filter forwards and back, ignore nans
     return filtered
 
+# TO DO : find_nearest is quite fragile atm, add in conditioning
+# TO DO : ADD IN CONDITION FOR CHECKING FBAND[1] > FBAND[0]
+# TO DO : add in condition for if something is really not in the set
 def find_nearest(array, value):
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
     return idx
+
+def read_txt(file_pth):
+    data = np.zeros((1, 3))
+    with open(file_pth) as lines:
+        for line in lines:
+            fields = line.rstrip().split(',')
+            fields = np.float32(fields)
+            data = np.vstack((data, fields))
+    data = np.delete(data, (0), axis=0)
+    return (data)
+
