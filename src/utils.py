@@ -1,15 +1,19 @@
 from scipy import signal
 import numpy as np
 
-def butter_filter(fs,fc,N,btype):
-    #fs = sampling frequency [Hz], fc = cut off frequency [Hz], N = filter order, btype = high / low
-    w = fc / (fs/2) #normalize the frequency
-    b,a = signal.butter(N,w,btype) #design filter
-    return b,a
+
+def butter_filter(fs, fc, N, btype):
+    # fs = sampling frequency [Hz], fc = cut off frequency [Hz], N = filter
+    # order, btype = high / low
+    w = fc / (fs / 2)  # normalize the frequency
+    b, a = signal.butter(N, w, btype)  # design filter
+    return b, a
+
 
 def apply_butter(siggy, b, a):
-    #b,a = output from butter_filter, signal = 1d array
-    filtered = signal.filtfilt(b, a, siggy[~np.isnan(siggy)]) #apply filter forwards and back, ignore nans
+    # b,a = output from butter_filter, signal = 1d array
+    filtered = signal.filtfilt(b, a, siggy[
+        ~np.isnan(siggy)])  # apply filter forwards and back, ignore nans
     return filtered
 
 # TO DO : find_nearest is quite fragile atm, add in conditioning
@@ -19,6 +23,7 @@ def find_nearest(array, value):
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
     return idx
+  
 
 def read_txt(file_pth):
     data = np.zeros((1, 3))

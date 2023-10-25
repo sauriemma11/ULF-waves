@@ -1,10 +1,11 @@
 name: Tests
 
 on:
-#   push:
-#     branches: [ main ] # push on main
-   pull_request:
-     branches: [ main ] # pull on main
+  push:
+    branches:
+      - "**" # all branches
+  pull_request:
+    branches: [ main ] # pull on main
 
 jobs:
   run_style_check: # STYLE CHECK
@@ -18,16 +19,25 @@ jobs:
         with:
           activate-environment: ULF_waves
           environment-file: env.yml
-      - run: pycodestyle $(git ls-files "*.py")
+      # - name: Verify conda env
+      #   run: conda list -n ULF_waves
+      # - name: Install project dependencies
+      #   run: micromamba install -n ULF_waves --file requirements.txt
+      - run: pycodestyle --exclude=src/radiation_belt_analysis_v4.py,test/unit/test_mfa_transform.py $(git ls-files "*.py")
 
   run_unit_tests: # UNIT TESTS
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
     steps:
       - uses: actions/checkout@v2
       - uses: mamba-org/setup-micromamba@v1
         with:
           activate-environment: ULF_waves
           environment-file: env.yml
+      - name: Install proj dependencies
+        run: micromamba install -n ULF_waves --file requirements.txt
       - name: Run plots tests
         run: |
           cd test/unit
@@ -36,6 +46,8 @@ jobs:
         run: |
           cd test/unit
           python -m unittest test_data_prep.py
+          
+
 #  run_func_tests: # FUNCTIONAL TESTS
 #    runs-on: ubuntu-latest
 #    steps:

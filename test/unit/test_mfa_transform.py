@@ -8,7 +8,9 @@ sys.path.insert(0, '../../src')  # noqa # must run from unit test directory
 import utils as u  # noqa
 import src.mfa_transform as mt
 sys.path.insert(0, './test_data')
-
+import mfa_transform as mt
+import utils as u  # noqa
+# import src.mfa_transform as mt
 
 class TestMathLib(unittest.TestCase):
     def setUP(self):
