@@ -30,7 +30,8 @@ in future studies.
 * [ULFW - Ultra Low Frequency Waves](#ulfw---ultra-low-frequency-waves)
     * [Project Goals](#project-goals)
     * [Key Features](#key-features)
-
+    * [Usage](#usage)
+    * [Updates](#updates)
 <!-- TOC -->
 
 
@@ -53,24 +54,28 @@ in future studies.
 * Diffusion Time Calculation : Calculate the time it takes for an electron to
   diffuse one Earth radii towards Earth due to wave-particle interaction.
 * Data Visualization : Generate time series plots
-* User-Friendly : This project was designed to be user-friendly and with best 
-code practices. 
+* User-Friendly : This project was designed to be user-friendly and with best
+code practices.
 
 
 ---
 
 ## Usage
 
-- Start from clone
-- Run from main project directory, execute with `$ ./run.sh`.
+- Clone this repo and ensure all [environment](https://github.com/sauriemma11/ULF-waves/blob/main/env.yml) requirements are fulfilled
+- Run from main project directory, execute with `$ ./run.sh`. **Expected run time for full day: 1-2 minutes.**
 
 ### `module_name_here.py`
 
 #### Examples how to run:
+Mutable user inputs are:
+- `filename` (.nc data file -- required)
+- `fband` (frequency band in Hz -- default is [0.001, 0.01])
+- `timespan` (time per window in hours, must go evenly into 24 -- default is 1).
 
+From the main repository directory, run:
 ```shell
-python print_fires.py --country USSR --country_column 0 --fires_column 3 ../Agrofood_c02.csv
-python print_fires.py --country "United States of America" --country_column 0 --fires_column 3 --file_name ../Agrofood_co2_emission.csv
+python main.py --filename foo.nc
 ```
 
 ## Updates
@@ -78,20 +83,8 @@ python print_fires.py --country "United States of America" --country_column 0 --
 <details>
 <summary>Expand for version release updates</summary>
 
-
-### V 3.0
-
-- blah blah
-
-### V 2.0
-
-- blah blah
-- wow new feature 
-
 ### V 1.0
-
-- blah blah 
-- initial release etc. 
+First full draft before the code review. Split one file that runs everything into different modules, created initial unit and functional tests, a main file to call all the functions, and a run.sh file.
 
 </details>
 
