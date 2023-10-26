@@ -32,7 +32,7 @@ parser.add_argument('--timespan',
                         (i.e. 1, 2, 3, 4, 6, 8, 12 hrs).""",
                     required=False)
 
-parser.add_argument('--freq_band',
+parser.add_argument('--fband',
                     type=list,
                     default=[0.001, 0.01],  # default is 0.001 - 0.01 Hz
                     help="""Values to define the frequency band
@@ -43,7 +43,7 @@ parser.add_argument('--freq_band',
 args = parser.parse_args()
 
 
-def main(filename, timespan, freq_band):
+def main(filename, timespan, fband):
     """
     Parameters
     ----------
@@ -62,11 +62,13 @@ def main(filename, timespan, freq_band):
     """
     variable_dict = data_prep.read_nc_file(filename)
 
-    mfa_dict = mfa_transform.main(variable_dict)
+    b_mga = mfa_transform.main(variable_dict['b_epn'])
 
-    tau_dict = call_tau.call_tau(mfa_dict,
-                                 timespan,
-                                 freq_band)
+    tau_dict = call_tau.concat_tau(b_mga,
+                                   fband,
+                                   comp=2,
+                                   ftype='highpass',
+                                   timespan_hrs=1)
 
     # CREATE PLOTS???
 
@@ -74,4 +76,4 @@ def main(filename, timespan, freq_band):
 
 
 if __name__ == '__main__':
-    main(args.filename, args.timespan, args.freq_band)
+    main(args.filename, args.timespan, args.fband)
