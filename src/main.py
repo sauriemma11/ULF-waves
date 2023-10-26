@@ -40,10 +40,23 @@ parser.add_argument('--fband',
                         and second element is upper frequency [Hz].""",
                     required=False)
 
+parser.add_argument('--comp',
+                    type=list,
+                    default=2,  # default is 2 --- parallel
+                    help="""Componenet of the magnetic field to filter
+                      (0=radial, 1=phi, 2=parallel)""",
+                    required=False)
+
+parser.add_argument('--ftype',
+                    type=list,
+                    default='highpass', 
+                    help="""...""",
+                    required=False)
+
 args = parser.parse_args()
 
 
-def main(filename, timespan, fband):
+def main(filename, timespan, fband, comp, ftype):
     """
     Parameters
     ----------
@@ -66,9 +79,9 @@ def main(filename, timespan, fband):
 
     tau_dict = call_tau.concat_tau(b_mga,
                                    fband,
-                                   comp=2,
-                                   ftype='highpass',
-                                   timespan_hrs=1)
+                                   comp=comp,
+                                   ftype=ftype,
+                                   timespan_hrs=timespan)
 
     # CREATE PLOTS???
 
@@ -76,4 +89,8 @@ def main(filename, timespan, fband):
 
 
 if __name__ == '__main__':
-    main(args.filename, args.timespan, args.fband)
+    main(args.filename, 
+         args.timespan, 
+         args.fband, 
+         args.comp, 
+         args.ftype)
