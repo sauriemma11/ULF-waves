@@ -38,7 +38,7 @@ def get_bav(b_in):
             list of int size n
     output: b_av : average background field. list of int size 1x3
 
-    other parameters : fs: sampling frequency, Hz (10 Hz default)
+    other parameters : fs: sampling frequency, [Hz] (10 Hz default)
                     fc: cut off frequency (30 minutes)
                     N : filter order
                     btype: filter type, high/low/band pass (lowpass default)
@@ -110,6 +110,7 @@ def background_sub(b_in):
 
 
 def main(b_epn):
+
     b_avg = get_bav(b_epn)
 
     b_mfa = compute_mfa(b_avg, b_epn)

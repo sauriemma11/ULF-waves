@@ -87,6 +87,7 @@ def spect(b_in, fs=10):
     return (f_sps, t_s, Sxx_s)
 
 
+# TO DO : ADD IN CONDITION FOR CHECKING FBAND[1] > FBAND[0]
 def get_f_band(f_hp_spectrum, fband):
     # TO DO: band option in config?
     """
@@ -98,11 +99,12 @@ def get_f_band(f_hp_spectrum, fband):
             band_sp: index of the stop frequency, int
             delta_f: difference between the high and low frequencies, int [Hz]
     """
-
+    # TODO: repetitive
     band = [fband[0], fband[1]]  # band = frequency band limits,: 1-10mHz,
     # use 0.011 so includes 10mHz
-    delta_f = band[1]-band[0]
+    delta_f = float(band[1]-band[0])
     # get start and stop index for frequency band
+    # TO DO: THINK ABOUT WHAT THE TOLERANCE SHOULD BE HERE
     band_st = u.find_nearest(f_hp_spectrum, band[0])
     band_sp = u.find_nearest(f_hp_spectrum, band[1])
     return (band_st, band_sp, delta_f)
