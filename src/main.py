@@ -62,7 +62,7 @@ def main(filename, timespan, fband):
     """
     variable_dict = data_prep.read_nc_file(filename)
 
-    b_mga = mfa_transform.main(variable_dict['epn'])
+    b_mga = mfa_transform.main(variable_dict['b_epn'])
 
     tau_dict = call_tau.concat_tau(b_mga,
                                    fband,
