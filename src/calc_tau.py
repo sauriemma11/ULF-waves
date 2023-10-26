@@ -100,13 +100,18 @@ def get_f_band(f_hp_spectrum, fband):
             delta_f: difference between the high and low frequencies, int [Hz]
     """
     # TODO: repetitive
-    band = [fband[0], fband[1]]  # band = frequency band limits,: 1-10mHz,
+    # print('fband: ')
+    # print(type(fband[0]), type(fband[1]))
+    band = [fband[0], fband[1]]
+    # print('band: ')
+    # print(band, type(band[0]), type(band[1]))
+    # band = frequency band limits,: 1-10mHz,
     # use 0.011 so includes 10mHz
     delta_f = float(band[1]-band[0])
     # get start and stop index for frequency band
-    # TO DO: THINK ABOUT WHAT THE TOLERANCE SHOULD BE HERE
-    band_st = u.find_nearest(f_hp_spectrum, band[0])
-    band_sp = u.find_nearest(f_hp_spectrum, band[1])
+    # TODO: THINK ABOUT WHAT THE TOLERANCE SHOULD BE HERE
+    band_st = u.find_nearest(f_hp_spectrum, band[0], tolerance=100)
+    band_sp = u.find_nearest(f_hp_spectrum, band[1], tolerance=100)
     return (band_st, band_sp, delta_f)
 
 
