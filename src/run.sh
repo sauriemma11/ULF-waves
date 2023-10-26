@@ -15,7 +15,7 @@ fi
 
 if [[ ! -f "$FILE" ]]; then # if does not already exist, download it -- using one example file in google drive
 
-    # method for downloading big file from google drive: https://chadrick-kwag.net/wget-google-drive-large-files-bypassing-virus-check/#google_vignette 
+    # method for downloading big file from google drive: https://chadrick-kwag.net/wget-google-drive-large-files-bypassing-virus-check/#google_vignette
     wget --save-cookies cookies.txt 'https://docs.google.com/uc?export=download&id='$GOOGLE_ID -O- \
      | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1/p' > confirm.txt
     wget --load-cookies cookies.txt -O $FILE \
