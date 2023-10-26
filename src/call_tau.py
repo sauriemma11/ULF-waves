@@ -15,6 +15,7 @@ Module to calculate and combine tau values for specified time interval
 '''
 
 import calc_tau
+from tqdm import tqdm
 
 
 def define_window(time_list, timespan_hrs=1):
@@ -77,7 +78,7 @@ def concat_tau(b_mfa, fband, comp=2, ftype='highpass', timespan_hrs=1):
     num_windows = int(24/timespan_hrs)
     all_windows_tau_dict = {"tau": [], "D_LL": [], "psd": [], "Sxx": [],
                             "time": [], "freqs": [], "b_filt": []}
-    for i in range(num_windows):
+    for i in tqdm(range(num_windows)):
         tau_dict_for_window = calc_tau.get_tau(b_mfa, fband, ftype, comp)
         all_windows_tau_dict["tau"].append(tau_dict_for_window["tau"])
         all_windows_tau_dict["D_LL"].append(tau_dict_for_window["D_LL"])
