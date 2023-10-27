@@ -17,7 +17,7 @@ import argparse
 parser = argparse.ArgumentParser(
     description="""Pass in parameters for calculating
       Tau for a given dataset."""
-    )
+)
 
 parser.add_argument('--filename',
                     type=str,
@@ -49,7 +49,7 @@ parser.add_argument('--comp',
 
 parser.add_argument('--ftype',
                     type=list,
-                    default='highpass', 
+                    default='highpass',
                     help="""...""",
                     required=False)
 
@@ -89,8 +89,8 @@ def main(filename, timespan, fband, comp, ftype):
 
 
 if __name__ == '__main__':
-    main(args.filename, 
-         args.timespan, 
-         args.fband, 
-         args.comp, 
+    main(args.filename,
+         args.timespan,
+         args.fband,
+         args.comp,
          args.ftype)
