@@ -65,8 +65,6 @@ code practices.
 - Clone this repo and ensure all [environment](https://github.com/sauriemma11/ULF-waves/blob/main/env.yml) requirements are fulfilled
 - Run from main project directory, execute with `$ ./run.sh`. **Expected run time for full day: 1-2 minutes.**
 
-### `module_name_here.py`
-
 #### Examples how to run:
 Mutable user inputs are:
 - `filename` (.nc data file -- required)
