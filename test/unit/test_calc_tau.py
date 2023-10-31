@@ -6,7 +6,8 @@ import unittest
 from numpy.random import randint
 sys.path.insert(0, '../../src')  # noqa # must run from unit test directory
 import utils as u  # noqa
-import src.calc_tau as tau
+# import src.calc_tau as tau
+import calc_tau as tau
 sys.path.insert(0, './test_data')
 
 

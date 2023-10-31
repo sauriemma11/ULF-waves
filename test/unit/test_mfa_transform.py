@@ -6,13 +6,13 @@ import unittest
 from numpy.random import randint
 sys.path.insert(0, '../../src')  # noqa # must run from unit test directory
 import utils as u  # noqa
-import src.mfa_transform as mt
-sys.path.insert(0, './test_data')
-import mfa_transform as mt
-import utils as u  # noqa
 # import src.mfa_transform as mt
-#
-# TODO: WHEN YOU HAVE RANDOMNESS, RUN THINGS FOR MANY ITTERATIONS
+import mfa_transform as mt
+sys.path.insert(0, './test_data')
+import mfa_transform as mt  # noqa
+import utils as u  # noqa
+
+# TO DO: WHEN YOU HAVE RANDOMNESS, RUN THINGS FOR MANY ITTERATIONS
 class TestMathLib(unittest.TestCase):
     # def setUP(self):
     #     # create an nx3 random dataset for testing
@@ -33,6 +33,7 @@ class TestMathLib(unittest.TestCase):
         self.assertEqual(np.all(mt.get_bav(test_dat)), np.all(av))
         self.assertRaises(TypeError, mt.get_bav, empty_dat)
 
+
     def test_get_bav_sci(self):
         # test consistency by comparison to a validated dataset
         # file to feed into get_bav function
@@ -40,6 +41,7 @@ class TestMathLib(unittest.TestCase):
         # scientifically validated file
         b_av_sci = u.read_txt('../../test/unit/test_data/b_av_test_set.txt')
         self.assertAlmostEqual(np.all(mt.get_bav(b_epn)), np.all(b_av_sci))
+
 
     def test_compute_mfa(self):
         test_bav = np.random.randint(low=1, high=10000, size=(100, 3))
