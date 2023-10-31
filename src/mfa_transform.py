@@ -25,7 +25,7 @@ import numpy as np
 
 
 # step 1 : find average background field
-# TO DO: USE CONFIG FILE TO SET UP THE FILTER: i.e. set up fs/fc/N/btype
+# TODO: USE CONFIG FILE TO SET UP THE FILTER: i.e. set up fs/fc/N/btype
 def get_bav(b_in):
     """
     step 1: get average background field. This is done by taking a 30 min
