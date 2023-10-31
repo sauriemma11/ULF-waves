@@ -31,7 +31,7 @@ import utils as u
 import matplotlib.pyplot as plt
 from scipy import signal
 import numpy as np
-# TO DO: GET RID OF GLOBAL VARIABLES HERE
+# TODO: GET RID OF GLOBAL VARIABLES HERE
 # THINGS TO ADD TO CONFIG: frequency/Pc band
 #   -highpass or bandpass for tau filtering
 

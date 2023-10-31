@@ -32,7 +32,7 @@ def apply_butter(siggy, b, a):
     return filtered
 
 
-# TO DO : find_nearest is quite fragile atm, add in conditioning
+# TODO : find_nearest is quite fragile atm, add in conditioning
 def find_nearest(array, value, tolerance=None):
     """
     Find the index of  closest element to value in the array. i.e. if you have
@@ -45,7 +45,10 @@ def find_nearest(array, value, tolerance=None):
     """
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
+    if tolerance==None:
+        return idx
     if np.abs(array - value).min() >= tolerance:
+        print('No value within tolerance range')
         return None
     else:
         return idx
