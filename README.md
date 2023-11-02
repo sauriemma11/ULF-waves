@@ -21,6 +21,13 @@ Engineering for Scientists ([SWE4S](https://github.com/swe4s)) course at
 University of Colorado, Boulder with the intent of helping answer this question
 in future studies.
 
+The figure below shows the important calculations and outputs. 
+1) The first panel is a timeseries of the parallel component of the magnetic field filtered for the frequency band of interest. This shows when increases in amplitude occur. 
+2) The second panel is a spectrogram which has time on the x axis, frequency on the y and the color is the power (blue is low, red is high). The red bursts of high power in the lower frequencies are the plasma waves we are interested in. You can also see the bursts correspond with amplitude increase in the above panel. 
+3) The third panel is the average power spectral density (PSD) in the frequency band over time. This calculation is done in 3 hour intervals, hence why it is a line plot with steps. You can see that when the amplitude and power in the above plots increase, the average PSD also increases. 
+4) The final panel is tau, or the electron radial diffusion time scale. Again, this correlated nicely as times with higher power have shorter timescales (more power -> diffuse electrons quicker). 
+![example_output.png](docs%2Fexample_output.png)
+
 </div>
 
 ---
