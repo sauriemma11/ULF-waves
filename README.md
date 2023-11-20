@@ -8,7 +8,8 @@
 <div align="center">
 
 ![ulfwave_img.png](docs%2Fulfwave_img.png)
-
+</div>
+<div align="left">
 The ULFW project focuses on the analysis of Ultra-Low-Frequency (ULF) waves in
 space
 using data from the Geostationary Operational Environmental Satellite (GOES)
