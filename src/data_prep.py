@@ -8,7 +8,7 @@ Module to read in the data file and create outputs in the necessary format
         value -9999)
         ['time'] nx1 array of time in datetime formatted sec
 - Used in:
-    ****
+    * main.py
 """
 
 import netCDF4 as nc
@@ -19,13 +19,17 @@ import numpy as np
 
 def read_nc_file(file_path):
     """
-    Read an nc file and extract its variables.
+    Read an nc file and extract its variables
 
-    Args:
-        file_path (str): Path to the nc file.
+    Parameters
+    ----------
+    file_path: str
+        Full path to the nc file
 
-    Returns:
-        dict: Dictionary containing variables extracted from the nc file.
+    Returns
+    -------
+    variables: dict
+        NetCDF dataset
     """
     dataset = nc.Dataset(file_path)
     variables = read_variables(dataset)
@@ -35,13 +39,17 @@ def read_nc_file(file_path):
 
 def read_variables(dataset):
     """
-    Read and store all variables from an nc dataset into a dictionary.
+    Read and store all variables from an nc dataset into a dictionary
 
-    Args:
-        dataset : NetCDF dataset.
+    Parameters
+    ----------
+    dataset: NetCDF data
+        NetCDF dataset
 
-    Returns:
-        dict: Dictionary containing variables from the dataset.
+    Returns
+    -------
+    data_dict: dict
+        Dictionary containing variables from the dataset
     """
     data_dict = {}
     for variable_name in dataset.variables.keys():
@@ -53,12 +61,16 @@ def deal_with_fills(data_dict):
     """
     Replaces variables that are -9999 with NaN values in the 'b_epn' variable.
 
-    Args:
-        data_dict (dict): Dictionary containing data that needs to be filtered.
-            It has variables 'time' (nx1) and 'b_epn' (nx3).
+    Parameters
+    ----------
+    data_dict: dict
+        Dictionary containing data that needs to be filtered
+        It has variables 'time' (nx1) and 'b_epn' (nx3)
 
-    Returns:
-        dict: a new dictionary with -9999 values in 'b_epn' replaced by NaNs.
+    Returns
+    -------
+    new_epn: Dict
+        A new dictionary with -9999 values in 'b_epn' replaced by NaNs.
     """
     b_epn = data_dict['b_epn']
     b_epn = np.where(b_epn == -9999, np.nan, b_epn)
@@ -69,19 +81,23 @@ def deal_with_fills(data_dict):
 
 def time_convert(seconds_2000):
     """
-    Convert time values from seconds since 2000-01-01 to datetime objects.
+    Convert time values from seconds since 2000-01-01 to datetime objects
 
-    Args:
-        seconds_2000 (numpy.ndarray): Array of time values in seconds since
-        2000-01-01.
+    Parameters
+    ----------
+    seconds_2000: numpy.ndarray
+        Array of time values in seconds since 2000-01-01
 
-    Returns:
-        numpy.ndarray: Array of datetime objects.
+    Returns
+    -------
+    dt_array: numpy.ndarray
+        Array of datetime objects
     """
     date_original = datetime.datetime(2000, 1, 1, 12, 0)
-    return np.array(
-        [date_original + timedelta(seconds=int(seconds)) for seconds in
-         seconds_2000])
+    dt_array = np.array([date_original +
+                         timedelta(seconds=int(seconds))
+                         for seconds in seconds_2000])
+    return dt_array
 
 
 def output_data_prepped_dict(file_path):
@@ -89,12 +105,16 @@ def output_data_prepped_dict(file_path):
     Process a data file, including reading, dealing with fill values,
     and converting time. Puts everything into a new dictionary
 
-    Args:
-        file_path (str): Path to the data file.
+    Parameters
+    ----------
+    file_path: str
+        Full path to the data file
 
-    Returns:
-        dict: Processed data dictionary containing 'time' and 'b_epn' with
-        fill values corrected.
+    Returns
+    -------
+    dict_prepped: dict
+        Processed data dictionary containing 'time' and 'b_epn' with
+        fill values corrected
     """
 
     original_dict = read_nc_file(file_path)

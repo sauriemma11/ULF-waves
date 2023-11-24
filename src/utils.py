@@ -5,11 +5,21 @@ import numpy as np
 def butter_filter(fs, fc, N, btype):
     """
     Create butterworth filter.
-    input: fs: sampling frequency, int [Hz]
-           fc: cut off frequency of filter, int [Hz]
-           N: filter order, int
-           btype: filter type, 'highpass', 'lowpass', 'bandpass', str
-    output: b, a: filter coefficients
+
+    Parameters
+    ----------
+    fs: int [Hz]
+        Sampling frequency
+    fc: int [Hz]
+        Cut off frequency of filter
+    N: int
+        Filter order
+    btype: str
+        Filter type, 'highpass', 'lowpass', 'bandpass'
+
+    Outputs
+    -------
+    b, a: filter coefficients
     """
     # fs = sampling frequency [Hz], fc = cut off frequency [Hz],
     # N = filter order, btype = high / low
@@ -21,10 +31,20 @@ def butter_filter(fs, fc, N, btype):
 def apply_butter(siggy, b, a):
     """
     Apply a filter forwards and backwards
-    input: siggy: signal, 1D array of ints / floats
-           b: filter coefficient (see butter_filter)
-           a: filter coefficient (see butter_filter)
-    output: filtered signal, 1D array
+
+    Parameters
+    ----------
+    siggy: 1D array of ints / floats
+        Signal
+    b: (see butter filter)
+        Filter coefficient
+    a: (see butter_filter)
+        Filter coefficient
+
+    Outputs
+    -------
+    Filtered: 1D array
+        Signal
     """
     # b,a = output from butter_filter, signal = 1d array
     filtered = signal.filtfilt(b, a, siggy[
@@ -35,13 +55,20 @@ def apply_butter(siggy, b, a):
 # TODO : find_nearest is quite fragile atm, add in conditioning
 def find_nearest(array, value, tolerance=None):
     """
-    Find the index of  closest element to value in the array. i.e. if you have
-    [5, 5.5] and looking for 6, return 1
-    input : array: 1D array of ints or floats
-            value: search value to look for, int
-            tolerance: maximum deviation of element in list from search value,
-                        int
-    output: idx: index of the closest value in array, int
+    Find the index of  closest element to value in the array.
+    (i.e. if you have [5, 5.5] and looking for 6, return 1)
+
+    Parameters
+    ----------
+    array: 1D array of ints or floats
+    value: int
+        Search value to look for
+    tolerance: int
+        Maximum deviation of element in list from search value
+    Outputs
+    -------
+    idx: int
+        Index of the closest value in array, int
     """
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
@@ -57,8 +84,16 @@ def find_nearest(array, value, tolerance=None):
 def read_txt(file_pth):
     """
     Read a text file. NOTE: currently set up to take in 3 componenet data
-    intput: file_path: path to the file, str
-    output: data: data from file, nx3 array of floats
+
+    Parameters
+    ----------
+    file_path: str
+        Full path to the file
+
+    Outputs
+    -------
+    data: nx3 array of floats
+        Data from file,
     """
     data = np.zeros((1, 3))
     with open(file_pth) as lines:

@@ -13,7 +13,6 @@ Module to create final result file and visuals
     * csv file with key result parameters
 -Used in:
     * main.py
-
 """
 
 import matplotlib.pyplot as plt
@@ -23,17 +22,22 @@ import numpy as np
 
 def plot_data(t_hp_z, f_hp_z, sgdb_hp_z, dt_g16, highps_z_all):
     """
-        Create a 4-panel subplot
+    Create a 4-panel subplot
 
-        Args:
-            t_hp_z (numpy.ndarray): Array of time values.
-            f_hp_z (numpy.ndarray): Array of frequency values.
-            sgdb_hp_z (numpy.ndarray): Spectrogram data.
-            dt_g16 (numpy.ndarray):
-            highps_z_all (numpy.ndarray):
+    Parameters
+    ----------
+    t_hp_z: (numpy.ndarray)
+        Array of time values
+    f_hp_z: (numpy.ndarray)
+        Array of frequency values
+    sgdb_hp_z: (numpy.ndarray)
+        Spectrogram data
+    dt_g16: (numpy.ndarray)
 
-        Example:
-            plot_data(t_hp_z, f_hp_z, sgdb_hp_z, dt_g16, highps_z_all)
+    highps_z_all: (numpy.ndarray)
+
+
+    Example: plot_data(t_hp_z, f_hp_z, sgdb_hp_z, dt_g16, highps_z_all)
     """
     fig, ax = plt.subplots(nrows=4)
 

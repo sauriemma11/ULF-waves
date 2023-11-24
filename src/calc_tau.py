@@ -40,18 +40,29 @@ def filter_b(b_mfa, ftype='highpass', comp=2, fs=10, N=1, fc=0.001):
     # TO DO: option for which components to get waves for?
     # TO DO: optoin for frequency band? dpdds on application..
     """
-    Filter the mangetic field component of interest.
-    input: b_mfa: magnetic field measurements in MFA coordinates, assumed to
-                  be one time window, size nx3 [nT]
-           ftype: 'high' or 'low' or 'bandpass', str
-           comp: component of magnetic field to filter 0=radial,
-                 1=phi, 2=paralell
-           fs: sampling frequency, default 10Hz, int [Hz]
-           N: filter order, deault 1, int
-           fc: cutoff frequency IF highpass or lowpass filter, int
-               if bandpass, 1x2 list of int with low and high frequencies
+    Filter the mangetic field component of interest
 
-    output: highps_z: highpass filtered componenent of b_mfa. size n [nT]
+    Parameters
+    ----------
+    b_mfa: size nx3 [nT]
+        Magnetic field measurements in MFA coordinates, assumed to
+        be one time window
+    ftype: str
+        Frequency type options are 'high' or 'low' or 'bandpass'
+    comp: int
+        Component of magnetic field to filter 0=radial, 1=phi, 2=paralell
+    fs: int [Hz] (default = 10Hz)
+        Sampling frequency
+    N: int (default = 1)
+        Filter order
+    fc: int or 1x2 list
+        int if cutoff frequency is highpass or lowpass filter
+        1x2 list of int high and low frequencies if cutoff is bandpass filter
+
+    Returns
+    -------
+    highps_z: n [nT]
+        Highpass filtered componenent of b_mfa
     """
 
     if ftype == 'highpass' or 'lowpass':
@@ -69,13 +80,24 @@ def filter_b(b_mfa, ftype='highpass', comp=2, fs=10, N=1, fc=0.001):
 
 def spect(b_in, fs=10):
     """
-    create spectrogram of magnetic field timeseries.
-    input: b_in: magnetic field in MFA coordinates, filtered, size n (i.e.
-    just one componenet of magnetic field) [nT]
-           fs: sampling frequency, default is 10 Hz [Hz]
-    output: f_sps: frequencies present in the spectrogram, [Hz]
-            t_s: times in the spectrogram [s]
-            Sxx_s: power in the spectrogram [nT^2/Hz]
+    Create spectrogram of magnetic field timeseries
+
+    Parameters
+    ----------
+    b_in: [nT]
+        magnetic field in MFA coordinates, filtered, size n (i.e.
+        just one componenet of magnetic field)
+    fs: int [Hz] (default = 10Hz)
+        Sampling frequency
+
+    Returns
+    -------
+    f_sps: [Hz]
+        Frequencies present in the spectrogram, [Hz]
+    t_s: [s]
+        Times in the spectrogram
+    Sxx_s: [nT^2/Hz]
+        Power in the spectrogram
     """
     NFFT = 4500
 
@@ -92,12 +114,21 @@ def get_f_band(f_hp_spectrum, fband):
     # TO DO: band option in config?
     """
     Find the indicies for the low and high frequencies
+
+    Parameters
+    ----------
     inputs: f_hp_spectrum: frequencies in the spectrogram, mx1 [Hz]
             fband: low and high frequencies of band, 1x2 list i.e.
                    [low,high], [Hz]
-    output: band_st: index of the starting frequency, int
-            band_sp: index of the stop frequency, int
-            delta_f: difference between the high and low frequencies, int [Hz]
+
+    Returns
+    -------
+    band_st: int
+        Index of the starting frequency
+    band_sp: int
+        Index of the stop frequency
+    delta_f: int [Hz]
+        Difference between the high and low frequencies
     """
     # TODO: repetitive
     # print('fband: ')
@@ -118,12 +149,24 @@ def get_f_band(f_hp_spectrum, fband):
 def avg_psd(Sxx_hp_spectrum,  band_st, band_sp, delta_f, t_xx):
     """
     Calculate the average power spectral density in the frequency band
-    inputs: Sxx_hp_spectrum: power specrum from spectrogram, txm [nT^2/Hz]
-            band_st: starting index of frequencies in frequency band, int
-            band_sp: stopping index of frequencies in frequency band, int
-            delta_f: difference between the high and low frequencies, in [Hz]
-            t_xx: times from spectrum [s]
-    outputs: psd_avg: average power spectral density, int, [nT^2/Hz]
+
+    Parameters
+    ----------
+    Sxx_hp_spectrum: txm [nT^2/Hz]
+        Power specrum from spectrogram
+    band_st: int
+        Starting index of frequencies in frequency band
+    band_sp: int
+        Stopping index of frequencies in frequency band
+    delta_f: int [Hz]
+        difference between the high and low frequencies
+    t_xx: [s]
+        Times from spectrum
+
+    Returns
+    -------
+    psd_avg: int [nT^2/Hz]
+        Average power spectral density
     """
 
     band_pwrs = []
@@ -139,11 +182,21 @@ def calc_Dll(psd_avg):
     # TO DO: MAKE F A VARIABLE / JUST PASS IN FBAND FROM INPUTS
     """
     Calculate D_LL
-    inputs: psd_avg: average power spectral density for the frequency
-            band of interest, int [nT^2/Hz]
-    params: L: Lshell (Earth Radius) [RE]
-            B_e: equitorial magnetic field strength at surface of earth [nT]
-    output: D_LL
+
+    Parameters
+    ----------
+    psd_avg: int [nT^2/Hz]
+        Average power spectral density for the frequency band of interest
+
+    Constants
+    ---------
+    L: Lshell (Earth Radius) [RE]
+    B_e: equitorial magnetic field strength at surface of earth [nT]
+
+    Outputs
+    -------
+    D_LL:
+
     """
     L = 6.6
     P_b = psd_avg
@@ -155,9 +208,15 @@ def calc_Dll(psd_avg):
 
 def calc_tau(D_ll):
     """
-    calculate tau (the time it takes for an electron to diffuse one Lshell)
-    input: D_ll
-    output: tau, int [min]
+    Calculate tau (the time it takes for an electron to diffuse one Lshell)
+
+    Parameters
+    ----------
+    D_ll:
+
+    Returns
+    -------
+    tau: int [min]
     """
     tau_s = 1/D_ll
     tau_m = tau_s / 60
@@ -167,22 +226,34 @@ def calc_tau(D_ll):
 def get_tau(b_mfa, fband=[0.001, 0.01], ftype='highpass', comp=2):
     # function to be called by main module
     """
-    calculate tau.
-    input: b_mfa: magnetic field values in MFA with background field
-                   subtracted, tx1 [nT]
-           time: datetime array, tx1 [s]
-           fband: low and high frequency for the band of interest,
-                  1x2, list of ints [Hz]
-            comp: componenet of the magnetic field to filter, int,
-                0=radia, 1=phi,2=paralell
-    output: a dictionary containing:
-            tau: timescale to diffuse one Lshell, int [min]
-            Dll: D_LL, int
-            t_hp_spectrum: times corresponding to frequency domain,  [s]
-            f_hp_spectrum: frequencies corresponding to frequency domain [Hz]
-            Sxx_hp_spectrum: power spectrum corresponding to frequency domain
-                            [nT^2/Hz]
-            b_filt: highpass (?) filtered componenet of magnetic field [nT]
+    Calculate tau
+
+    Parameters
+    ----------
+    b_mfa: tx1 [nT]
+        Magnetic field values in MFA with background field subtracted,
+    time: tx1 [s]
+        Datetime array,
+    fband: 1x2 list of ints [Hz]
+        Low and high frequency for the band of interest
+    comp: int
+        Componenet of the magnetic field to filter, 0=radial, 1=phi, 2=paralell
+
+    Returns
+    -------
+    outs: dict, containing
+        tau: int [min]
+            Timescale to diffuse one Lshell
+        D_LL: int
+            D_LL
+        t_hp_spectrum: [s]
+            Times corresponding to frequency domain
+        f_hp_spectrum: [Hz]
+            Frequencies corresponding to frequency domain
+        Sxx_hp_spectrum: [nT^2/Hz]
+            Power spectrum corresponding to frequency domain
+        b_filt: [nT]
+            highpass (?) filtered componenet of magnetic field
     """
 
     b_filt = filter_b(b_mfa, ftype, comp)

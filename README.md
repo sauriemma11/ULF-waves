@@ -73,7 +73,7 @@ code practices.
 - Clone this repo and ensure all [environment](https://github.com/sauriemma11/ULF-waves/blob/main/env.yml) requirements are fulfilled
 - Run from main project directory, execute with `$ ./run.sh`. **Expected run time for full day: 1-2 minutes.**
 
-#### Examples how to run:
+### Examples how to run:
 Mutable user inputs are:
 - `filename` (.nc data file -- required)
 - `fband` (frequency band in Hz -- default is [0.001, 0.01])
@@ -83,6 +83,12 @@ From the main repository directory, run:
 ```shell
 python main.py --filename foo.nc
 ```
+
+### How to download data:
+Visit https://www.ngdc.noaa.gov/stp/satellite/goes/dataaccess.html and click ./science. TO DO: COMPLETE INSTRUCTIONS HERE. This software will work for GOES 16-18 .nc magnetometer files. These have filenames of structure: (DESCRIBE STRUCTURE).
+
+### Example outputs:
+TO DO: UPDATE HERE
 
 ## Updates
 
