@@ -28,20 +28,33 @@ import numpy as np
 # TODO: USE CONFIG FILE TO SET UP THE FILTER: i.e. set up fs/fc/N/btype
 def get_bav(b_in):
     """
-    step 1: get average background field. This is done by taking a 30 min
+    Step 1: get average background field. This is done by taking a 30 min
             lowpass butterworth filter of the entire dataset. This calls
             butter_filter and apply butter.
-    input : b_epn: magnetic field msmts in EPN coordinates, list of int size
-            nx3 where n = times and ea. col is a componenet. data should be
-            accounted for fill values already.
-            b_time: timestamps corresponding to b_epn, converted to dt,
-            list of int size n
-    output: b_av : average background field. list of int size 1x3
 
-    other parameters : fs: sampling frequency, [Hz] (10 Hz default)
-                    fc: cut off frequency (30 minutes)
-                    N : filter order
-                    btype: filter type, high/low/band pass (lowpass default)
+    Parameters
+    ----------
+    b_epn: list of int nx3
+        Magnetic field msmts in EPN coordinates where n = times
+        and ea. col is a componenet.
+        Data should be accounted for fill values already.
+    b_time: list of int size n
+        Timestamps corresponding to b_epn, converted to dt
+
+    Constants
+    ---------
+    fs: [Hz] (10 Hz default)
+        Sampling frequency
+    fc: (30 minutes)
+        Cut off frequency
+    N : filter order
+    btype: str
+        Filter type, high/low/band pass (lowpass default)
+
+    Outputs
+    -------
+    b_av : list of int size 1x3
+        Average background field
 
     """
     fs = 10
@@ -60,12 +73,19 @@ def get_bav(b_in):
 # setp 2 : compute mfa
 def compute_mfa(b_av, b_epn):
     """
-    step 2: compute MFA coordinates. See wave_analysis_steps.pdf for all dtails
-    input: b_av: average background field from get_bav
-           b_epn: magnetic field observations in EPN. List of int size nx3 w/
-                  data prep already accoutned for
-    output : magnetic field measurements in MFA coordinates, list of int size
-            nx3.
+    Step 2: compute MFA coordinates. See wave_analysis_steps.pdf for all details
+
+    Parameters
+    ----------
+    b_av: float
+        average background field from get_bav
+    b_epn: list of int size nx3
+        (Data prep already accoutned for) Magnetic field observations in EPN
+
+    Outputs
+    -------
+    b_mfa: list of int size nx3
+        Magnetic field measurements in MFA coordinates
     """
     b_mfa = np.zeros((len(b_epn), 3))
     for n in np.arange(len(b_epn)):
@@ -85,15 +105,28 @@ def compute_mfa(b_av, b_epn):
 # step 3 : background subtraction
 def background_sub(b_in):
     """
-    step 3: subtrack the background signal so that it is easier to see the
+    Step 3: subtrack the background signal so that it is easier to see the
             waves in the frequency band of interest
-    input: b_in: magnetic field measurements in MFA coordinates, list of
-           ints size nx3
-    output: b_mfa_bsub: magnetif field measurements in MFA coordinates with
-            the average background field subtracted, list of int size nx3
-    parameters : fs: sampling frequency, Hz (10 Hz default)
-                 fc: cutoff frequency, Hz (30 min)
-                 btype: filter type (highpass)
+
+    Parameters
+    ----------
+    b_in: list of ints size nx3
+        Magnetic field measurements in MFA coordinates
+
+    Outputs
+    -------
+    b_mfa_bsub: List of int size nx3
+        Magnetic field measurements in MFA coordinates with
+        the average background field subtracted
+
+    Constants
+    ---------
+    fs: [Hz] (default = 10)
+        Sampling frequency
+    fc: [Hz] (30 min)
+        Cutoff frequency
+    btype: str
+        Filter type (highpass)
     """
 
     fs = 10

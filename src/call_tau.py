@@ -35,6 +35,7 @@ def define_window(time_list, timespan_hrs=1):
     -------
     time_sublists: list
         List of lists; each list is indices of data entries for each timespan
+        Dimension 24/timespan_hrs x 864000/(24/timespan_hrs)
     """
     # Check that 24 is divisible by entered timespan before proceeding
     if 24 % timespan_hrs != 0:
@@ -50,7 +51,8 @@ def define_window(time_list, timespan_hrs=1):
         return time_sublists
 
 
-def concat_tau(b_mfa, fband, comp=2, ftype='highpass', timespan_hrs=1):
+def concat_tau(b_mfa, time_sublists,
+               fband, comp=2, ftype='highpass', timespan_hrs=1):
     """
     Concatenates individual window data into one dictionary
 
@@ -58,12 +60,16 @@ def concat_tau(b_mfa, fband, comp=2, ftype='highpass', timespan_hrs=1):
     ----------
     b_mfa: tx1 list [nT]
         Magnetic field values in MFA with background field subtracted
-    time: tx1 list [s]
-        Datetime array
+    time_sublists: list
+        List of lists; each list is indices of data entries for each timespan
+        Dimension 24/timespan_hrs x 864000/(24/timespan_hrs)
     fband: 1x2 list of ints [Hz]
         Low and high frequency for the band of interest
     comp: int (default = 2)
         Componenet of the magnetic field to filter -- 0=radial,1=phi,2=paralell
+    ftype: str
+        Frequency type; options are 'high', 'low', or 'bandpass'
+
     timespan_hrs: int (default = 1) [Hrs]
         Number of hours over which to find average Tau, PSD, and DLL
         Must be divisible by 24 (i.e. 1, 2, 3, 4, 6, 8, 12 hrs)
@@ -75,16 +81,21 @@ def concat_tau(b_mfa, fband, comp=2, ftype='highpass', timespan_hrs=1):
         Dictionary with information from all windows concatenated
         Keys: "tau", "D_LL", "psd", "Sxx", "time", "freqs", "b_filt"
     """
+
     num_windows = int(24/timespan_hrs)
+    len_one_window = len(time_sublists[0])
+
     all_windows_tau_dict = {"tau": [], "D_LL": [], "psd": [], "Sxx": [],
                             "time": [], "freqs": [], "b_filt": []}
+
+    dict_keys = ["tau", "D_LL", "psd", "Sxx", "time", "freqs", "b_filt"]
+
     for i in tqdm(range(num_windows)):
-        tau_dict_for_window = calc_tau.get_tau(b_mfa, fband, ftype, comp)
-        all_windows_tau_dict["tau"].append(tau_dict_for_window["tau"])
-        all_windows_tau_dict["D_LL"].append(tau_dict_for_window["D_LL"])
-        all_windows_tau_dict["psd"].append(tau_dict_for_window["psd"])
-        all_windows_tau_dict["Sxx"].append(tau_dict_for_window["Sxx"])
-        all_windows_tau_dict["time"].append(tau_dict_for_window["time"])
-        all_windows_tau_dict["freqs"].append(tau_dict_for_window["freqs"])
-        all_windows_tau_dict["b_filt"].append(tau_dict_for_window["freqs"])
+        b_mfa_window = b_mfa[i*len_one_window:(i+1)*len_one_window]
+        fband_window = fband[i*len_one_window:(i+1)*len_one_window]
+
+        tau_dict_for_window = calc_tau.get_tau(b_mfa_window, fband_window,
+                                               ftype, comp)
+        for key in dict_keys:
+            all_windows_tau_dict[key].append(tau_dict_for_window[key])
     return all_windows_tau_dict
