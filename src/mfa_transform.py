@@ -26,7 +26,7 @@ import numpy as np
 
 # step 1 : find average background field
 # TODO: USE CONFIG FILE TO SET UP THE FILTER: i.e. set up fs/fc/N/btype
-def get_bav(b_in):
+def get_bav(b_in, fs=10, fc=1/(30*60), N=2, btype='lowpass'):
     """
     Step 1: get average background field. This is done by taking a 30 min
             lowpass butterworth filter of the entire dataset. This calls
@@ -57,10 +57,6 @@ def get_bav(b_in):
         Average background field
 
     """
-    fs = 10
-    fc = 1/(30*60)
-    N = 2
-    btype = 'lowpass'
     b, a = u.butter_filter(fs, fc, N, btype)
     b_avx = u.apply_butter(b_in[:][:, 0], b, a)
     b_avy = u.apply_butter(b_in[:][:, 1], b, a)

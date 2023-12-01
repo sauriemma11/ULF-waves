@@ -49,23 +49,30 @@ class TestMathLib(unittest.TestCase):
         self.assertRaises(AttributeError, tau.spect, empty_dat)
         self.assertRaises(ZeroDivisionError, tau.spect, test_dat, fs=0)
 
-    def test_get_fband(self):
+    def test_get_fband_ind(self):
         NFFT = 4500  # matches constant defined in tau.spect
         noverlap = NFFT / 4  # matches default in tau.spect
         f_sz = (NFFT / 2) + 1
 
-        f = np.random.randint(low=1, high=100, size=int(f_sz))
+        f = np.random.randint(low=0, high=100, size=int(f_sz))
         nan_dat = np.copy(f)
         nan_dat[:] = np.asarray(np.nan).astype(int)
         fband = np.random.randint(low=0, high=1, size=2)
         fband_bad = np.random.randint(low=0, high=1, size=1)
         df_check = fband[1] - fband[0]
+        fband_outrange = np.random.randint(low=1000, high=10000, size=2)
+        fband_outrange.sort()
+        df_outrange = float(fband_outrange[1] - fband_outrange[0])
+        bd1, bd2, df = tau.get_fband_ind(f, fband)
 
-        bd1, bd2, df = tau.get_f_band(f, fband)
-
-        self.assertIsNotNone(tau.get_f_band(f, fband))
+        self.assertIsNotNone(tau.get_fband_ind(f, fband))
         self.assertEqual(df_check, df)
-        self.assertRaises(IndexError, tau.get_f_band, f, fband_bad)
+        self.assertRaises(IndexError, tau.get_fband_ind, f, fband_bad)
+        self.assertEqual(tau.get_fband_ind(f,fband_outrange),
+                         (None, None, df_outrange))
+        #test non sorted numbers
+        # TODO: resolve: find_nearest will return none, but get fband will try
+        # to switch the order...
 
     def test_avg_psd(self):
         # lots of set up: prior outputs are inputs here
@@ -132,3 +139,6 @@ class TestMathLib(unittest.TestCase):
         self.assertRaises(TypeError, tau.get_tau, [])
         self.assertRaises(IndexError, tau.get_tau, test_dat, comp=4)
         self.assertRaises(IndexError, tau.get_tau, test_dat, fband=[])
+
+if __name__ == '__main__':
+    unittest.main()
