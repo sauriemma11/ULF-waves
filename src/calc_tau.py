@@ -48,7 +48,7 @@ def filter_b(b_mfa, ftype='highpass', comp=2, fs=10, N=1, fc=0.001):
         Magnetic field measurements in MFA coordinates, assumed to
         be one time window
     ftype: str
-        Frequency type options are 'high' or 'low' or 'bandpass'
+        Frequency type options are 'highpass' or 'lowpass' or 'bandpass'
     comp: int
         Component of magnetic field to filter 0=radial, 1=phi, 2=paralell
     fs: int [Hz] (default = 10Hz)
@@ -64,8 +64,7 @@ def filter_b(b_mfa, ftype='highpass', comp=2, fs=10, N=1, fc=0.001):
     highps_z: n [nT]
         Highpass filtered componenent of b_mfa
     """
-
-    if ftype == 'highpass' or 'lowpass':
+    if str(ftype) == str('highpass') or str('lowpass'):
         b, a = u.butter_filter(fs, fc, N, ftype)
     if ftype == 'bandpass':
         w1 = fs[0] / (fs/2)  # normalize the frequency

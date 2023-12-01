@@ -54,14 +54,9 @@ def concat_tau(b_mfa, num_data_entries, fband, comp, ftype, timespan_hrs):
                             "time": [], "freqs": [], "b_filt": []}
 
     dict_keys = ["tau", "D_LL", "psd", "Sxx", "time", "freqs", "b_filt"]
-    print(len(b_mfa))
     for i in tqdm(range(num_windows)):
         b_mfa_window = b_mfa[i*len_one_window:(i+1)*len_one_window]
-        fband_window = fband[i*len_one_window:(i+1)*len_one_window]
-        print(len(b_mfa_window))
-        print(fband_window)
-
-        tau_dict_for_window = calc_tau.get_tau(b_mfa_window, fband_window,
+        tau_dict_for_window = calc_tau.get_tau(b_mfa_window, fband,
                                                ftype, comp)
         for key in dict_keys:
             all_windows_tau_dict[key].append(tau_dict_for_window[key])
