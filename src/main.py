@@ -15,6 +15,8 @@ import call_tau
 import argparse
 import os.path
 import sys
+import plots
+import pickle
 
 parser = argparse.ArgumentParser(
     description="""Pass in parameters for calculating
@@ -115,7 +117,15 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
                                    ftype=ftype,
                                    timespan_hrs=timespan)
 
-    # CREATE PLOTS???
+
+    file_path = '../docs/'
+
+    # Save tau_dict as pickle:
+    with open(file_path, 'wb') as file:
+        pickle.dump(tau_dict, file)
+    print(f'tau_dict saved to {file}')
+
+    # plots.plot_data()
 
     return tau_dict
 
