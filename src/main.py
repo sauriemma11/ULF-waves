@@ -13,6 +13,8 @@ import data_prep
 import mfa_transform
 import call_tau
 import argparse
+import os.path
+import sys
 
 parser = argparse.ArgumentParser(
     description="""Pass in parameters for calculating
@@ -21,7 +23,8 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument('--filename',
                     type=str,
-                    help='Path to file of interest.',
+                    help="""Path to file of interest. 
+                    Must be '.nc' file type.""",
                     required=True)
 
 parser.add_argument('--timespan',
@@ -70,18 +73,37 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
     Parameters
     ----------
     filename: str
-        data file to work with
+      data file to work with
 
-    timespan: integer: hours to split up data by
+    timespan: integer
+    `hours to split up data by
 
     freq_band: list of 2 integers
-        first element is lower frequency,
-        and second element is upper frequency
+      first element is lower frequency,
+      and second element is upper frequency
 
     Returns
     -------
     tau_dict: dict
     """
+    # checking that file exists
+    check_file = os.path.exists(filename)
+    if not check_file:
+        print(f'Could not find {filename}. Try a different file.')
+        sys.exit(1)
+
+    # check that file is '.nc'
+    is_nc = filename.endswith('.nc')
+    if not is_nc:
+        print("Wrong file type -- must be '.nc' file.")
+        sys.exit(2)
+
+    # checking 'timespan' input
+    if not 24 % timespan:
+        print("'timespan' must be a factor of 24.")
+        sys.exit(21)
+
+
     variable_dict = data_prep.read_nc_file(filename)
 
     b_mga = mfa_transform.main(variable_dict['b_epn'])
