@@ -58,7 +58,7 @@ parser.add_argument('--fband',
 parser.add_argument('--comp',
                     type=list,
                     default=2,  # default is 2 --- parallel
-                    help="""Componenet of the magnetic field to filter
+                    help="""Component of the magnetic field to filter
                          (0=radial, 1=phi, 2=parallel)""",
                     required=False)
 
@@ -132,7 +132,10 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
 
     # chain from itertools flattens the list
     times_by_data_entry = list(chain(*tau_dict['time']))
-    magnetic_field_data = list(chain(*tau_dict['bfilt']))
+    all_comps_mag_field_data = list(tau_dict['b_filt'])
+    b_comp = [all_comps_mag_field_data[0]
+              for entry in all_comps_mag_field_data[0]]
+    magnetic_field_data = list(chain(*b_comp))
     frequencies = list(chain(*tau_dict['freqs']))
 
     plots.plot_data(times_by_data_entry,
