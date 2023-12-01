@@ -56,7 +56,7 @@ parser.add_argument('--comp',
                     required=False)
 
 parser.add_argument('--ftype',
-                    type=list,
+                    type=str,
                     default='highpass',
                     help="""Frequency type;
                          options are 'high', 'low', or 'bandpass'""",

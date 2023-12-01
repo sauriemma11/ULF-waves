@@ -128,7 +128,7 @@ def background_sub(b_in):
     fs = 10
     fc = 1/(30*60)
     N = 2
-    btype = 'high'
+    btype = 'highpass'
     b, a = u.butter_filter(fs, fc, N, btype)
     b_x = u.apply_butter(b_in[:][:, 0], b, a)
     b_y = u.apply_butter(b_in[:][:, 1], b, a)
