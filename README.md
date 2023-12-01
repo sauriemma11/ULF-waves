@@ -85,7 +85,10 @@ python main.py --filename foo.nc
 ```
 
 ### How to download data:
-Visit https://www.ngdc.noaa.gov/stp/satellite/goes/dataaccess.html and click ./science. TO DO: COMPLETE INSTRUCTIONS HERE. This software will work for GOES 16-18 .nc magnetometer files. These have filenames of structure: (DESCRIBE STRUCTURE).
+Visit https://www.ngdc.noaa.gov/stp/satellite/goes-r.html
+This code repo works best with the NCEI L2 data. Click on the GOES-*-L2 button for the satellite you are interested in. Then choose magn-l2-hires -> year -> day. All file names adhere to the following structure: dn-magn-l2-hires_g<16,17 or 18>_d<date>_v1-0-1.nc
+
+The data files are netCDF4 files. This is a self-describing dataset which contains 10Hz magnetometer measurements. The level 2 data has been calibrated, converted to scientific units and converted to scientific coordinate frames. For more information about working with netCDF4 datafiles, visit https://unidata.github.io/netcdf4-python/
 
 ### Example outputs:
 TO DO: UPDATE HERE
