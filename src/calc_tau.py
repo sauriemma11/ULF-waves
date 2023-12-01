@@ -88,7 +88,7 @@ def spect(b_in, fs=10):
 
 
 # TO DO : ADD IN CONDITION FOR CHECKING FBAND[1] > FBAND[0]
-def get_f_band(f_hp_spectrum, fband):
+def get_fband_ind(f_hp_spectrum, fband):
     # TO DO: band option in config?
     """
     Find the indicies for the low and high frequencies
@@ -102,16 +102,21 @@ def get_f_band(f_hp_spectrum, fband):
     # TODO: repetitive
     # print('fband: ')
     # print(type(fband[0]), type(fband[1]))
-    band = [fband[0], fband[1]]
-    # print('band: ')
-    # print(band, type(band[0]), type(band[1]))
-    # band = frequency band limits,: 1-10mHz,
-    # use 0.011 so includes 10mHz
-    delta_f = float(band[1]-band[0])
+    try:
+        if fband[1] < fband[0] or fband[1] == fband[0]:
+            print('Incorrect order for frequency band. should be [low, high]'
+                  'switching order.')
+            fband_temp = np.copy(fband)
+            fband[0] = fband_temp[1]
+            fband[1] = fband_temp[0]
+    except:
+        print('fband should be [low,high]. Switching order.')
+
+    delta_f = float(fband[1]-fband[0])
     # get start and stop index for frequency band
     # TODO: THINK ABOUT WHAT THE TOLERANCE SHOULD BE HERE
-    band_st = u.find_nearest(f_hp_spectrum, band[0], tolerance=100)
-    band_sp = u.find_nearest(f_hp_spectrum, band[1], tolerance=100)
+    band_st = u.find_nearest(f_hp_spectrum, fband[0], tolerance=0.005)
+    band_sp = u.find_nearest(f_hp_spectrum, fband[1], tolerance=0.05)
     return (band_st, band_sp, delta_f)
 
 
@@ -189,7 +194,7 @@ def get_tau(b_mfa, fband=[0.001, 0.01], ftype='highpass', comp=2):
 
     f_spect, t_spect, Sxx_spect = spect(b_filt)
 
-    low_f, high_f, df = get_f_band(f_spect, fband)
+    low_f, high_f, df = get_fband_ind(f_spect, fband)
 
     psd_av = avg_psd(Sxx_spect, low_f, high_f, df, t_spect)
 
