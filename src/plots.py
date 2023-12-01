@@ -63,14 +63,15 @@ def plot_data(time_by_data_entry, mag_field_data, frequencies, windows_start_tim
     plt.show()
 
 # **** Moved this all to unit test
-# # Make sample data for plotting:
-# t_hp_z = np.linspace(0, 10, 100)
-# f_hp_z = np.linspace(0, 0.05, 100)
-# sgdb_hp_z = np.random.rand(100, 100) * 40 - 20 #2d array
-# dt_g16 = np.linspace(0, 10, 100)
-# highps_z_all = np.random.uniform(-10, 10, len(dt_g16))
-#
-# plot_data(t_hp_z, f_hp_z, sgdb_hp_z, dt_g16, highps_z_all)
+# windows_start_time = np.linspace(0, 864000, 24)
+# time_by_data_entry = np.linspace(0, 10, 100)
+# mag_field_data = np.random.uniform(-10, 10, 100)
+# avg_psd = np.linspace(0, 300, len(windows_start_time))
+# avg_tau = np.linspace(0, 10, len(windows_start_time))
+# frequencies_2D = np.random.uniform(-20, 20, (len(mag_field_data), len(time_by_data_entry)))
+
+# plot_data(time_by_data_entry, mag_field_data, frequencies_2D, windows_start_time, avg_psd, avg_tau)
+
 
 
 # TODO: have option to save plot -> in /docs
