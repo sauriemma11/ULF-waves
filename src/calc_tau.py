@@ -253,7 +253,7 @@ def get_tau(b_mfa, fband=[0.001, 0.01], ftype='highpass', comp=2):
         Sxx_hp_spectrum: [nT^2/Hz]
             Power spectrum corresponding to frequency domain
         b_filt: [nT]
-            highpass (?) filtered componenet of magnetic field
+            Filtered componenet of magnetic field
     """
 
     b_filt = filter_b(b_mfa, ftype, comp)

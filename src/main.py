@@ -28,35 +28,44 @@ parser.add_argument('--timespan',
                     type=int,
                     default=1,  # default is 1 hour
                     help="""Number of hours over which to find average
-                      Tau, PSD, and DLL values. Must be divisible by 24
-                        (i.e. 1, 2, 3, 4, 6, 8, 12 hrs).""",
+                         Tau, PSD, and DLL values. Must be divisible by 24
+                         (i.e. 1, 2, 3, 4, 6, 8, 12 hrs).""",
+                    required=False)
+
+parser.add_argument('--num_entries',
+                    type=int,
+                    # default is 86400 secs with 10 samples/sec = 864000
+                    default= 864000,
+                    help="""Number of entries in data file.
+                         Typically 864000 (10 ssamples/sec for 24 hours)""",
                     required=False)
 
 parser.add_argument('--fband',
                     type=list,
                     default=[0.001, 0.01],  # default is 0.001 - 0.01 Hz
                     help="""Values to define the frequency band
-                      of interest.First element is lower frequency,
-                        and second element is upper frequency [Hz].""",
+                         of interest.First element is lower frequency,
+                         and second element is upper frequency [Hz].""",
                     required=False)
 
 parser.add_argument('--comp',
                     type=list,
                     default=2,  # default is 2 --- parallel
                     help="""Componenet of the magnetic field to filter
-                      (0=radial, 1=phi, 2=parallel)""",
+                         (0=radial, 1=phi, 2=parallel)""",
                     required=False)
 
 parser.add_argument('--ftype',
                     type=list,
                     default='highpass',
-                    help="""...""",
+                    help="""Frequency type;
+                         options are 'high', 'low', or 'bandpass'""",
                     required=False)
 
 args = parser.parse_args()
 
 
-def main(filename, timespan, fband, comp, ftype):
+def main(filename, timespan, num_entries, fband, comp, ftype):
     """
     Parameters
     ----------
@@ -78,7 +87,8 @@ def main(filename, timespan, fband, comp, ftype):
     b_mga = mfa_transform.main(variable_dict['b_epn'])
 
     tau_dict = call_tau.concat_tau(b_mga,
-                                   fband,
+                                   num_data_entries=num_entries,
+                                   fband=fband,
                                    comp=comp,
                                    ftype=ftype,
                                    timespan_hrs=timespan)
@@ -89,8 +99,12 @@ def main(filename, timespan, fband, comp, ftype):
 
 
 if __name__ == '__main__':
-    main(args.filename,
-         args.timespan,
-         args.fband,
-         args.comp,
-         args.ftype)
+    try:
+        main(args.filename,
+            args.timespan,
+            args.num_entries,
+            args.fband,
+            args.comp,
+            args.ftype)
+    except FileNotFoundError:
+      print("The file does not exist. Please check your path.")
