@@ -17,6 +17,7 @@ import os.path
 import sys
 import plots
 import pickle
+import numpy as np
 
 parser = argparse.ArgumentParser(
     description="""Pass in parameters for calculating
@@ -101,7 +102,7 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
         sys.exit(2)
 
     # checking 'timespan' input
-    if not 24 % timespan:
+    if not 24 % timespan == 0:
         print("'timespan' must be a factor of 24.")
         sys.exit(21)
 
@@ -118,14 +119,15 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
                                    timespan_hrs=timespan)
 
 
-    file_path = '../docs/'
+    file_path = '../docs/tau_dict.pkl'
 
     # Save tau_dict as pickle:
     with open(file_path, 'wb') as file:
         pickle.dump(tau_dict, file)
     print(f'tau_dict saved to {file}')
 
-    # plots.plot_data()
+
+    plots.plot_data()
 
     return tau_dict
 
