@@ -22,8 +22,7 @@ from itertools import chain
 
 parser = argparse.ArgumentParser(
     description="""Pass in parameters for calculating
-      Tau for a given dataset."""
-)
+      Tau for a given dataset.""")
 
 parser.add_argument('--filename',
                     type=str,
@@ -130,17 +129,14 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
     number_of_windows = int(24/timespan)
     window_start_times = np.linspace(0, num_entries, number_of_windows)
 
+    times_by_data_entry = np.arange(0,num_entries,1)
+
     # chain from itertools flattens the list
-    times_by_data_entry = list(chain(*tau_dict['time']))
-    all_comps_mag_field_data = list(tau_dict['b_filt'])
-    b_comp = [all_comps_mag_field_data[0]
-              for entry in all_comps_mag_field_data[0]]
-    magnetic_field_data = list(chain(*b_comp))
-    frequencies = list(chain(*tau_dict['freqs']))
+    magnetic_field_data = list(chain(*tau_dict['b_filt']))
 
     plots.plot_data(times_by_data_entry,
                     magnetic_field_data,
-                    frequencies,
+                    tau_dict["freqs"][0],
                     window_start_times,
                     tau_dict['psd'],
                     tau_dict['tau'])
