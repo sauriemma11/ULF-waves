@@ -27,10 +27,11 @@ def plot_data(time_by_data_entry, mag_field_data, frequencies, windows_start_tim
 
     Create a 4-panel subplot
     """
+    print("poop")
     fig, ax = plt.subplots(nrows=4)
 
     cmap = plt.get_cmap('rainbow')
-
+    print("ax1")
     ax[0].plot(time_by_data_entry, mag_field_data, linewidth=1)
     ax[0].set_ylabel('B MFA\n[nT]') # Is it par or perp
     ax[0].xaxis.set_ticklabels([])
@@ -40,12 +41,12 @@ def plot_data(time_by_data_entry, mag_field_data, frequencies, windows_start_tim
                       loc='upper right')
     at.patch.set_boxstyle("round, pad=0., rounding_size=0.2")
     ax[0].add_artist(at)
-
+    print("ax2")
     ax[1].pcolormesh(time_by_data_entry, mag_field_data, frequencies, vmin=-20, vmax=20, cmap=cmap)
     ax[1].axes.get_xaxis().set_visible(False)
     ax[1].set_ylabel('Frequency\n[Hz]')
     ax[1].tick_params(axis='y')
-
+    print("ax3")
     ax[2].plot(windows_start_time, avg_psd, linewidth=1)
     ax[2].set_ylabel('Average $P^{B}$\n[$nT^2$/Hz]')
     ax[2].xaxis.set_ticklabels([])
@@ -53,14 +54,14 @@ def plot_data(time_by_data_entry, mag_field_data, frequencies, windows_start_tim
     at2 = AnchoredText(f'{window_len_inhrs} hour windows', frameon=True, loc='upper right')
     at2.patch.set_boxstyle("round, pad=0., rounding_size=0.2")
     ax[2].add_artist(at2)
-
+    print("ax4")
     ax[3].semilogy(windows_start_time, avg_tau,
                    linewidth=1)
     ax[3].set_ylabel('Tau\n[hrs]')
     ax[3].set_xlabel('Time [UT]')
     ax[3].tick_params(axis='both')
-
-    plt.show()
+    print("savefig")
+    fig.savefig('output_plot.png')
 
 # **** Moved this all to unit test
 # # Make sample data for plotting:
