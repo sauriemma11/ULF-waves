@@ -17,6 +17,8 @@ import os.path
 import sys
 import plots
 import pickle
+import numpy as np
+from itertools import chain
 
 parser = argparse.ArgumentParser(
     description="""Pass in parameters for calculating
@@ -25,7 +27,7 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument('--filename',
                     type=str,
-                    help="""Path to file of interest. 
+                    help="""Path to file of interest.
                     Must be '.nc' file type.""",
                     required=True)
 
@@ -101,7 +103,7 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
         sys.exit(2)
 
     # checking 'timespan' input
-    if not 24 % timespan:
+    if not 24 % timespan == 0:
         print("'timespan' must be a factor of 24.")
         sys.exit(21)
 
@@ -118,25 +120,35 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
                                    timespan_hrs=timespan)
 
 
-    file_path = '../docs/'
+    file_path = '../docs/tau_dict.pkl'
 
     # Save tau_dict as pickle:
     with open(file_path, 'wb') as file:
         pickle.dump(tau_dict, file)
     print(f'tau_dict saved to {file}')
 
-    # plots.plot_data()
+    number_of_windows = int(24/timespan)
+    window_start_times = np.linspace(0, num_entries, number_of_windows)
+
+    # chain from itertools flattens the list
+    times_by_data_entry = list(chain(*tau_dict['time']))
+    magnetic_field_data = list(chain(*tau_dict['bfilt']))
+    frequencies = list(chain(*tau_dict['freqs']))
+
+    plots.plot_data(times_by_data_entry,
+                    magnetic_field_data,
+                    frequencies,
+                    window_start_times,
+                    tau_dict['psd'],
+                    tau_dict['tau'])
 
     return tau_dict
 
 
 if __name__ == '__main__':
-    try:
-        main(args.filename,
-            args.timespan,
-            args.num_entries,
-            args.fband,
-            args.comp,
-            args.ftype)
-    except FileNotFoundError:
-      print("The file does not exist. Please check your path.")
+    main(args.filename,
+        args.timespan,
+        args.num_entries,
+        args.fband,
+        args.comp,
+        args.ftype)
