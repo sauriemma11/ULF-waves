@@ -18,6 +18,7 @@ import sys
 import plots
 import pickle
 import numpy as np
+from itertools import chain
 
 parser = argparse.ArgumentParser(
     description="""Pass in parameters for calculating
@@ -26,7 +27,7 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument('--filename',
                     type=str,
-                    help="""Path to file of interest. 
+                    help="""Path to file of interest.
                     Must be '.nc' file type.""",
                     required=True)
 
@@ -126,19 +127,28 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
         pickle.dump(tau_dict, file)
     print(f'tau_dict saved to {file}')
 
+    number_of_windows = int(24/timespan)
+    window_start_times = np.linspace(0, num_entries, number_of_windows)
 
-    plots.plot_data()
+    # chain from itertools flattens the list
+    times_by_data_entry = list(chain(*tau_dict['time']))
+    magnetic_field_data = list(chain(*tau_dict['bfilt']))
+    frequencies = list(chain(*tau_dict['freqs']))
+
+    plots.plot_data(times_by_data_entry,
+                    magnetic_field_data,
+                    frequencies,
+                    window_start_times,
+                    tau_dict['psd'],
+                    tau_dict['tau'])
 
     return tau_dict
 
 
 if __name__ == '__main__':
-    try:
-        main(args.filename,
-            args.timespan,
-            args.num_entries,
-            args.fband,
-            args.comp,
-            args.ftype)
-    except FileNotFoundError:
-      print("The file does not exist. Please check your path.")
+    main(args.filename,
+        args.timespan,
+        args.num_entries,
+        args.fband,
+        args.comp,
+        args.ftype)
