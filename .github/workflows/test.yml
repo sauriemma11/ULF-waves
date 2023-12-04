@@ -18,6 +18,7 @@ jobs:
       - uses: mamba-org/setup-micromamba@v1
         with:
           # activate-environment: ULF_waves
+          environment-name: env
           environment-file: env.yml
       # - name: Verify conda env
       #   run: conda list -n ULF_waves
