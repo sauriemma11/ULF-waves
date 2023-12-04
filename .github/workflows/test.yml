@@ -18,7 +18,7 @@ jobs:
       - uses: mamba-org/setup-micromamba@v1
         with:
           # activate-environment: ULF_waves
-          environment-name: env
+          # environment-name: env
           environment-file: env.yml
       # - name: Verify conda env
       #   run: conda list -n ULF_waves
@@ -32,13 +32,13 @@ jobs:
       run:
         shell: bash -l {0}
     steps:
-      - uses: actions/checkout@v2
+      # - uses: actions/checkout@v2
       - uses: mamba-org/setup-micromamba@v1
         with:
           # activate-environment: ULF_waves
           environment-file: env.yml
-      - name: Install proj dependencies
-        run: micromamba install -n ULF_waves --file requirements.txt
+      # - name: Install proj dependencies
+      #   run: micromamba install -n ULF_waves --file requirements.txt
       - name: Run plots tests
         run: |
           cd test/unit
@@ -51,10 +51,11 @@ jobs:
   run_func_tests: # FUNCTIONAL TESTS
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      # - uses: actions/checkout@v2
       - uses: mamba-org/setup-micromamba@v1
         with:
         #  activate-environment: env
+          # environment-name: env
           environment-file: env.yml
       - run: |
           cd test/functional
