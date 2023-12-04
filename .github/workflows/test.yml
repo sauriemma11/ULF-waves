@@ -36,7 +36,7 @@ jobs:
       - uses: mamba-org/setup-micromamba@v1
         with:
           # activate-environment: ULF_waves
-          environment-file: ../../env.yml
+          environment-file: env.yml
       # - name: Install proj dependencies
       #   run: micromamba install -n ULF_waves --file requirements.txt
       - name: Run plots tests
