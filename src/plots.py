@@ -19,18 +19,48 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from matplotlib.offsetbox import AnchoredText
 import numpy as np
-
-
-def plot_data(time_by_data_entry, mag_field_data, frequencies, windows_start_time, avg_psd, avg_tau):
+import scipy.signal as signal
+from datetime import datetime, timedelta
+def time_convert(seconds_2000):
+    date_original = datetime(2000, 1, 1, 12, 0)
+    return date_original + timedelta(seconds=int(seconds_2000))
+def plot_data(time_by_data_entry, mag_field_data, windows_start_time, avg_psd,
+              avg_tau):
     """
-    time_by_data_entry, Magnetic_field_data, frequencies, windows_start_times, average_PSD, average_tau
+    time_by_data_entry, Magnetic_field_data, frequencies, windows_start_times,
+     average_PSD, average_tau
+    inputs: time_by_data_entry: times corresponding to timeseries observations,
+            1xn, 10Hz
+    mag_field_data: filtered magnetic field data, nx3 [nT]
+    spect_time: times corresponding to spectrogram sampling
+    spect_freq: frequencies corresponding to spectrogram sampling, [Hz]
+    spectrum: Sxx from spectrogram, size[spect_time x spect_freq], [dB]
+    windows_start_time: start time of tau window
+    avg_psd: average psd in the band of interest
+    avg_tau: average tau in the band of interest
 
     Create a 4-panel subplot
     """
-    fig, ax = plt.subplots(nrows=4)
+    # easiest way to plot spectrogram is to create a new one here from
+    # concatenated filtered signal
+    NFFT = 4500
+
+    f_sps, t_s, Sxx_s = signal.spectrogram(np.asarray(mag_field_data),
+                                           10, nperseg=int(NFFT),
+                                           noverlap=int(NFFT / 4),
+                                           scaling='spectrum',
+                                           return_onesided=True, mode='psd')
+    sgdb_sxx_s = 10 * np.log10(Sxx_s)
+
+    # TODO: FIGURE OUT HOW TO GET ACTUAL DATETIMES CORRECTLY
+    times_to_plot = time_by_data_entry[0::36000]
+    plot_times = []
+    for i, time_new in enumerate(times_to_plot):
+        plot_times.append(time_convert(time_new))
+
+    fig, ax = plt.subplots(nrows=4, figsize=(18,14))
 
     cmap = plt.get_cmap('rainbow')
-    print("ax1")
     ax[0].plot(time_by_data_entry, mag_field_data, linewidth=1)
     ax[0].set_ylabel('Comp. MFA\n[nT]')
     ax[0].xaxis.set_ticklabels([])
@@ -41,10 +71,11 @@ def plot_data(time_by_data_entry, mag_field_data, frequencies, windows_start_tim
     at.patch.set_boxstyle("round, pad=0., rounding_size=0.2")
     ax[0].add_artist(at)
 
-    ax[1].pcolormesh(time_by_data_entry, mag_field_data, frequencies, vmin=-20, vmax=20, cmap=cmap)
+    ax[1].pcolormesh(t_s, f_sps, sgdb_sxx_s, vmin=-20, vmax=20, cmap=cmap)
     ax[1].axes.get_xaxis().set_visible(False)
     ax[1].set_ylabel('Frequency\n[Hz]')
     ax[1].tick_params(axis='y')
+    ax[1].set_ylim([0, 0.05])
 
     ax[2].plot(windows_start_time, avg_psd, linewidth=1)
     ax[2].set_ylabel('Average $P^{B}$\n[$nT^2$/Hz]')
@@ -54,7 +85,7 @@ def plot_data(time_by_data_entry, mag_field_data, frequencies, windows_start_tim
     at2.patch.set_boxstyle("round, pad=0., rounding_size=0.2")
     ax[2].add_artist(at2)
 
-    ax[3].semilogy(windows_start_time, avg_tau,
+    ax[3].semilogy(plot_times, avg_tau,
                    linewidth=1)
     ax[3].set_ylabel('Tau\n[hrs]')
     ax[3].set_xlabel('Time of day [hrs]')

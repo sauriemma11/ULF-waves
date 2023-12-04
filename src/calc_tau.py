@@ -271,14 +271,10 @@ def get_tau(b_mfa, fband=[0.001, 0.01], ftype='highpass', comp=2):
     D_LL = calc_Dll(psd_av)
 
     tau = calc_tau(D_LL)
-
     outs = {}
 
     outs['tau'] = tau
     outs['D_LL'] = D_LL
-    outs['freqs'] = f_spect
-    outs['time'] = t_spect
-    outs['Sxx'] = Sxx_spect
     outs['psd'] = psd_av
     outs['b_filt'] = b_filt
 

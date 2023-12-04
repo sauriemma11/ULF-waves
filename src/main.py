@@ -136,7 +136,6 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
 
     plots.plot_data(times_by_data_entry,
                     magnetic_field_data,
-                    tau_dict["freqs"][0],
                     window_start_times,
                     tau_dict['psd'],
                     tau_dict['tau'])
