@@ -1,9 +1,9 @@
 name: Tests
 
 on:
-  push:
-    branches:
-      - "**" # all branches
+  # push:
+  #   branches:
+  #     - "**" # all branches
   pull_request:
     branches: [ main ] # pull on main
 
@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: mamba-org/setup-micromamba@v1
         with:
-          activate-environment: ULF_waves
+          # activate-environment: ULF_waves
           environment-file: env.yml
       # - name: Verify conda env
       #   run: conda list -n ULF_waves
@@ -34,7 +34,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: mamba-org/setup-micromamba@v1
         with:
-          activate-environment: ULF_waves
+          # activate-environment: ULF_waves
           environment-file: env.yml
       - name: Install proj dependencies
         run: micromamba install -n ULF_waves --file requirements.txt
@@ -48,14 +48,14 @@ jobs:
           python -m unittest test_data_prep.py
           
 
-#  run_func_tests: # FUNCTIONAL TESTS
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: mamba-org/setup-micromamba@v1
-#        with:
-#          activate-environment: env
-#          environment-file: env.yml
-#      - run: |
-#          cd test/functional
-#          bash func_tests.sh
+ run_func_tests: # FUNCTIONAL TESTS
+   runs-on: ubuntu-latest
+   steps:
+     - uses: actions/checkout@v2
+     - uses: mamba-org/setup-micromamba@v1
+       with:
+        #  activate-environment: env
+         environment-file: env.yml
+     - run: |
+         cd test/functional
+         bash func_tests.sh
