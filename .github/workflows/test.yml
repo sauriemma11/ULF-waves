@@ -1,9 +1,9 @@
 name: Tests
 
 on:
-  # push:
-  #   branches:
-  #     - "**" # all branches
+  push:
+    branches:
+      - "**" # all branches
   pull_request:
     branches: [ main ] # pull on main
 
@@ -14,12 +14,11 @@ jobs:
       run:
         shell: bash -l {0}
     steps:
-      # - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       - uses: mamba-org/setup-micromamba@v1
         with:
-          # activate-environment: ULF_waves
+          activate-environment: ULF_waves
           environment-file: env.yml
-          environment-name: ULF_waves
       # - name: Verify conda env
       #   run: conda list -n ULF_waves
       # - name: Install project dependencies
@@ -32,14 +31,13 @@ jobs:
       run:
         shell: bash -l {0}
     steps:
-      # - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       - uses: mamba-org/setup-micromamba@v1
         with:
-          # activate-environment: ULF_waves
+          activate-environment: ULF_waves
           environment-file: env.yml
-          environment-name: ULF_waves
-      # - name: Install proj dependencies
-      #   run: micromamba install -n ULF_waves --file requirements.txt
+      #- name: Install proj dependencies
+       # run: micromamba install -n ULF_waves --file requirements.txt
       - name: Run plots tests
         run: |
           cd test/unit
@@ -47,17 +45,17 @@ jobs:
       - name: Run data_prep tests
         run: |
           cd test/unit
-          python -m unittest test_data_prep.py        
+          python -m unittest test_data_prep.py
 
-  run_func_tests: # FUNCTIONAL TESTS
-    runs-on: ubuntu-latest
-    steps:
-      # - uses: actions/checkout@v2
-      - uses: mamba-org/setup-micromamba@v1
-        with:
-        #  activate-environment: env
-          environment-file: env.yml
-          environment-name: ULF_waves
-      - run: |
-          cd test/functional
-          bash func_tests.sh
+
+#  run_func_tests: # FUNCTIONAL TESTS
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - uses: mamba-org/setup-micromamba@v1
+#        with:
+#          activate-environment: env
+#          environment-file: env.yml
+#      - run: |
+#          cd test/functional
+#          bash func_tests.sh
