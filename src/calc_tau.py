@@ -129,18 +129,13 @@ def get_fband_ind(f_hp_spectrum, fband):
     delta_f: int [Hz]
         Difference between the high and low frequencies
     """
-    # TODO: repetitive
-    # print('fband: ')
-    # print(type(fband[0]), type(fband[1]))
-    try:
-        if fband[1] < fband[0] or fband[1] == fband[0]:
-            print('Incorrect order for frequency band. should be [low, high]'
-                  'switching order.')
-            fband_temp = np.copy(fband)
-            fband[0] = fband_temp[1]
-            fband[1] = fband_temp[0]
-    except:
-        print('fband should be [low,high]. Switching order.')
+
+    if fband[1] < fband[0] or fband[1] == fband[0]:
+        print('Incorrect order for frequency band. should be [low, high]'
+              'switching order.')
+        fband_temp = np.copy(fband)
+        fband[0] = fband_temp[1]
+        fband[1] = fband_temp[0]
 
     delta_f = float(fband[1]-fband[0])
     # get start and stop index for frequency band

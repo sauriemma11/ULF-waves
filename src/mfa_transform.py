@@ -69,7 +69,7 @@ def get_bav(b_in, fs=10, fc=1/(30*60), N=2, btype='lowpass'):
 # setp 2 : compute mfa
 def compute_mfa(b_av, b_epn):
     """
-    Step 2: compute MFA coordinates. See wave_analysis_steps.pdf for all details
+    Step 2: compute MFA coordinates. See wave_analysis_steps.pdf for details
 
     Parameters
     ----------

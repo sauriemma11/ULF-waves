@@ -73,7 +73,7 @@ def find_nearest(array, value, tolerance=None):
     """
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
-    if tolerance==None:
+    if tolerance is None:
         return idx
     if np.abs(array - value).min() >= tolerance:
         print('No value within tolerance range')
