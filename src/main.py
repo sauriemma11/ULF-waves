@@ -134,7 +134,7 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
     # chain from itertools flattens the list
     magnetic_field_data = list(chain(*tau_dict['b_filt']))
 
-    plots.plot_data(times_by_data_entry,
+    plots.plot_data(variable_dict['time'],
                     magnetic_field_data,
                     window_start_times,
                     tau_dict['psd'],
