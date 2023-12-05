@@ -41,7 +41,7 @@ parser.add_argument('--timespan',
 parser.add_argument('--num_entries',
                     type=int,
                     # default is 86400 secs with 10 samples/sec = 864000
-                    default= 864000,
+                    default=864000,
                     help="""Number of entries in data file.
                          Typically 864000 (10 ssamples/sec for 24 hours)""",
                     required=False)
@@ -106,7 +106,6 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
         print("'timespan' must be a factor of 24.")
         sys.exit(21)
 
-
     variable_dict = data_prep.read_nc_file(filename)
 
     b_mga = mfa_transform.main(variable_dict['b_epn'])
@@ -118,7 +117,6 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
                                    ftype=ftype,
                                    timespan_hrs=timespan)
 
-
     file_path = '../docs/tau_dict.pkl'
 
     # Save tau_dict as pickle:
@@ -129,7 +127,7 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
     number_of_windows = int(24/timespan)
     window_start_times = np.linspace(0, num_entries, number_of_windows)
 
-    times_by_data_entry = np.arange(0,num_entries,1)
+    times_by_data_entry = np.arange(0, num_entries, 1)
 
     # chain from itertools flattens the list
     magnetic_field_data = list(chain(*tau_dict['b_filt']))
@@ -145,8 +143,8 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
 
 if __name__ == '__main__':
     main(args.filename,
-        args.timespan,
-        args.num_entries,
-        args.fband,
-        args.comp,
-        args.ftype)
+         args.timespan,
+         args.num_entries,
+         args.fband,
+         args.comp,
+         args.ftype)
