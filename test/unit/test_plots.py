@@ -19,7 +19,7 @@ class TestPlots(unittest.TestCase):
 #test
         #try:
         plot_data(t_hp_z, highps_z_all, window_start_time, avg_psd,
-                  avg_tau)
+                  avg_tau,output_dir='test.png')
 
         # except Exception as e:
         #     self.fail(f"plot_data raised an exception: {e}")

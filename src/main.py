@@ -136,7 +136,8 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
                     magnetic_field_data,
                     window_start_times,
                     tau_dict['psd'],
-                    tau_dict['tau'])
+                    tau_dict['tau'],
+                    output_dir='../docs/output_plot.png')
 
     return tau_dict
 

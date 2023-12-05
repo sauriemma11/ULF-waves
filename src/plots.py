@@ -25,7 +25,7 @@ def time_convert(seconds_2000):
     date_original = datetime(2000, 1, 1, 12, 0)
     return date_original + timedelta(seconds=int(seconds_2000))
 def plot_data(time_by_data_entry, mag_field_data, windows_start_time, avg_psd,
-              avg_tau):
+              avg_tau, output_dir):
     """
     time_by_data_entry, Magnetic_field_data, frequencies, windows_start_times,
      average_PSD, average_tau
@@ -90,7 +90,7 @@ def plot_data(time_by_data_entry, mag_field_data, windows_start_time, avg_psd,
     ax[3].set_ylabel('Tau\n[hrs]')
     ax[3].set_xlabel('Time of day [hrs]')
     ax[3].tick_params(axis='both')
-    fig.savefig('../docs/output_plot.png')
+    fig.savefig(output_dir)
 
 # **** Moved this all to unit test
 # # Make sample data for plotting:
