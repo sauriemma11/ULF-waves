@@ -16,8 +16,8 @@ class TestPlots(unittest.TestCase):
         avg_tau = np.linspace(0, 1000, 24)
         window_start_time = np.linspace(0, 24, 864000)
         highps_z_all = np.random.uniform(-10, 10, 864000)
-
-        # try:
+#test
+        #try:
         plot_data(t_hp_z, highps_z_all, window_start_time, avg_psd,
                   avg_tau)
 
