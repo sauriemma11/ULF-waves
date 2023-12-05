@@ -77,7 +77,7 @@ def plot_data(time_by_data_entry, mag_field_data, windows_start_time, avg_psd,
     ax[1].tick_params(axis='y')
     ax[1].set_ylim([0, 0.05])
 
-    ax[2].plot(windows_start_time, avg_psd, linewidth=1)
+    ax[2].semilogy(windows_start_time, avg_psd, linewidth=1)
     ax[2].set_ylabel('Average $P^{B}$\n[$nT^2$/Hz]')
     ax[2].xaxis.set_ticklabels([])
     window_len_inhrs = 24 / len(avg_psd)
