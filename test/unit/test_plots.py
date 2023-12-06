@@ -1,7 +1,6 @@
 import unittest
 import numpy as np
 import sys
-
 sys.path.insert(0, '../../src')  # noqa
 from plots import plot_data
 
@@ -17,12 +16,8 @@ class TestPlots(unittest.TestCase):
         window_start_time = np.linspace(0, 24, 864000)
         highps_z_all = np.random.uniform(-10, 10, 864000)
 
-        # try:
         plot_data(t_hp_z, highps_z_all, window_start_time, avg_psd,
                   avg_tau)
-
-        # except Exception as e:
-        #     self.fail(f"plot_data raised an exception: {e}")
 
     def test_plot_data_inputs(self):
         # Test if inputs are non-array
