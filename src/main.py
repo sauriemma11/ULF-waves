@@ -7,8 +7,6 @@ Main module
     * data file
 '''
 
-# Import statements here
-# Or maybe we have a library file
 import data_prep
 import mfa_transform
 import call_tau
@@ -65,7 +63,7 @@ parser.add_argument('--ftype',
                     type=str,
                     default='highpass',
                     help="""Frequency type;
-                         options are 'high', 'low', or 'bandpass'""",
+                         options are 'highpass', 'lowpass', or 'bandpass'""",
                     required=False)
 
 args = parser.parse_args()

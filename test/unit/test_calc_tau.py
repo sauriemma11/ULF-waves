@@ -68,11 +68,8 @@ class TestMathLib(unittest.TestCase):
         self.assertIsNotNone(tau.get_fband_ind(f, fband))
         self.assertEqual(df_check, df)
         self.assertRaises(IndexError, tau.get_fband_ind, f, fband_bad)
-        self.assertEqual(tau.get_fband_ind(f,fband_outrange),
+        self.assertEqual(tau.get_fband_ind(f, fband_outrange),
                          (None, None, df_outrange))
-        #test non sorted numbers
-        # TODO: resolve: find_nearest will return none, but get fband will try
-        # to switch the order...
 
     def test_avg_psd(self):
         # lots of set up: prior outputs are inputs here
@@ -93,7 +90,6 @@ class TestMathLib(unittest.TestCase):
 
         t_xx = np.random.randint(low=1, high=10000, size=int(t_sz))
 
-        # TO DO : another positive test?
         self.assertIsNotNone(tau.avg_psd(Sxx, band_st, band_sp, delta_f, t_xx))
         self.assertIsNotNone(tau.avg_psd(Sxx_nans, band_st, band_sp, delta_f,
                                          t_xx))
@@ -139,6 +135,7 @@ class TestMathLib(unittest.TestCase):
         self.assertRaises(TypeError, tau.get_tau, [])
         self.assertRaises(IndexError, tau.get_tau, test_dat, comp=4)
         self.assertRaises(IndexError, tau.get_tau, test_dat, fband=[])
+
 
 if __name__ == '__main__':
     unittest.main()
