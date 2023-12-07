@@ -48,22 +48,22 @@ parser.add_argument('--fband',
                     type=list,
                     default=[0.001, 0.01],  # default is 0.001 - 0.01 Hz
                     help="""Values to define the frequency band
-                         of interest.First element is lower frequency,
+                         of interest. First element is lower frequency,
                          and second element is upper frequency [Hz].""",
                     required=False)
 
 parser.add_argument('--comp',
-                    type=list,
-                    default=2,  # default is 2 --- parallel
+                    choices=[0, 1, 2],
+                    default=2,  # default is 2 -- parallel
                     help="""Component of the magnetic field to filter
                          (0=radial, 1=phi, 2=parallel)""",
                     required=False)
 
 parser.add_argument('--ftype',
-                    type=str,
+                    choices=['highpass', 'lowpass', 'bandpass'],  # correct?
                     default='highpass',
                     help="""Frequency type;
-                         options are 'highpass', 'lowpass', or 'bandpass'""",
+                    (options are 'high', 'low', or 'bandpass')""",
                     required=False)
 
 args = parser.parse_args()
@@ -87,27 +87,47 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
     -------
     tau_dict: dict
     """
-    # checking that file exists
+    # checking that file exists -- 0
     check_file = os.path.exists(filename)
     if not check_file:
         print(f'Could not find {filename}. Try a different file.')
         sys.exit(1)
 
-    # check that file is '.nc'
+    # check that file is '.nc' -- 0
     is_nc = filename.endswith('.nc')
     if not is_nc:
         print("Wrong file type -- must be '.nc' file.")
         sys.exit(2)
 
-    # checking 'timespan' input
+    # checking `timespan` input is factor of 24 -- 1
     if not 24 % timespan == 0:
         print("'timespan' must be a factor of 24.")
-        sys.exit(21)
+        sys.exit(11)
 
+    # `num_entries` -- 2
+
+    # checking `fband` length (must have 2 elements) -- 3
+    if len(fband) != 2:
+        print(f"""`fband` must have 2 elements
+              but given `fband` has length {len(fband)}.""")
+        sys.exit(31)
+
+    # `fband` elements must be floats -- 3
+    # if type(fband[0]) != float and type(fband[1]) != float:
+    #     print('`fband` elements are not floats.')
+    #     sys.exit(32)
+
+    # if `fband` elements are reversed, flip it
+    if fband[0] > fband[1]:
+        fband = [fband[1], fband[0]]
+
+    print('Prepping data...')
     variable_dict = data_prep.read_nc_file(filename)
 
+    print('Performing MFA transform...')
     b_mga = mfa_transform.main(variable_dict['b_epn'])
 
+    print('Calculating tau...')
     tau_dict = call_tau.concat_tau(b_mga,
                                    num_data_entries=num_entries,
                                    fband=fband,
@@ -115,9 +135,9 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
                                    ftype=ftype,
                                    timespan_hrs=timespan)
 
-    file_path = '../docs/tau_dict.pkl'
-
     # Save tau_dict as pickle:
+    file_path = "../docs/tau_dict.pkl"
+    # file_path = 'tau_dict.pkl'
     with open(file_path, 'wb') as file:
         pickle.dump(tau_dict, file)
     print(f'tau_dict saved to {file}')
@@ -130,6 +150,7 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
     # chain from itertools flattens the list
     magnetic_field_data = list(chain(*tau_dict['b_filt']))
 
+    print('Plotting data...')
     plots.plot_data(variable_dict['time'],
                     magnetic_field_data,
                     window_start_times,

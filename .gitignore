@@ -1,5 +1,6 @@
 # Data files
 data
+test/unit/test_data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
