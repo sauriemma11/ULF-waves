@@ -94,8 +94,8 @@ def plot_data(time_by_data_entry, mag_field_data, windows_start_time, avg_psd,
     ax[2].set_ylabel('Average $P^{B}$\n[$nT^2$/Hz]')
     ax[2].xaxis.set_ticklabels([])
     window_len_inhrs = 24 / len(avg_psd)
-    at2 = AnchoredText(f'{window_len_inhrs} hour windows',
-                       frameon=True, loc='upper right')
+    at2 = AnchoredText(f'{window_len_inhrs} hour windows', frameon=True,
+                       loc='upper right')
     at2.patch.set_boxstyle("round, pad=0., rounding_size=0.2")
     ax[2].add_artist(at2)
 

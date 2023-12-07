@@ -9,15 +9,21 @@ class TestPlots(unittest.TestCase):
 
     def test_plot_data(self):
         # Test random input data
-        dt_g16 = np.linspace(0, 24, 864000)
         avg_psd = np.linspace(0, 1000, 864000)
         t_hp_z = np.linspace(0, 24, 864000)
         avg_tau = np.linspace(0, 1000, 24)
         window_start_time = np.linspace(0, 24, 864000)
         highps_z_all = np.random.uniform(-10, 10, 864000)
-
-        plot_data(t_hp_z, highps_z_all, window_start_time, avg_psd,
-                  avg_tau, output_dir='test.png')
+        wrg_lgth = np.linspace(0, 24, 100)
+        self.assertRaises(ValueError, plot_data, 'oops', highps_z_all,
+                          window_start_time, avg_psd, avg_tau,
+                          output_dir='test.png')
+        self.assertIsNone(plot_data(t_hp_z, highps_z_all,
+                          window_start_time, avg_psd, avg_tau,
+                          output_dir='test.png'))
+        self.assertRaises(ValueError, plot_data, wrg_lgth, highps_z_all,
+                          window_start_time, avg_psd, avg_tau,
+                          output_dir='test.png')
 
     def test_plot_data_inputs(self):
         # Test if inputs are non-array
