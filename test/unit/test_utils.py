@@ -13,7 +13,6 @@ import utils as u  # noqa
 # import src.mfa_transform as mt
 
 
-# TO DO: WHEN YOU HAVE RANDOMNESS, RUN THINGS FOR MANY ITTERATIONS
 class TestMathLib(unittest.TestCase):
 
     def test_butter_filter(self):
