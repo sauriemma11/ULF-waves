@@ -93,6 +93,14 @@ This code repo works best with the NCEI L2 data. Click on the GOES-*-L2 button f
 
 The data files are netCDF4 files. This is a self-describing dataset which contains 10Hz magnetometer measurements. The level 2 data has been calibrated, converted to scientific units and converted to scientific coordinate frames. For more information about working with netCDF4 datafiles, visit https://unidata.github.io/netcdf4-python/
 
+### Testing:
+To run individual unit tests, first navigate to the unit test directory.
+
+```commandline
+cd test/unit
+python -m unittest test_plots.py
+```
+
 ## Updates
 
 <details>
