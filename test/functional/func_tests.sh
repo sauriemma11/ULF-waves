@@ -2,14 +2,13 @@ test -e ssshtest || wget -q https://raw.githubusercontent.com/ryanlayer/ssshtest
 . ssshtest
 
 MAIN_DIR="../../src"
-DATA_DIR="../../data/"
-FILE="dn_magn-l2-hires_g16_d20230227_v1-0-1.nc"
+DATA_DIR="../unit/data/"
+FILE="first_5_data.nc"  # test dataset
 
-# ../data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc
 
-# # successful run -- SAVING PICKLE FILE WHEN TESTING DOESN'T WORK?
-# run test_success python $MAIN_DIR/main.py --filename $DATA_DIR$FILE
-# assert_exit_code 0
+# successful run -- SAVING PICKLE FILE WHEN TESTING DOESN'T WORK?
+run test_success python $MAIN_DIR/main.py --filename $DATA_DIR$FILE
+assert_exit_code 0
 
 
 # TO DO: CHECK THAT OUTPUTTING PLOT CORRECTLY
@@ -21,7 +20,7 @@ run test_no_file python $MAIN_DIR/main.py --filename $DATA_DIR'DOES_NOT_EXIST.nc
 assert_exit_code 1
 
 # file is wrong type
-run test_file_wrong_type python $MAIN_DIR/main.py --filename $DATA_DIR'wrong_file.txt'
+run test_file_wrong_type python $MAIN_DIR/main.py --filename $DATA_DIR'b_av_test_set.txt'
 assert_exit_code 2
 
 

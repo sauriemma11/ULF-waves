@@ -32,14 +32,30 @@ jobs:
         with:
           activate-environment: ULF_waves
           environment-file: env.yml
-      - name: Run plots tests
+      - name: Run PLOTTING tests
         run: |
           cd test/unit
           python -m unittest test_plots.py
-      - name: Run data_prep tests
+      - name: Run DATA PREP tests
         run: |
           cd test/unit
           python -m unittest test_data_prep.py
+      - name: Run CALCULATING TAU tests
+        run: |
+          cd test/unit
+          python -m unittest test_calc_tau.py
+      - name: Run CALLING TAU tests
+        run: |
+          cd test/unit
+          python -m unittest test_call_tau.py
+      - name: Run MFA TRANSFORM tests
+        run: |
+          cd test/unit
+          python -m unittest test_mfa_transform.py
+      - name: Run UTILS tests
+        run: |
+          cd test/unit
+          python -m unittest test_utils.py
 
   run_func_tests: # FUNCTIONAL TESTS
     runs-on: ubuntu-latest
