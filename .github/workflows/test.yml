@@ -41,15 +41,17 @@ jobs:
           cd test/unit
           python -m unittest test_data_prep.py
 
-
-#  run_func_tests: # FUNCTIONAL TESTS
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: mamba-org/setup-micromamba@v1
-#        with:
-#          activate-environment: env
-#          environment-file: env.yml
-#      - run: |
-#          cd test/functional
-#          bash func_tests.sh
+  run_func_tests: # FUNCTIONAL TESTS
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: mamba-org/setup-micromamba@v1
+        with:
+          activate-environment: ULF_waves
+          environment-file: env.yml
+      - run: |
+          cd test/functional
+          bash func_tests.sh
