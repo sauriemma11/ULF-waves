@@ -21,9 +21,13 @@ from matplotlib.offsetbox import AnchoredText
 import numpy as np
 import scipy.signal as signal
 from datetime import datetime, timedelta
+
+
 def time_convert(seconds_2000):
     date_original = datetime(2000, 1, 1, 12, 0)
     return date_original + timedelta(seconds=int(seconds_2000))
+
+
 def plot_data(time_by_data_entry, mag_field_data, windows_start_time, avg_psd,
               avg_tau, output_dir):
     """
@@ -58,7 +62,7 @@ def plot_data(time_by_data_entry, mag_field_data, windows_start_time, avg_psd,
     for i, time_new in enumerate(times_to_plot):
         plot_times.append(time_convert(time_new))
 
-    fig, ax = plt.subplots(nrows=4, figsize=(18,14))
+    fig, ax = plt.subplots(nrows=4, figsize=(18, 14))
 
     cmap = plt.get_cmap('rainbow')
     ax[0].plot(time_by_data_entry, mag_field_data, linewidth=1)
@@ -81,7 +85,8 @@ def plot_data(time_by_data_entry, mag_field_data, windows_start_time, avg_psd,
     ax[2].set_ylabel('Average $P^{B}$\n[$nT^2$/Hz]')
     ax[2].xaxis.set_ticklabels([])
     window_len_inhrs = 24 / len(avg_psd)
-    at2 = AnchoredText(f'{window_len_inhrs} hour windows', frameon=True, loc='upper right')
+    at2 = AnchoredText(f'{window_len_inhrs} hour windows', frameon=True,
+                       loc='upper right')
     at2.patch.set_boxstyle("round, pad=0., rounding_size=0.2")
     ax[2].add_artist(at2)
 

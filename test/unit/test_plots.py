@@ -15,7 +15,7 @@ class TestPlots(unittest.TestCase):
         avg_tau = np.linspace(0, 1000, 24)
         window_start_time = np.linspace(0, 24, 864000)
         highps_z_all = np.random.uniform(-10, 10, 864000)
-        wrg_lgth = np.linspace(0,24,100)
+        wrg_lgth = np.linspace(0, 24, 100)
         self.assertRaises(ValueError, plot_data, 'oops', highps_z_all,
                           window_start_time, avg_psd, avg_tau,
                           output_dir='test.png')
