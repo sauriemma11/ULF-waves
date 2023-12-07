@@ -32,7 +32,7 @@ def time_convert(seconds_2000):
 
 
 def plot_data(time_by_data_entry, mag_field_data, windows_start_time, avg_psd,
-              avg_tau):
+              avg_tau, output_dir):
     """
     Parameters
     ----------
@@ -104,4 +104,4 @@ def plot_data(time_by_data_entry, mag_field_data, windows_start_time, avg_psd,
     ax[3].set_ylabel('Tau\n[hrs]')
     ax[3].set_xlabel('Time of day [hrs]')
     ax[3].tick_params(axis='both')
-    fig.savefig('../docs/output_plot.png')
+    fig.savefig(output_dir)

@@ -17,7 +17,7 @@ class TestPlots(unittest.TestCase):
         highps_z_all = np.random.uniform(-10, 10, 864000)
 
         plot_data(t_hp_z, highps_z_all, window_start_time, avg_psd,
-                  avg_tau)
+                  avg_tau, output_dir='test.png')
 
     def test_plot_data_inputs(self):
         # Test if inputs are non-array
