@@ -2,42 +2,44 @@ test -e ssshtest || wget -q https://raw.githubusercontent.com/ryanlayer/ssshtest
 . ssshtest
 
 MAIN_DIR="../../src"
-DATA_DIR="../unit/data/"
-FILE="first_5_data.nc"  # test dataset
+
+# all paths relative to MAIN_DIR
+DATA_DIR="../test/unit/test_data" #"../unit/test_data"
+OUTPUTS_PATH="../docs" #"../../docs"
+FILE="dn_magn-l2-hires_g16_d20230227_v1-0-1.nc"  # test dataset
 
 
-# successful run -- SAVING PICKLE FILE WHEN TESTING DOESN'T WORK?
-run test_success python $MAIN_DIR/main.py --filename $DATA_DIR$FILE
+#### successful run ####
+cd $MAIN_DIR
+run test_success python main.py --filename $DATA_DIR/$FILE
 assert_exit_code 0
-
-
-# TO DO: CHECK THAT OUTPUTTING PLOT CORRECTLY
-
+assert_equal $OUTPUTS_PATH/tau_dict.pkl $( ls $OUTPUTS_PATH/tau_dict.pkl )  # output file created
+assert_equal $OUTPUTS_PATH/output_plot.png $( ls $OUTPUTS_PATH/output_plot.png )  # output plot created
+# rm $OUTPUTS_PATH/tau_dict.pkl $OUTPUTS_PATH/output_plot.png  # remove test files
 
 #### testing `filename` input ####
 # file does not exist
-run test_no_file python $MAIN_DIR/main.py --filename $DATA_DIR'DOES_NOT_EXIST.nc'
+run test_no_file python main.py --filename $DATA_DIR/DOES_NOT_EXIST.nc
 assert_exit_code 1
 
 # file is wrong type
-run test_file_wrong_type python $MAIN_DIR/main.py --filename $DATA_DIR'b_av_test_set.txt'
+run test_file_wrong_type python main.py --filename $DATA_DIR/b_av_test_set.txt
 assert_exit_code 2
-
 
 #### testing `timespan` input ####
 # `timespan` isn't a factor of 24
-run test_timespan_not_factor python $MAIN_DIR/main.py --filename $DATA_DIR$FILE --timespan 17
+run test_timespan_not_factor python main.py --filename $DATA_DIR/$FILE --timespan 17
 assert_exit_code 11
 
 #### testing `fband` input ####
 # `fband` has MORE than two elements
-run test_fband_wrong_size python $MAIN_DIR/main.py --filename $DATA_DIR$FILE --fband 0.001,0.1,0.5
+run test_fband_wrong_size python main.py --filename $DATA_DIR/$FILE --fband 0.001,0.1,0.5
 assert_exit_code 31
 
 # `fband` has LESS than two elements
-run test_fband_wrong_size python $MAIN_DIR/main.py --filename $DATA_DIR$FILE --fband 0.001
+run test_fband_wrong_size python main.py --filename $DATA_DIR/$FILE --fband 0.001
 assert_exit_code 31
 
 # # `fband` wrong type
-# run test_fband_wrong_type python $MAIN_DIR/main.py --filename $DATA_DIR$FILE --fband 1,2
+# run test_fband_wrong_type python $MAIN_DIR/main.py --filename $DATA_DIR/$FILE --fband 1,2
 # assert_exit_code 32
