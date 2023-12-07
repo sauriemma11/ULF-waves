@@ -167,8 +167,8 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
 
 if __name__ == '__main__':
     main(args.filename,
-        args.timespan,
-        args.num_entries,
-        args.fband,
-        args.comp,
-        args.ftype)
+         args.timespan,
+         args.num_entries,
+         args.fband,
+         args.comp,
+         args.ftype)

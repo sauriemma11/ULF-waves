@@ -19,10 +19,6 @@ jobs:
         with:
           activate-environment: ULF_waves
           environment-file: env.yml
-      # - name: Verify conda env
-      #   run: conda list -n ULF_waves
-      # - name: Install project dependencies
-      #   run: micromamba install -n ULF_waves --file requirements.txt
       - run: pycodestyle --exclude=src/radiation_belt_analysis_v4.py,test/unit/test_mfa_transform.py $(git ls-files "*.py")
 
   run_unit_tests: # UNIT TESTS
@@ -36,8 +32,6 @@ jobs:
         with:
           activate-environment: ULF_waves
           environment-file: env.yml
-      #- name: Install proj dependencies
-       # run: micromamba install -n ULF_waves --file requirements.txt
       - name: Run plots tests
         run: |
           cd test/unit
