@@ -46,7 +46,7 @@ parser.add_argument('--num_entries',
 
 parser.add_argument('--fband',
                     type=list,
-                    default=[0.001,0.01],  # default is 0.001 - 0.01 Hz
+                    default=[0.001, 0.01],  # default is 0.001 - 0.01 Hz
                     help="""Values to define the frequency band
                          of interest. First element is lower frequency,
                          and second element is upper frequency [Hz].""",
@@ -120,7 +120,6 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
     # if `fband` elements are reversed, flip it
     if fband[0] > fband[1]:
         fband = [fband[1], fband[0]]
-
 
     print('Prepping data...')
     variable_dict = data_prep.read_nc_file(filename)
