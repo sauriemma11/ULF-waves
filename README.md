@@ -75,11 +75,14 @@ code practices.
 
 ### Examples how to run:
 Mutable user inputs are:
-- `filename` (.nc data file -- required)
+- `filename` (.nc data file path and name -- required)
+- `timespan` (time per window in hours, must go evenly into 24 -- default is 1)
+- `num_entries` (number of entries in data file -- default is 864000)
 - `fband` (frequency band in Hz -- default is [0.001, 0.01])
-- `timespan` (time per window in hours, must go evenly into 24 -- default is 1).
+- `comp` (component of the magnetic field to filter; 0=radial, 1=phi, 2=parallel -- default is 2)
+- `ftype` (frequency type; options are 'high', 'low', or 'bandpass -- default is 'highpass')
 
-From the main repository directory, run:
+From the main repository directory, run (adding any optional inputs as desired)
 ```shell
 python main.py --filename foo.nc
 ```
@@ -90,13 +93,21 @@ This code repo works best with the NCEI L2 data. Click on the GOES-*-L2 button f
 
 The data files are netCDF4 files. This is a self-describing dataset which contains 10Hz magnetometer measurements. The level 2 data has been calibrated, converted to scientific units and converted to scientific coordinate frames. For more information about working with netCDF4 datafiles, visit https://unidata.github.io/netcdf4-python/
 
-### Example outputs:
-TO DO: UPDATE HERE
+### Testing:
+To run individual unit tests, first navigate to the unit test directory.
+
+```commandline
+cd test/unit
+python -m unittest test_plots.py
+```
 
 ## Updates
 
 <details>
 <summary>Expand for version release updates</summary>
+
+### V 2.0
+Final project release. Implemented code review comments. Made sure documentation was consistent. Fixed bugs in window output. Finalized plotting capabilities. Added save capabilities for plot outputs and dictionary outputs.
 
 ### V 1.0
 First full draft before the code review. Split one file that runs everything into different modules, created initial unit and functional tests, a main file to call all the functions, and a run.sh file.

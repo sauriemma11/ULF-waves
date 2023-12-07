@@ -1,15 +1,15 @@
 '''
 Module to calculate and combine tau values for specified time interval
--Requires:
+- Requires:
     * function get_tau from calc_tau.py
     * user input for time interval (or a default configuation)
--Outputs:
+- Outputs:
     * dictionary with a list of lists for each key;
       each list of lists has 24 hours / defined timespan in hours entries;
       keys described in concat_tau function below
--Used in:
+- Used in:
     * main.py
--Functions:
+- Functions:
     * concat_tau -- gathers calculated values from each window into one dict
 '''
 

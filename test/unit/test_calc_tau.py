@@ -90,7 +90,6 @@ class TestMathLib(unittest.TestCase):
 
         t_xx = np.random.randint(low=1, high=10000, size=int(t_sz))
 
-        # TO DO : another positive test?
         self.assertIsNotNone(tau.avg_psd(Sxx, band_st, band_sp, delta_f, t_xx))
         self.assertIsNotNone(tau.avg_psd(Sxx_nans, band_st, band_sp, delta_f,
                                          t_xx))
