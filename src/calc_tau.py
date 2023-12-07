@@ -1,10 +1,10 @@
 '''
 Module to calculate the tau value
--Inputs:
+- Inputs:
     * dictionary (output from mfa_transform.py) with
         nx3 array of background-subtracted B-field in MFA
         nx1 array of time in dt sec
--Outputs:
+- Outputs:
     * individual returns from functions, particularly
         tx1 tau
         tx1 D_LL
@@ -12,33 +12,28 @@ Module to calculate the tau value
         tx1 time
         tx1 frequencies
         tx1 filtered componenet of magnetic field
-
--Used in:
+- Used in:
     * call_tau.py
     * main.py
--Functions:
-    * highps_b -- highpass filter that returns tx1 B-field in MFA
+- Functions:
+    * filter_b -- highpass filter that returns tx1 B-field in MFA
     * spect -- spectrogram that returns tx1 frequencies, tx1 times, tx1
       spectrum
-    * get_fband -- retrieves indexes for frequencies in band of interest and
-                   returns start (low freq.) index and stop (high freq. index)
+    * get_fband_ind -- retrieve indexes for frequencies in band of interest and
+                    returns start (low freq.) index and stop (high freq. index)
     * avg_psd -- returns average Power Spectral Density within freq. band
-    * calc_dll -- calculate and return D_LL
+    * calc_Dll -- calculate and return D_LL
     * calc_tau -- calculate and return tau
+    * get_tau -- calculate tau; the function to be called in call_tau.py
 '''
 
 import utils as u
 import matplotlib.pyplot as plt
 from scipy import signal
 import numpy as np
-# TODO: GET RID OF GLOBAL VARIABLES HERE
-# THINGS TO ADD TO CONFIG: frequency/Pc band
-#   -highpass or bandpass for tau filtering
 
 
 def filter_b(b_mfa, ftype='highpass', comp=2, fs=10, N=1, fc=0.001):
-    # TO DO: option for which components to get waves for?
-    # TO DO: optoin for frequency band? dpdds on application..
     """
     Filter the mangetic field component of interest
 
@@ -55,13 +50,13 @@ def filter_b(b_mfa, ftype='highpass', comp=2, fs=10, N=1, fc=0.001):
         Sampling frequency
     N: int (default = 1)
         Filter order
-    fc: int or 1x2 list
-        int if cutoff frequency is highpass or lowpass filter
+    fc: float or 1x2 list
+        float if cutoff frequency is highpass or lowpass filter
         1x2 list of int high and low frequencies if cutoff is bandpass filter
 
     Returns
     -------
-    highps_z: n [nT]
+    filt_comp: n [nT]
         Highpass filtered componenent of b_mfa
     """
     if str(ftype) == str('highpass') or str('lowpass'):
@@ -108,17 +103,16 @@ def spect(b_in, fs=10):
     return (f_sps, t_s, Sxx_s)
 
 
-# TO DO : ADD IN CONDITION FOR CHECKING FBAND[1] > FBAND[0]
 def get_fband_ind(f_hp_spectrum, fband):
-    # TO DO: band option in config?
     """
     Find the indicies for the low and high frequencies
 
     Parameters
     ----------
-    inputs: f_hp_spectrum: frequencies in the spectrogram, mx1 [Hz]
-            fband: low and high frequencies of band, 1x2 list i.e.
-                   [low,high], [Hz]
+    f_hp_spectrum: mx1 [Hz]
+        frequencies in the spectrogram,
+    fband: 1x2 list of floats [Hz]
+        low and high frequencies of band, [low freq, high freq]
 
     Returns
     -------
@@ -129,22 +123,15 @@ def get_fband_ind(f_hp_spectrum, fband):
     delta_f: int [Hz]
         Difference between the high and low frequencies
     """
-    # TODO: repetitive
-    # print('fband: ')
-    # print(type(fband[0]), type(fband[1]))
-    try:
-        if fband[1] < fband[0] or fband[1] == fband[0]:
-            print('Incorrect order for frequency band. should be [low, high]'
-                  'switching order.')
-            fband_temp = np.copy(fband)
-            fband[0] = fband_temp[1]
-            fband[1] = fband_temp[0]
-    except:
-        print('fband should be [low,high]. Switching order.')
+
+    if fband[1] < fband[0] or fband[1] == fband[0]:
+        print('Incorrect order for frequency band. should be [low, high]'
+              'switching order.')
+        fband_temp = np.copy(fband)
+        fband[0] = fband_temp[1]
+        fband[1] = fband_temp[0]
 
     delta_f = float(fband[1]-fband[0])
-    # get start and stop index for frequency band
-    # TODO: THINK ABOUT WHAT THE TOLERANCE SHOULD BE HERE
     band_st = u.find_nearest(f_hp_spectrum, fband[0], tolerance=0.005)
     band_sp = u.find_nearest(f_hp_spectrum, fband[1], tolerance=0.05)
     return (band_st, band_sp, delta_f)
@@ -183,7 +170,6 @@ def avg_psd(Sxx_hp_spectrum,  band_st, band_sp, delta_f, t_xx):
 
 
 def calc_Dll(psd_avg):
-    # TO DO: MAKE F A VARIABLE / JUST PASS IN FBAND FROM INPUTS
     """
     Calculate D_LL
 
@@ -199,7 +185,8 @@ def calc_Dll(psd_avg):
 
     Outputs
     -------
-    D_LL:
+    D_LL: float
+        Diffusion coefficient
 
     """
     L = 6.6
@@ -216,11 +203,13 @@ def calc_tau(D_ll):
 
     Parameters
     ----------
-    D_ll:
+    D_ll: float
+        Diffusion coefficient
 
     Returns
     -------
-    tau: int [min]
+    tau_m: float [min]
+        The time it takes for an electron to diffuse one Lshell
     """
     tau_s = 1/D_ll
     tau_m = tau_s / 60
@@ -228,18 +217,17 @@ def calc_tau(D_ll):
 
 
 def get_tau(b_mfa, fband=[0.001, 0.01], ftype='highpass', comp=2):
-    # function to be called by main module
     """
-    Calculate tau
+    Calculate tau -- function to be called in call_tau.py
 
     Parameters
     ----------
     b_mfa: tx1 [nT]
         Magnetic field values in MFA with background field subtracted,
-    time: tx1 [s]
-        Datetime array,
     fband: 1x2 list of ints [Hz]
         Low and high frequency for the band of interest
+    ftype: str
+        Frequency type options are 'highpass' or 'lowpass' or 'bandpass'
     comp: int
         Componenet of the magnetic field to filter, 0=radial, 1=phi, 2=paralell
 
@@ -248,8 +236,8 @@ def get_tau(b_mfa, fband=[0.001, 0.01], ftype='highpass', comp=2):
     outs: dict, containing
         tau: int [min]
             Timescale to diffuse one Lshell
-        D_LL: int
-            D_LL
+        D_LL: float
+            Diffusion coefficient
         t_hp_spectrum: [s]
             Times corresponding to frequency domain
         f_hp_spectrum: [Hz]
@@ -271,14 +259,10 @@ def get_tau(b_mfa, fband=[0.001, 0.01], ftype='highpass', comp=2):
     D_LL = calc_Dll(psd_av)
 
     tau = calc_tau(D_LL)
-
     outs = {}
 
     outs['tau'] = tau
     outs['D_LL'] = D_LL
-    outs['freqs'] = f_spect
-    outs['time'] = t_spect
-    outs['Sxx'] = Sxx_spect
     outs['psd'] = psd_av
     outs['b_filt'] = b_filt
 

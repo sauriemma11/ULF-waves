@@ -1,31 +1,26 @@
 '''
 Module to find the Magnetic Field Aligned (MFA) coordinates
--Inputs:
+- Inputs:
     * dictionary (output from data_prep.py) with
         nx3 array of background-subtracted B-field in EPN (with nan values)
         nx1 array of time in dt sec
--Outputs:
+- Outputs:
     * dictionary with
         nx3 array of background-subtracted B-field in MFA
         nx1 array of time in dt sec
--Used in:
+- Used in:
     * calc_tau.py
     * call_tau.py
     * main.py
--Functions:
+- Functions:
     * get_bav -- calcualate average background field
     * compute_mfa -- perform EPN to MFA transformation
     * background_sub -- filter out (subtract) the background field from data
 '''
 import utils as u
 import numpy as np
-# MFA transformation steps
-# to be called after data_prep
-# output will go into calc_tau
 
 
-# step 1 : find average background field
-# TODO: USE CONFIG FILE TO SET UP THE FILTER: i.e. set up fs/fc/N/btype
 def get_bav(b_in, fs=10, fc=1/(30*60), N=2, btype='lowpass'):
     """
     Step 1: get average background field. This is done by taking a 30 min
@@ -40,9 +35,6 @@ def get_bav(b_in, fs=10, fc=1/(30*60), N=2, btype='lowpass'):
         Data should be accounted for fill values already.
     b_time: list of int size n
         Timestamps corresponding to b_epn, converted to dt
-
-    Constants
-    ---------
     fs: [Hz] (10 Hz default)
         Sampling frequency
     fc: (30 minutes)
@@ -55,7 +47,6 @@ def get_bav(b_in, fs=10, fc=1/(30*60), N=2, btype='lowpass'):
     -------
     b_av : list of int size 1x3
         Average background field
-
     """
     b, a = u.butter_filter(fs, fc, N, btype)
     b_avx = u.apply_butter(b_in[:][:, 0], b, a)
@@ -66,10 +57,9 @@ def get_bav(b_in, fs=10, fc=1/(30*60), N=2, btype='lowpass'):
     return (b_av)
 
 
-# setp 2 : compute mfa
 def compute_mfa(b_av, b_epn):
     """
-    Step 2: compute MFA coordinates. See wave_analysis_steps.pdf for all details
+    Step 2: compute MFA coordinates. See wave_analysis_steps.pdf for details
 
     Parameters
     ----------
@@ -98,7 +88,6 @@ def compute_mfa(b_av, b_epn):
     return (b_mfa)
 
 
-# step 3 : background subtraction
 def background_sub(b_in):
     """
     Step 3: subtrack the background signal so that it is easier to see the
@@ -139,14 +128,9 @@ def background_sub(b_in):
 
 
 def main(b_epn):
-
     b_avg = get_bav(b_epn)
 
     b_mfa = compute_mfa(b_avg, b_epn)
 
     b_mga_bsub = background_sub(b_mfa)
     return (b_mga_bsub)
-
-
-# if __name__ == '__main__':
-#    main()

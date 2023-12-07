@@ -9,6 +9,18 @@ Module to read in the data file and create outputs in the necessary format
         ['time'] nx1 array of time in datetime formatted sec
 - Used in:
     * main.py
+- Functions:
+    * read_nc_file -- read an nc file and extract its variables
+    * read_variables -- read and store all variables from
+                    an nc dataset into a dictionary
+    * deal_with_fills -- replaces variables that are -9999
+                    with NaN values in the 'b_epn' variable
+    * time_convert -- convert time values from seconds
+                    since 2000-01-01 to datetime objects
+- Example usage:
+    prepped_data = output_data_prepped_dict(
+    '../data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc')
+    print(prepped_data)
 """
 
 import netCDF4 as nc
@@ -75,7 +87,6 @@ def deal_with_fills(data_dict):
     b_epn = data_dict['b_epn']
     b_epn = np.where(b_epn == -9999, np.nan, b_epn)
     new_epn = {'b_epn': b_epn}
-    # print(type(b_epn))
     return new_epn
 
 
@@ -125,8 +136,3 @@ def output_data_prepped_dict(file_path):
                     'b_epn': epn_with_fills_fixed['b_epn']}
 
     return dict_prepped
-
-# Example usage:
-# prepped_data = output_data_prepped_dict(
-# '../data/dn_magn-l2-hires_g16_d20230227_v1-0-1.nc')
-# print(prepped_data)

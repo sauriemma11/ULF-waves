@@ -1,10 +1,18 @@
+'''
+Library of functions used throughout code base
+- Functions:
+    * butter_filter -- create a Butterworth filter
+    * apply_butter -- apply a filter forwards and backwards
+    * find_nearest -- find the index of  closest element to value in the array
+    * read_txt -- read a text file (of 3-component data)
+'''
 from scipy import signal
 import numpy as np
 
 
 def butter_filter(fs, fc, N, btype):
     """
-    Create butterworth filter.
+    Create Butterworth filter
 
     Parameters
     ----------
@@ -21,11 +29,11 @@ def butter_filter(fs, fc, N, btype):
     -------
     b, a: filter coefficients
     """
-    # fs = sampling frequency [Hz], fc = cut off frequency [Hz],
-    # N = filter order, btype = high / low
-    w = fc / (fs/2)  # normalize the frequency
+    # normalize the frequency
+    w = fc / (fs/2)
 
-    b, a = signal.butter(N, w, btype)  # design filter
+    # design filter
+    b, a = signal.butter(N, w, btype)
     return b, a
 
 
@@ -47,13 +55,11 @@ def apply_butter(siggy, b, a):
     Filtered: 1D array
         Signal
     """
-    # b,a = output from butter_filter, signal = 1d array
     filtered = signal.filtfilt(b, a, siggy[
         ~np.isnan(siggy)])  # apply filter forwards and back, ignore nans
     return filtered
 
 
-# TODO : find_nearest is quite fragile atm, add in conditioning
 def find_nearest(array, value, tolerance=None):
     """
     Find the index of  closest element to value in the array.
@@ -66,6 +72,7 @@ def find_nearest(array, value, tolerance=None):
         Search value to look for
     tolerance: int
         Maximum deviation of element in list from search value
+
     Outputs
     -------
     idx: int
@@ -73,7 +80,7 @@ def find_nearest(array, value, tolerance=None):
     """
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
-    if tolerance==None:
+    if tolerance is None:
         return idx
     if np.abs(array - value).min() >= tolerance:
         print('No value within tolerance range')
@@ -84,7 +91,7 @@ def find_nearest(array, value, tolerance=None):
 
 def read_txt(file_pth):
     """
-    Read a text file. NOTE: currently set up to take in 3 componenet data
+    Read a text file. NOTE: currently set up to take in 3-componenet data
 
     Parameters
     ----------

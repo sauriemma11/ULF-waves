@@ -7,8 +7,6 @@ Main module
     * data file
 '''
 
-# Import statements here
-# Or maybe we have a library file
 import data_prep
 import mfa_transform
 import call_tau
@@ -41,7 +39,7 @@ parser.add_argument('--timespan',
 parser.add_argument('--num_entries',
                     type=int,
                     # default is 86400 secs with 10 samples/sec = 864000
-                    default= 864000,
+                    default=864000,
                     help="""Number of entries in data file.
                          Typically 864000 (10 ssamples/sec for 24 hours)""",
                     required=False)
@@ -138,7 +136,6 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
                                    ftype=ftype,
                                    timespan_hrs=timespan)
 
-
     # Save tau_dict as pickle:
     file_path = "../docs/tau_dict.pkl"
     # file_path = 'tau_dict.pkl'
@@ -149,18 +146,18 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
     number_of_windows = int(24/timespan)
     window_start_times = np.linspace(0, num_entries, number_of_windows)
 
-    times_by_data_entry = np.arange(0,num_entries,1)
+    times_by_data_entry = np.arange(0, num_entries, 1)
 
     # chain from itertools flattens the list
     magnetic_field_data = list(chain(*tau_dict['b_filt']))
 
     print('Plotting data...')
-    plots.plot_data(times_by_data_entry,
+    plots.plot_data(variable_dict['time'],
                     magnetic_field_data,
-                    tau_dict["freqs"][0],
                     window_start_times,
                     tau_dict['psd'],
-                    tau_dict['tau'])
+                    tau_dict['tau'],
+                    output_dir='../docs/output_plot.png')
 
     return tau_dict
 
