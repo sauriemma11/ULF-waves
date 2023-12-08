@@ -1,14 +1,10 @@
 import sys
 import numpy as np
-import random
-import os
 import unittest
 from numpy.random import randint
 sys.path.insert(0, '../../src')  # noqa # must run from unit test directory
 import utils as u  # noqa
-# import src.mfa_transform as mt
-import mfa_transform as mt
-sys.path.insert(0, './test_data')
+sys.path.insert(0, './test_data')  # noqa
 import mfa_transform as mt  # noqa
 import utils as u  # noqa
 
@@ -83,3 +79,7 @@ class TestMathLib(unittest.TestCase):
                          np.shape(test_in))
         self.assertRaises(TypeError, mt.main, wrong_sz)
         self.assertRaises(ValueError, mt.main, nan_dat)
+
+
+if __name__ == '__main__':
+    unittest.main()
