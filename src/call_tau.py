@@ -30,7 +30,7 @@ def concat_tau(b_mfa, num_data_entries, fband, comp, ftype, timespan_hrs):
         10 samples/sec for 24 hours (86400 seconds)
     fband: 1x2 list of ints [Hz]
         Low and high frequency for the band of interest
-    comp: int (default = 2)
+    comp: int
         Componenet of the magnetic field to filter -- 0=radial,1=phi,2=paralell
     ftype: str
         Frequency type; options are 'high', 'low', or 'bandpass'
@@ -46,7 +46,6 @@ def concat_tau(b_mfa, num_data_entries, fband, comp, ftype, timespan_hrs):
         Dictionary with information from all windows concatenated
         Keys: "tau", "D_LL", "psd", "Sxx", "time", "freqs", "b_filt"
     """
-    # TODO: delete this
     import numpy as np
     num_windows = int(24/timespan_hrs)
     len_one_window = int(num_data_entries/num_windows)
@@ -58,7 +57,7 @@ def concat_tau(b_mfa, num_data_entries, fband, comp, ftype, timespan_hrs):
         b_mfa_window = b_mfa[i*len_one_window:(i+1)*len_one_window]
         tau_dict_for_window = calc_tau.get_tau(b_mfa_window, fband,
                                                ftype, comp)
-        b_mfa_window_comp = [entry[0] for entry in b_mfa_window]
+        b_mfa_window_comp = [entry[comp] for entry in b_mfa_window]
         all_windows_tau_dict["b_filt"].append(b_mfa_window_comp)
         for key in dict_keys:
             all_windows_tau_dict[key].append(tau_dict_for_window[key])
