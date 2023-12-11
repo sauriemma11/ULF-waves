@@ -15,6 +15,7 @@ Module to calculate and combine tau values for specified time interval
 
 import calc_tau
 from tqdm import tqdm
+import sys
 
 
 def concat_tau(b_mfa, num_data_entries, fband, comp, ftype, timespan_hrs):
@@ -37,16 +38,18 @@ def concat_tau(b_mfa, num_data_entries, fband, comp, ftype, timespan_hrs):
 
     timespan_hrs: int (default = 1) [Hrs]
         Number of hours over which to find average Tau, PSD, and DLL
-        Must be divisible by 24 (i.e. 1, 2, 3, 4, 6, 8, 12 hrs)
+        Must be a multiple of 24 (i.e. 1, 2, 3, 4, 6, 8, 12 hrs)
         Must be the same timespan used in define_windows function
 
     Returns
     -------
     all_windows_tau_dict: dict
         Dictionary with information from all windows concatenated
-        Keys: "tau", "D_LL", "psd", "Sxx", "time", "freqs", "b_filt"
+        Keys: "tau", "D_LL", "psd", "b_filt"
     """
-    import numpy as np
+    if 24 % timespan_hrs != 0:
+        raise ValueError("Timespan must be a multiple of 24.")
+        sys.exit(11)
     num_windows = int(24/timespan_hrs)
     len_one_window = int(num_data_entries/num_windows)
 
@@ -61,5 +64,4 @@ def concat_tau(b_mfa, num_data_entries, fband, comp, ftype, timespan_hrs):
         all_windows_tau_dict["b_filt"].append(b_mfa_window_comp)
         for key in dict_keys:
             all_windows_tau_dict[key].append(tau_dict_for_window[key])
-
     return all_windows_tau_dict
