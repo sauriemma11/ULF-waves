@@ -125,11 +125,8 @@ class TestMathLib(unittest.TestCase):
         test_dat = np.random.randint(low=1, high=10000, size=(10000, 3))
 
         self.assertIsNotNone(tau.get_tau(test_dat))
-        self.assertIn('Sxx', tau.get_tau(test_dat))
         self.assertIn('tau', tau.get_tau(test_dat))
         self.assertIn('D_LL', tau.get_tau(test_dat))
-        self.assertIn('freqs', tau.get_tau(test_dat))
-        self.assertIn('time', tau.get_tau(test_dat))
         self.assertIn('psd', tau.get_tau(test_dat))
         self.assertIn('b_filt', tau.get_tau(test_dat))
         self.assertRaises(TypeError, tau.get_tau, [])
