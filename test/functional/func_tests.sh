@@ -51,16 +51,12 @@ assert_exit_code 11
 
 #### testing `fband` input ####
 # `fband` has MORE than two elements
-run test_fband_wrong_size python main.py --filename $DATA_DIR/$FILE --fband 0.001,0.1,0.5
+run test_fband_too_many python main.py --filename $DATA_DIR/$FILE --fband 0.001 0.1 0.5
 assert_exit_code 31
 
 # `fband` has LESS than two elements
-run test_fband_wrong_size python main.py --filename $DATA_DIR/$FILE --fband 0.001
+run test_fband_too_few python main.py --filename $DATA_DIR/$FILE --fband 0.001
 assert_exit_code 31
-
-# # `fband` wrong type
-# run test_fband_wrong_type python $MAIN_DIR/main.py --filename $DATA_DIR/$FILE --fband 1,2
-# assert_exit_code 32
 
 
 # REMOVE TEST FILE

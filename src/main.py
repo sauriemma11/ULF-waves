@@ -45,7 +45,8 @@ parser.add_argument('--num_entries',
                     required=False)
 
 parser.add_argument('--fband',
-                    type=list,
+                    nargs='+',
+                    type=float,
                     default=[0.001, 0.01],  # default is 0.001 - 0.01 Hz
                     help="""Values to define the frequency band
                          of interest. First element is lower frequency,
@@ -61,7 +62,7 @@ parser.add_argument('--comp',
 
 parser.add_argument('--ftype',
                     choices=['highpass', 'lowpass', 'bandpass'],
-                    default='highpass',
+                    default='highpass',  # default is highpass filter
                     help="""Frequency type;
                     (options are 'high', 'low', or 'bandpass')""",
                     required=False)
@@ -104,21 +105,15 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
         print("'timespan' must be a factor of 24.")
         sys.exit(11)
 
-    # `num_entries` -- 2
-
     # checking `fband` length (must have 2 elements) -- 3
     if len(fband) != 2:
         print(f"""`fband` must have 2 elements
               but given `fband` has length {len(fband)}.""")
         sys.exit(31)
 
-    # `fband` elements must be floats -- 3
-    # if type(fband[0]) != float and type(fband[1]) != float:
-    #     print('`fband` elements are not floats.')
-    #     sys.exit(32)
-
     # if `fband` elements are reversed, flip it
     if fband[0] > fband[1]:
+        print('Flipping `fband` elements because given in wrong order')
         fband = [fband[1], fband[0]]
 
     print('Prepping data...')
@@ -144,8 +139,6 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
 
     number_of_windows = int(24/timespan)
     window_start_times = np.linspace(0, num_entries, number_of_windows)
-
-    times_by_data_entry = np.arange(0, num_entries, 1)
 
     # chain from itertools flattens the list
     magnetic_field_data = list(chain(*tau_dict['b_filt']))
