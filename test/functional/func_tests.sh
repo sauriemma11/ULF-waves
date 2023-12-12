@@ -7,6 +7,7 @@ OUTPUTS_PATH="../docs"
 
 ## downloading test data ##
 FILE="dn_magn-l2-hires_g16_d20230227_v1-0-1.nc"  # test dataset
+FILE_JUST_NAME="dn_magn-l2-hires_g16_d20230227_v1-0-1"
 GOOGLE_ID="161_mW7XwKO-Ta1amOsM1VaQjVTs19FXC"
 
 # cd to where main file is
@@ -30,10 +31,11 @@ fi
 
 #### successful run ####
 run test_success python main.py --filename $DATA_DIR/$FILE
+# run test_success python main.py --filename $DATA_DIR/$FILE --timespan 1 --num_entries 864000 --fband 0.001 0.01 --comp 2 --ftype 'highpass'
 assert_exit_code 0
-assert_equal $OUTPUTS_PATH/tau_dict.pkl $( ls $OUTPUTS_PATH/tau_dict.pkl )  # output file created
-assert_equal $OUTPUTS_PATH/output_plot.png $( ls $OUTPUTS_PATH/output_plot.png )  # output plot created
-rm $OUTPUTS_PATH/tau_dict.pkl $OUTPUTS_PATH/output_plot.png  # remove test files
+assert_equal $OUTPUTS_PATH/tau_dict_$FILE_JUST_NAME.pkl $( ls $OUTPUTS_PATH/tau_dict_$FILE_JUST_NAME.pkl )  # output file created
+assert_equal $OUTPUTS_PATH/output_plot_$FILE_JUST_NAME.png $( ls $OUTPUTS_PATH/output_plot_$FILE_JUST_NAME.png )  # output plot created
+rm $OUTPUTS_PATH/tau_dict_$FILE_JUST_NAME.pkl $OUTPUTS_PATH/output_plot_$FILE_JUST_NAME.png  # remove test files
 
 #### testing `filename` input ####
 # file does not exist

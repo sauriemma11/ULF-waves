@@ -71,7 +71,7 @@ code practices.
 ## Usage
 
 - Clone this repo and ensure all [environment](https://github.com/sauriemma11/ULF-waves/blob/main/env.yml) requirements are fulfilled
-- Run from main project directory, execute with `$ ./run.sh`. **Expected run time for full day: 1-2 minutes.**
+- Run `main.py` which is located in the `src` folder -- **expected run time for full day: 1-2 minutes.**
 
 ### Examples how to run:
 Mutable user inputs are:
@@ -80,11 +80,16 @@ Mutable user inputs are:
 - `num_entries` (number of entries in data file -- default is 864000)
 - `fband` (frequency band in Hz -- default is [0.001, 0.01])
 - `comp` (component of the magnetic field to filter; 0=radial, 1=phi, 2=parallel -- default is 2)
-- `ftype` (frequency type; options are 'high', 'low', or 'bandpass -- default is 'highpass')
+- `ftype` (frequency type; options are 'highpass', 'lowpass', or 'bandpass' -- default is 'highpass')
 
-From the main repository directory, run (adding any optional inputs as desired)
+From the `src` directory, run (adding any optional inputs as desired)
 ```shell
 python main.py --filename foo.nc
+```
+
+Here's an example of a run which specifies all possible inputs:
+```shell
+python main.py --filename foo.nc --timespan 1 --num_entries 864000 --fband 0.001 0.01 --comp 2 --ftype 'highpass'
 ```
 
 ### How to download data:
@@ -100,6 +105,30 @@ To run individual unit tests, first navigate to the unit test directory.
 cd test/unit
 python -m unittest test_plots.py
 ```
+
+To run functional tests, navigate to the functional test directory.
+
+```commandline
+cd test/functional
+bash func_tests.sh
+```
+
+*Note: functional tests use [this test file](https://drive.google.com/file/d/161_mW7XwKO-Ta1amOsM1VaQjVTs19FXC/view) for ensuring functionality.* 
+
+### Outputs
+
+Running `main.py` as specified above, will create and save the following output files in in the `docs` folder:
+
+- `output_plot_FILENAME.png` where FILENAME is the name of the input file (e.g. if the input file is `foo.nc`, the output plot will be saved as `output_plot_foo.png`)
+
+- `tau_dict_FILENAME.pkl` where FILENAME is the name of the input file. The saved parameters in this file are the following:
+
+  - `tau`: Timescale to diffuse one L shell (Earth radius), given in minutes [int]
+
+  - `D_LL`: Diffusion coefficient [float]
+
+  - `psd`: Average power spectral density for the frequency band of interest, given in nT<sup>2</sup>/Hz [int]
+
 
 ## Updates
 
