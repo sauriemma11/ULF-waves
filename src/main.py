@@ -131,7 +131,8 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
                                    timespan_hrs=timespan)
 
     # Save tau_dict as pickle:
-    file_path = "../docs/tau_dict.pkl"
+    filename_stripped = filename.split('/')[-1].split('.')[0]
+    file_path = f"../docs/tau_dict_{filename_stripped}.pkl"
     # file_path = 'tau_dict.pkl'
     with open(file_path, 'wb') as file:
         pickle.dump(tau_dict, file)
@@ -149,7 +150,7 @@ def main(filename, timespan, num_entries, fband, comp, ftype):
                     window_start_times,
                     tau_dict['psd'],
                     tau_dict['tau'],
-                    output_dir='../docs/output_plot.png')
+                    output_dir=f'../docs/output_plot_{filename_stripped}.png')
 
     return tau_dict
 
