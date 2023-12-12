@@ -2,9 +2,8 @@
 
 [//]: # (Magnetospheric Plasma Wave-Particle Interactions)
 
-.. image:: https://github.com/sauriemma11/ULF-waves/actions/workflows/test.yml/badge.svg 
-    :target: https://github.com/sauriemma11/ULF-waves/actions/workflows/test.yml/badge.svg 
-    :alt: GitHub Actions
+
+![https://github.com/sauriemma11/ULF-waves/actions/workflows/test.yml/badge.svg](https://github.com/sauriemma11/ULF-waves/actions/workflows/test.yml/badge.svg)
 
 ---
 
